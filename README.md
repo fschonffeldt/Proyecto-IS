@@ -1,5 +1,6 @@
 # Proyecto-IS
-# *Grupo 1:* Proyecto postulacion a fondos y concursos.
+# *Grupo 1:* Proyectos, postulacion a fondos y concursos.
+
 
 ### Instalación inicial
 
