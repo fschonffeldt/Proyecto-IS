@@ -1,5 +1,5 @@
 # Proyecto-IS
-# *Grupo 5:* Practica, planificacion y ejecución de ejercicios para cuadrillas.
+# *Grupo 1:* Proyecto postulacion a fondos y concursos.
 
 ### Instalación inicial
 
