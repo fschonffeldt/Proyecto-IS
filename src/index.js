@@ -9,5 +9,5 @@ app.get('/api', (_req, res) => {
 
 app.listen(port, () => {
   console.log(`API en la url http://localhost:${port}`)
-  console.log(`la API funciona: ${process.env.SALUDO}`);
+  console.log(`la API funciona: ${process.env.Prueba}`);
 })
