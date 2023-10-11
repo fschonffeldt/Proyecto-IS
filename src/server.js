@@ -1,11 +1,14 @@
 import express, { json } from 'express'
 import { Prueba } from './config/env.config.js';
 import { setupDB } from './config/db.config.js';
+import formularioRoutes from './api/routes/formulario.routes.js';
+
 const app = express()
-const port = 3000
+const port = 5000
 
 
 app.use(json());
+app.use('/api/formulario',formularioRoutes),
 app.get('/api', (_req, res) => {
   res.send('Hello World!')
 })
