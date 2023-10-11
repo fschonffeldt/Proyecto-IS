@@ -1,7 +1,8 @@
 import express, { json } from 'express'
 const app = express()
 const port = 3000
-import 'dotenv/config';
+
+
 app.use(json());
 app.get('/api', (_req, res) => {
   res.send('Hello World!')
