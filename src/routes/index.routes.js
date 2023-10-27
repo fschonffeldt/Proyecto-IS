@@ -18,7 +18,6 @@ const router = express.Router();
 router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
-// Agrega las rutas para la entidad "estado" bajo /api/estados
 
 // Exporta el enrutador
 module.exports = router;
