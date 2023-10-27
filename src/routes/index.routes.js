@@ -10,6 +10,9 @@ const authRoutes = require("./auth.routes.js");
 
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
+const { isAdmin } = require("../middlewares/authorization.middleware.js");
+const { isEvaluador } = require("../middlewares/authorization.middleware.js");
+
 
 /** Instancia del enrutador */
 const router = express.Router();
