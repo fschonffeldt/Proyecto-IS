@@ -1,24 +1,13 @@
-// routes/concursos.js
-const express = require('express');
-const Concurso = require('../models/Concurso');
+// routes/concurso.routes.js
+"use strict";
+
+const express = require("express");
+const concursoController = require("../controllers/concurso.controller");
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const concursos = await Concurso.find();
-  res.json(concursos);
-});
-
-router.post('/', async (req, res) => {
-  const nuevoConcurso = new Concurso(req.body);
-  await nuevoConcurso.save();
-  res.json(nuevoConcurso);
-});
-
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const concursoActualizado = await Concurso.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(concursoActualizado);
-});
+router.get('/', concursoController.findAll);  // Ruta para obtener todos los concursos
+router.post('/', concursoController.create);  // Ruta para crear un nuevo concurso
+router.put('/:id', concursoController.update);  // Ruta para actualizar un concurso existente
 
 module.exports = router;

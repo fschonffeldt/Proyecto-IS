@@ -1,24 +1,13 @@
-// routes/fondos.js
-const express = require('express');
-const Fondo = require('../models/Fondo');
+// routes/fondo.routes.js
+"use strict";
+
+const express = require("express");
+const fondoController = require("../controllers/fondo.controller");
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const fondos = await Fondo.find();
-  res.json(fondos);
-});
-
-router.post('/', async (req, res) => {
-  const nuevoFondo = new Fondo(req.body);
-  await nuevoFondo.save();
-  res.json(nuevoFondo);
-});
-
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const fondoActualizado = await Fondo.findByIdAndUpdate(id, req.body, { new: true });
-  res.json(fondoActualizado);
-});
+router.get('/', fondoController.findAll);  // Ruta para obtener todos los fondos
+router.post('/', fondoController.create);  // Ruta para crear un nuevo fondo
+router.put('/:id', fondoController.update);  // Ruta para actualizar un fondo existente
 
 module.exports = router;
