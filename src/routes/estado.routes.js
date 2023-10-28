@@ -12,9 +12,9 @@ router.use(authenticationMiddleware);
 
 // Define las rutas para los estados
 router.get("/", estadoController.getEstados);
-router.post("/", authorizationMiddleware.isAdmin, estadoController.createEstado);
+router.post("/", authorizationMiddleware.isEvaluador, estadoController.createEstado);
 router.get("/:id", estadoController.getEstadoById);
-router.put("/:id", authorizationMiddleware.isAdmin, estadoController.updateEstado);
+router.put("/:id", authorizationMiddleware.isEvaluador, estadoController.updateEstado);
 router.delete("/:id", authorizationMiddleware.isAdmin, estadoController.deleteEstado);
 
 // Exporta el enrutador

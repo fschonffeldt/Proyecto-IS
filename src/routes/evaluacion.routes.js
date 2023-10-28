@@ -13,6 +13,6 @@ router.get("/", evaluacionController.getEvaluaciones);
 router.post("/", authorizationMiddleware.isEvaluador, evaluacionController.createEvaluacion);
 router.get("/:id", evaluacionController.getEvaluacionById);
 router.put("/:id", authorizationMiddleware.isEvaluador, evaluacionController.updateEvaluacion);
-router.delete("/:id", authorizationMiddleware.isEvaluador, evaluacionController.deleteEvaluacion);
+router.delete("/:id", authorizationMiddleware.isAdmin, evaluacionController.deleteEvaluacion);
 
 module.exports = router;
