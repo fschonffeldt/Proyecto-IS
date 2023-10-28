@@ -2,7 +2,7 @@
 "use strict";
 
 const express = require("express");
-const fondoController = require("../controllers/fondo.controller");
+const fondoController = require("../controllers/fondos.controller");
 
 const router = express.Router();
 

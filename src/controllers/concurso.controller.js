@@ -1,7 +1,7 @@
 // controllers/concurso.controller.js
 "use strict";
+const Concurso = require('../models/concurso.model');
 
-const Concurso = require('../models/Concurso');
 
 /** 
  * Obtiene todos los concursos.

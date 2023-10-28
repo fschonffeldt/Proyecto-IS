@@ -1,7 +1,8 @@
 // controllers/fondo.controller.js
 "use strict";
 
-const Fondo = require('../models/Fondo');
+// Asegúrate de que la ruta y el nombre del archivo sean correctos
+const Fondo = require('../models/fondos.model');  // <-- Ajusta esto si es necesario
 
 /**
  * Obtiene todos los fondos.
