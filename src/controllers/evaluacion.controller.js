@@ -1,7 +1,7 @@
 "use strict";
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
-const EvaluacionService = require("../services/evaluacion.controller.js");
+const EvaluacionService = require("../controllers/evaluacion.controller.js");
 const { evaluacionBodySchema, evaluacionIdSchema } = require("../schema/evaluacion.schema");
 const { handleError } = require("../utils/errorHandler");
 
