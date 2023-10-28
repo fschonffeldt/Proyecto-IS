@@ -20,4 +20,5 @@ const fondoSchema = new mongoose.Schema({
   versionKey: false,
 });
 
-module.exports = fondoSchema;
+const Fondo = mongoose.model('Fondo', fondoSchema);
+module.exports = Fondo;

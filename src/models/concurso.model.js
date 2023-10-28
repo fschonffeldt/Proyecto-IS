@@ -19,9 +19,13 @@ const concursoSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  fondo: fondoSchema,  // Embebido de fondoSchema
+ fondo: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Fondo',  // Asumiendo que 'Fondo' es el nombre del modelo para el esquema de Fondo
+  required: true
+}
 }, {
-  versionKey: false,
+versionKey: false,
 });
 
 const Concurso = mongoose.model('Concurso', concursoSchema);
