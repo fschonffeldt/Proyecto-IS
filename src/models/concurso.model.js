@@ -1,5 +1,6 @@
 // models/Concurso.js
 const mongoose = require('mongoose');
+const fondoSchema = require('./Fondo');
 
 const concursoSchema = new mongoose.Schema({
   montoTotal: {
@@ -18,6 +19,7 @@ const concursoSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  fondo: fondoSchema,  // Embebido de fondoSchema
 }, {
   versionKey: false,
 });
