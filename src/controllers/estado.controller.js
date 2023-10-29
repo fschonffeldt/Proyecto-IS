@@ -114,7 +114,7 @@ async function deleteEstado(req, res) {
           res,
           404,
           "No se encontró el estado solicitado",
-          "Verifique el id ingresado"
+          "Verifique el id ingresado",
         )
       : respondSuccess(req, res, 200, estado);
   } catch (error) {

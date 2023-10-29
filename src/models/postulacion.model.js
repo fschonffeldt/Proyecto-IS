@@ -53,7 +53,13 @@ const postulacionesSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "ciudad", // Corregido el nombre del modelo
   },
+ estado: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "estado",
+  },
+  
 },
+   
 {
   versionKey: false,
 });
