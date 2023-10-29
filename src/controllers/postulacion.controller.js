@@ -1,100 +1,90 @@
-const Postulacion = require("../models/postulacion.model");
-const postulacionSchema = require("../schema/postulacion.schema");
-
-// Crear una nueva postulación
+const { postulacionSchema } = require("../schema/postulacion.schema");
+const PostulacionService = require("../services/postulacion.service");
+// Manejar la creación de una nueva postulación
 async function createPostulacion(req, res) {
-  const { body } = req;
   try {
-    // Valida los datos de entrada
-    const { error } = postulacionSchema.validate(body);
+    const postulacionData = req.body;
+
+    // Validar los datos con el esquema
+    const { error } = postulacionSchema.validate(postulacionData);
+
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    // Crea la nueva postulación
-    const nuevaPostulacion = new Postulacion(body);
-
-    // Guarda la postulación en la base de datos
-    await nuevaPostulacion.save();
-
-    return res.status(201).json(nuevaPostulacion);
+    const newPostulacion = await PostulacionService.createPostulacion(postulacionData);
+    return res.status(201).json(newPostulacion);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error al crear la postulación" });
+    return res.status(400).json({ error: error.message });
   }
 }
 
-// Leer todas las postulaciones
-async function getPostulaciones(req, res) {
+// Manejar la obtención de todas las postulaciones por el rut del representante
+async function getPostulacionesByRut(req, res) {
   try {
-    const postulaciones = await Postulacion.find().populate("Ciudad Region").exec();
+    const rut = req.params.rut; // Asegúrate de que esta sea la forma en que pasas el rut
+    const postulaciones = await PostulacionService.getPostulacionesByRut(rut);
     return res.status(200).json(postulaciones);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error al obtener las postulaciones" });
+    return res.status(400).json({ error: error.message });
   }
 }
 
-// Leer una postulación por número de solicitud
+// Manejar la obtención de una postulación por número de solicitud
 async function getPostulacionByNumeroSolicitud(req, res) {
-  const { numeroSolicitud } = req.params;
   try {
-    const postulacion = await Postulacion.findOne({ numeroSolicitud });
+    const numeroSolicitud = req.params.numeroSolicitud;
+    const postulacion = await PostulacionService.getPostulacionByNumeroSolicitud(numeroSolicitud);
     if (!postulacion) {
-      return res.status(404).json({ error: "Postulación no encontrada" });
+      return res.status(404).json({ error: 'Postulación no encontrada' });
     }
     return res.status(200).json(postulacion);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error al obtener la postulación" });
+    return res.status(500).json({ error: 'Error al obtener la postulación' });
   }
 }
 
-// Actualizar una postulación por número de solicitud
-async function updatePostulacionByNumeroSolicitud(req, res) {
-  const { numeroSolicitud } = req.params;
-  const { body } = req;
+async function updatePostulacion(req, res) {
   try {
-    // Valida los datos de entrada
-    const { error } = postulacionSchema.validate(body);
+    const numeroSolicitud = req.params.numeroSolicitud;
+    const postulacionData = req.body;
+
+    // Validar los datos con el esquema
+    const { error } = postulacionSchema.validate(postulacionData);
+
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const postulacion = await Postulacion.findOneAndUpdate({ numeroSolicitud }, body, {
-      new: true,
-    });
-
-    if (!postulacion) {
-      return res.status(404).json({ error: "Postulación no encontrada" });
+    const updatedPostulacion = await PostulacionService.updatePostulacion(numeroSolicitud, postulacionData);
+    
+    if (!updatedPostulacion) {
+      return res.status(404).json({ error: 'Postulación no encontrada' });
     }
-
-    return res.status(200).json(postulacion);
+    
+    return res.status(200).json(updatedPostulacion);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error al actualizar la postulación" });
+    return res.status(500).json({ error: 'Error al actualizar la postulación' });
   }
 }
 
-// Eliminar una postulación por número de solicitud
-async function deletePostulacionByNumeroSolicitud(req, res) {
-  const { numeroSolicitud } = req.params;
+
+
+// Manejar la eliminación de una postulación
+async function deletePostulacion(req, res) {
   try {
-    const postulacion = await Postulacion.findOneAndRemove({ numeroSolicitud });
-    if (!postulacion) {
-      return res.status(404).json({ error: "Postulación no encontrada" });
-    }
-    return res.status(204).end();
+    const numeroSolicitud = req.params.numeroSolicitud;
+    const deletedPostulacion = await PostulacionService.deletePostulacion(numeroSolicitud);
+    return res.status(200).json(deletedPostulacion);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error al eliminar la postulación" });
+    return res.status(500).json({ error: 'Error al eliminar la postulación' });
   }
 }
 
 module.exports = {
   createPostulacion,
-  getPostulaciones,
+  getPostulacionesByRut,
   getPostulacionByNumeroSolicitud,
-  updatePostulacionByNumeroSolicitud,
-  deletePostulacionByNumeroSolicitud,
+  updatePostulacion,
+  deletePostulacion,
 };

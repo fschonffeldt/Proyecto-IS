@@ -19,12 +19,17 @@ router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 
-// Exporta el enrutador
+// Importa y utiliza las rutas de los diferentes módulos de tu aplicación
+const postulacionesRoutes = require("./postulaciones.routes");
+
+// Agrega las rutas de los diferentes módulos aquí
+router.use("/postulaciones", postulacionesRoutes);
+
 module.exports = router;
 
-const postulacionRoutes = require("./postulacion.route");
+const ciudadRoutes = require("./routes/ciudad.routes");
+const regionRoutes = require("./routes/region.routes");
 
-// Rutas para las postulaciones
-router.use("/postulacion", postulacionRoutes);
-
+app.use("/api", ciudadRoutes);
+app.use("/api", regionRoutes);
 

@@ -1,57 +1,143 @@
+"use strict";
+
 const Postulacion = require("../models/postulacion.model");
 
 // Crear una nueva postulación
 async function createPostulacion(postulacionData) {
   try {
-    const nuevaPostulacion = new Postulacion(postulacionData);
-    return await nuevaPostulacion.save();
+    // Asegura que el número de solicitud se genere automáticamente
+    postulacionData.numeroSolicitud = generateSolicitudNumber(); 
+
+    // Valida que la ciudad y región existan en la base de datos
+    const ciudad = await Ciudad.findById(postulacionData.ciudad);
+    if (!ciudad) {
+      throw new Error("La ciudad especificada no existe en la base de datos.");
+    }
+
+    const region = await Region.findById(postulacionData.region);
+    if (!region) {
+      throw new Error("La región especificada no existe en la base de datos.");
+    }
+
+    // Crea la postulación si las validaciones pasan
+    const postulacion = await Postulacion.create(postulacionData);
+    return postulacion;
   } catch (error) {
-    throw new Error("Error al crear la postulación");
+    throw new Error("Error al crear la postulación: " + error.message);
   }
 }
 
-// Obtener todas las postulaciones
-async function getPostulaciones() {
+// Listar todas las postulaciones por rut del representante
+async function getPostulacionesByRut(rutRepresentante) {
   try {
-    return await Postulacion.find().populate("Ciudad Region").exec();
+    const postulaciones = await Postulacion.find({ rutRepresentante });
+    return postulaciones;
   } catch (error) {
-    throw new Error("Error al obtener las postulaciones");
+    throw new Error("Error al obtener las postulaciones: " + error.message);
   }
 }
 
-// Obtener una postulación por número de solicitud
+// Buscar una postulación por número de solicitud
 async function getPostulacionByNumeroSolicitud(numeroSolicitud) {
   try {
-    return await Postulacion.findOne({ numeroSolicitud }).populate("Ciudad Region").exec();
+    const postulacion = await Postulacion.findOne({ numeroSolicitud });
+    if (!postulacion) {
+      throw new Error("Postulación no encontrada");
+    }
+    return postulacion;
   } catch (error) {
-    throw new Error("Error al obtener la postulación");
+    throw new Error("Error al obtener la postulación: " + error.message);
   }
 }
 
-// Actualizar una postulación por número de solicitud
-async function updatePostulacionByNumeroSolicitud(numeroSolicitud, postulacionData) {
+// Visualizar el estado de la solicitud por número de solicitud
+async function visualizarEstadoSolicitud(numeroSolicitud) {
   try {
-    return await Postulacion.findOneAndUpdate({ numeroSolicitud }, postulacionData, {
-      new: true,
-    });
+    const postulacion = await Postulacion.findOne({ numeroSolicitud });
+    if (!postulacion) {
+      throw new Error("Postulación no encontrada");
+    }
+    // Aquí puedes agregar lógica para determinar el estado de la solicitud
+    return postulacion.estado; // Asume que la postulación tiene un campo "estado"
   } catch (error) {
-    throw new Error("Error al actualizar la postulación");
+    throw new Error("Error al visualizar el estado de la solicitud: " + error.message);
   }
 }
 
-// Eliminar una postulación por número de solicitud
-async function deletePostulacionByNumeroSolicitud(numeroSolicitud) {
+// Actualizar una solicitud
+async function updatePostulacion(numeroSolicitud, newData) {
   try {
-    return await Postulacion.findOneAndRemove({ numeroSolicitud });
+    const postulacion = await Postulacion.findOne({ numeroSolicitud });
+    if (!postulacion) {
+      throw new Error("Postulación no encontrada");
+    }
+
+    // Valida que la ciudad y región existan en la base de datos
+    if (newData.ciudad) {
+      const ciudad = await Ciudad.findById(newData.ciudad);
+      if (!ciudad) {
+        throw new Error("La ciudad especificada no existe en la base de datos.");
+      }
+    }
+
+    if (newData.region) {
+      const region = await Region.findById(newData.region);
+      if (!region) {
+        throw new Error("La región especificada no existe en la base de datos.");
+      }
+    }
+
+    // Validar que el número de solicitud no se pueda cambiar
+    if (newData.numeroSolicitud && newData.numeroSolicitud !== postulacion.numeroSolicitud) {
+      throw new Error("No puedes cambiar el número de solicitud");
+    }
+
+    // Realiza la actualización de otros campos permitidos
+    postulacion.nombreRepresentante = newData.nombreRepresentante;
+    postulacion.ApellidoRepresentante = newData.ApellidoRepresentante;
+    postulacion.rutRepresentante = newData.rutRepresentante;
+    postulacion.telefonoRepresentante = newData.telefonoRepresentante;
+    postulacion.emailRepresentante = newData.emailRepresentante;
+    postulacion.nombreInstitucion = newData.nombreInstitucion;
+    postulacion.rutInstitucion = newData.rutInstitucion;
+    postulacion.emailInstitucion = newData.emailInstitucion;
+    postulacion.direccionInstitucion = newData.direccionInstitucion;
+
+    // Realiza la actualización de la ciudad y región, si se especifican
+    if (newData.ciudad) {
+      postulacion.ciudad = newData.ciudad;
+    }
+
+    if (newData.region) {
+      postulacion.region = newData.region;
+    }
+
+    // Guarda la postulación actualizada
+    const updatedPostulacion = await postulacion.save();
+    return updatedPostulacion;
   } catch (error) {
-    throw new Error("Error al eliminar la postulación");
+    throw error; // Deja que el manejador de errores en el controlador se encargue de manejar esto
+  }
+}
+
+// Eliminar una solicitud por número de solicitud
+async function deletePostulacion(numeroSolicitud) {
+  try {
+    const postulacion = await Postulacion.findOneAndDelete({ numeroSolicitud });
+    if (!postulacion) {
+      throw new Error("Postulación no encontrada");
+    }
+    return "Postulación eliminada correctamente";
+  } catch (error) {
+    throw new Error("Error al eliminar la postulación: " + error.message);
   }
 }
 
 module.exports = {
   createPostulacion,
-  getPostulaciones,
+  getPostulacionesByRut,
   getPostulacionByNumeroSolicitud,
-  updatePostulacionByNumeroSolicitud,
-  deletePostulacionByNumeroSolicitud,
+  visualizarEstadoSolicitud,
+  updatePostulacion,
+  deletePostulacion,
 };
