@@ -22,9 +22,9 @@ router.use("/auth", authRoutes);
 // Exporta el enrutador
 module.exports = router;
 
-const postulacionRoutes = require("./postulaciones.route");
+const postulacionRoutes = require("./postulacion.route");
 
 // Rutas para las postulaciones
-router.use("/postulaciones", postulacionRoutes);
+router.use("/postulacion", postulacionRoutes);
 
 

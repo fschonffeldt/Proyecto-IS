@@ -1,0 +1,66 @@
+"use strict";
+
+const mongoose = require("mongoose");
+const ciudad= require("./ciudad.model"); // Corregido el nombre del modelo
+const region = require("./region.model");
+
+const postulacionesSchema = new mongoose.Schema({
+  numeroSolicitud: {
+    type: String,
+    unique: true,
+  },
+  nombreRepresentante: {
+    type: String,
+    required: true,
+  },
+  ApellidoRepresentante: {
+    type: String,
+    required: true,
+  },
+  rutRepresentante: {
+    type: String,
+    required: true,
+  },
+  telefonoRepresentante: {
+    type: String,
+    required: true,
+  },
+  emailRepresentante: {
+    type: String,
+    required: true,
+  },
+  nombreInstitucion: {
+    type: String,
+    required: true,
+  },
+  rutInstitucion: {
+    type: String,
+    required: true,
+  },
+  emailInstitucion: { // Corregido el nombre del campo
+    type: String,
+    required: true,
+  },
+  direccionInstitucion: {
+    type: String,
+    required: true,
+  },
+  FechaPostulacion: {
+    type: Date,
+    default: Date.now,
+  },
+  region: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Region'
+   },
+  ciudad: { // Corregido el nombre del campo
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Ciudad' // Corregido el nombre del modelo
+  },
+},
+{
+  versionKey: false,
+});
+
+const Postulaciones = mongoose.model("Postulaciones", postulacionesSchema);
+module.exports = Postulaciones;

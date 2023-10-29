@@ -1,5 +1,5 @@
 const Postulacion = require("../models/postulacion.model");
-const postulacionSchema = require("../schemas/postulacion.schema");
+const postulacionSchema = require("../schema/postulacion.schema");
 
 // Crear una nueva postulación
 async function createPostulacion(req, res) {
