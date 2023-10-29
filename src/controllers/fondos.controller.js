@@ -1,6 +1,6 @@
 // controllers/fondo.controller.js
 "use strict";
-
+const mongoose = require('mongoose');
 // Asegúrate de que la ruta y el nombre del archivo sean correctos
 const Fondo = require('../models/fondos.model');  // <-- Ajusta esto si es necesario
 
@@ -16,18 +16,25 @@ exports.findAll = async (req, res, next) => {
     }
 };
 
-/**
- * Crea un nuevo fondo.
- */
+
+// controllers/fondo.controller.js
+
 exports.create = async (req, res, next) => {
     try {
-        const nuevoFondo = new Fondo(req.body);
-        await nuevoFondo.save();
-        res.status(201).json(nuevoFondo);  // 201 Created
+      const nuevoFondo = new Fondo(req.body);
+      await nuevoFondo.save();
+      res.status(201).send(nuevoFondo);  // 201 Created
     } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError) {
+        // Si es un error de validación, enviar un mensaje de error personalizado
+        res.status(400).send({ message: error.message });
+      } else {
+        // Si es otro tipo de error, pasarlo al siguiente middleware de manejo de errores
         next(error);
+      }
     }
-};
+  };
+
 
 /**
  * Actualiza un fondo existente.
