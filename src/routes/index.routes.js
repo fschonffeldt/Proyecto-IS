@@ -25,8 +25,8 @@ router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 // Agrega las rutas para la entidad "estado" bajo /api/estados
-router.use("/estado", authenticationMiddleware, estadoRoutes); // Agrega esta línea
-router.use("/evaluaciones", authenticationMiddleware, evaluacionRoutes); // Agrega esta línea
+router.use("/estado",  estadoRoutes); // Agrega esta línea
+router.use("/evaluacion",  evaluacionRoutes); // Agrega esta línea
 
 // Exporta el enrutador
 module.exports = router;

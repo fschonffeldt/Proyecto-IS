@@ -9,9 +9,9 @@ const estadoBodySchema = Joi.object({
     "string.empty": "El campo 'id_evaluacion' no puede estar vacío.",
     "any.required": "El campo 'id_evaluacion' es obligatorio.",
   }),
-  id_solicitud: Joi.string().required().messages({
-    "string.empty": "El campo 'id_solicitud' no puede estar vacío.",
-    "any.required": "El campo 'id_solicitud' es obligatorio.",
+  id_formulario: Joi.string().required().messages({
+    "string.empty": "El campo 'id_formulario' no puede estar vacío.",
+    "any.required": "El campo 'id_formulario' es obligatorio.",
   }),
   estado: Joi.string()
     .valid("en proceso", "aceptado", "rechazado")

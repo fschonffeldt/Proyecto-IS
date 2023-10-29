@@ -1,7 +1,7 @@
 "use strict";
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
-const EstadoService = require("./estado.controller.js");
+const EstadoService = require("../controllers/estado.controller");
 const { estadoBodySchema, estadoIdSchema } = require("../schema/estado.schema");
 const { handleError } = require("../utils/errorHandler");
 
@@ -136,8 +136,8 @@ async function deleteEstado(req, res) {
 
 module.exports = {
   getEstados,
-  createEstado,
   getEstadoById,
+  createEstado,
   updateEstado,
   deleteEstado,
 };
