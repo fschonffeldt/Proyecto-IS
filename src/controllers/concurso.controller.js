@@ -44,3 +44,15 @@ exports.update = async (req, res, next) => {
   }
 };
 
+exports.delete = async (req, res, next) => {
+  try {
+      const { id } = req.params;
+      const concursoEliminado = await Concurso.findByIdAndDelete(id);
+      if (!concursoEliminado) {
+          return res.status(404).send({ message: 'Concurso no encontrado' });  // 404 Not Found
+      }
+      res.status(200).send({ message: 'Concurso eliminado exitosamente' });  // 200 OK
+  } catch (error) {
+      next(error);
+  }
+};
