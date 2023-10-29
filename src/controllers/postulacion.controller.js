@@ -28,6 +28,7 @@ async function createPostulacion(req, res) {
   }
 }
 
+
 /**
  * Obtiene todas las postulaciones por el rut del representante
  * @param {Object} req - Objeto de petición

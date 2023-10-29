@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const estadosValidos = ["en proceso", "aceptado", "rechazado"];
 
 const estadoSchema = new mongoose.Schema(
   {
@@ -13,6 +14,7 @@ const estadoSchema = new mongoose.Schema(
     estado: {
       type: String,
       required: true,
+      enum: estadosValidos, // Usa "enum" para restringir las opciones
     },
     ultima_modificacion: {
       type: Date, // Utiliza el tipo 'Date' para almacenar fechas y horas

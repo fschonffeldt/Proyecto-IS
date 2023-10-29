@@ -1,5 +1,7 @@
 "use strict";
 
+const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 const Postulacion = require("../models/postulacion.model");
 const Ciudad = require("../models/ciudad.model");
 const Region = require("../models/region.model");
@@ -7,7 +9,12 @@ const { handleError } = require("../utils/errorHandler");
 
 async function createPostulacion(postulacionData) {
   try {
-    postulacionData.numeroSolicitud = generateSolicitudNumber();
+    // Generar una fecha de postulación con Moment.js
+    postulacionData.FechaPostulacion = moment().format();
+
+    // Generar un número de solicitud único con UUID
+    postulacionData.numeroSolicitud = uuidv4();
+
     const ciudad = await Ciudad.findById(postulacionData.ciudad);
     if (!ciudad) {
       throw new Error("La ciudad especificada no existe en la base de datos.");

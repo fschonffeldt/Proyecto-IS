@@ -89,7 +89,7 @@ async function deleteEvaluacion(req, res) {
           res,
           404,
           "No se encontró la evaluación solicitada",
-          "Verifique el id ingresado"
+          "Verifique el id ingresado",
         )
       : respondSuccess(req, res, 200, evaluacion);
   } catch (error) {
