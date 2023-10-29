@@ -1,6 +1,7 @@
 // controllers/concurso.controller.js
 "use strict";
 const Concurso = require('../models/concurso.model');
+const Fondo = require('../models/fondos.model');
 
 
 /** 
@@ -22,11 +23,31 @@ exports.create = async (req, res, next) => {
   try {
     const nuevoConcurso = new Concurso(req.body);
     await nuevoConcurso.save();
-    res.status(201).json(nuevoConcurso);  // 201 Created
+
+    // Buscar el Fondo asociado
+    const fondo = await Fondo.findById(nuevoConcurso.fondo);
+    if (!fondo) {
+      throw new Error('Fondo no encontrado');
+    }
+
+    // Actualizar la información del Fondo
+    fondo.montoTotal = nuevoConcurso.montoTotal;
+    fondo.montoAsignado = nuevoConcurso.ganadores.reduce((sum, ganador) => sum + ganador.montoAsignado, 0);
+    fondo.ganadores = nuevoConcurso.ganadores;
+    fondo.montoRestante = fondo.montoTotal - fondo.montoAsignado;
+
+    await fondo.save();
+
+    // Buscar nuevamente el concurso con el fondo poblado
+    const concursoConFondo = await Concurso.findById(nuevoConcurso._id).populate('fondo');
+
+    res.status(201).json(concursoConFondo);  // 201 Created
   } catch (error) {
     next(error);
   }
 };
+
+
 
 /** 
  * Actualiza un concurso existente.
