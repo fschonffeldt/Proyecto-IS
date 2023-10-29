@@ -7,11 +7,8 @@ const userRoutes = require("./user.routes.js");
 
 /** Enrutador de autenticación */
 const authRoutes = require("./auth.routes.js");
-
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
-const { isAdmin } = require("../middlewares/authorization.middleware.js");
-const { isEvaluador } = require("../middlewares/authorization.middleware.js");
 
 const estadoRoutes = require("./estado.routes.js"); // Agrega esta línea
 
@@ -26,7 +23,18 @@ router.use("/users", authenticationMiddleware, userRoutes);
 router.use("/auth", authRoutes);
 // Agrega las rutas para la entidad "estado" bajo /api/estados
 router.use("/estado",  estadoRoutes); // Agrega esta línea
-router.use("/evaluacion",  evaluacionRoutes); // Agrega esta línea
+router.use("/evaluacion", evaluacionRoutes); // Agrega esta línea
 
-// Exporta el enrutador
+// Importa y utiliza las rutas de los diferentes módulos de tu aplicación
+const postulacionRoutes = require("./postulacion.routes");
+const ciudadRoutes = require("./ciudad.routes");
+const regionRoutes = require("./region.routes");
+
+// Agrega las rutas de los diferentes módulos aquí
+router.use("/postulaciones", postulacionRoutes);
+router.use("/ciudades", ciudadRoutes);
+router.use("/regiones", regionRoutes);
+
+
 module.exports = router;
+

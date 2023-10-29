@@ -41,7 +41,7 @@ async function createEstado(req, res) {
         req,
         res,
         400,
-        "El campo 'estado' debe ser 'en proceso', 'aceptado' o 'rechazado'."
+        "El campo 'estado' debe ser 'en proceso', 'aceptado' o 'rechazado'.",
       );
     }
 
@@ -125,7 +125,7 @@ async function deleteEstado(req, res) {
           res,
           404,
           "No se encontró el estado solicitado",
-          "Verifique el id ingresado"
+          "Verifique el id ingresado",
         )
       : respondSuccess(req, res, 200, estado);
   } catch (error) {

@@ -1,32 +1,28 @@
 "use strict";
 
+const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 const Postulacion = require("../models/postulacion.model");
 const Ciudad = require("../models/ciudad.model");
 const Region = require("../models/region.model");
 const { handleError } = require("../utils/errorHandler");
 
-/**
- * Crea una nueva postulación
- * @param {Object} postulacionData - Datos de la postulación
- * @returns {Promise} Promesa con la nueva postulación creada
- */
 async function createPostulacion(postulacionData) {
   try {
-    // Asegura que el número de solicitud se genere automáticamente
-    postulacionData.numeroSolicitud = generateSolicitudNumber();
+    // Generar una fecha de postulación con Moment.js
+    postulacionData.FechaPostulacion = moment().format();
 
-    // Valida que la ciudad y región existan en la base de datos
+    // Generar un número de solicitud único con UUID
+    postulacionData.numeroSolicitud = uuidv4();
+
     const ciudad = await Ciudad.findById(postulacionData.ciudad);
     if (!ciudad) {
       throw new Error("La ciudad especificada no existe en la base de datos.");
     }
-
     const region = await Region.findById(postulacionData.region);
     if (!region) {
       throw new Error("La región especificada no existe en la base de datos.");
     }
-
-    // Crea la postulación si las validaciones pasan
     const postulacion = await Postulacion.create(postulacionData);
     return postulacion;
   } catch (error) {
@@ -35,11 +31,6 @@ async function createPostulacion(postulacionData) {
   }
 }
 
-/**
- * Obtiene todas las postulaciones por el rut del representante
- * @param {string} rutRepresentante - Rut del representante
- * @returns {Promise} Promesa con un arreglo de postulaciones
- */
 async function getPostulacionesByRut(rutRepresentante) {
   try {
     const postulaciones = await Postulacion.find({ rutRepresentante });
@@ -50,11 +41,6 @@ async function getPostulacionesByRut(rutRepresentante) {
   }
 }
 
-/**
- * Busca una postulación por número de solicitud
- * @param {string} numeroSolicitud - Número de solicitud
- * @returns {Promise} Promesa con la postulación encontrada
- */
 async function getPostulacionByNumeroSolicitud(numeroSolicitud) {
   try {
     const postulacion = await Postulacion.findOne({ numeroSolicitud });
@@ -68,31 +54,19 @@ async function getPostulacionByNumeroSolicitud(numeroSolicitud) {
   }
 }
 
-/**
- * Visualiza el estado de la solicitud por número de solicitud
- * @param {string} numeroSolicitud - Número de solicitud
- * @returns {Promise} Promesa con el estado de la solicitud
- */
 async function visualizarEstadoSolicitud(numeroSolicitud) {
   try {
     const postulacion = await Postulacion.findOne({ numeroSolicitud });
     if (!postulacion) {
       throw new Error("Postulación no encontrada");
     }
-    // Aquí puedes agregar lógica para determinar el estado de la solicitud
-    return postulacion.estado; // Asume que la postulación tiene un campo "estado"
+    return postulacion.estado;
   } catch (error) {
     handleError(error, "postulacion.service -> visualizarEstadoSolicitud");
     throw new Error("Error al visualizar el estado de la solicitud: " + error.message);
   }
 }
 
-/**
- * Actualiza una solicitud por número de solicitud
- * @param {string} numeroSolicitud - Número de solicitud
- * @param {Object} newData - Datos de actualización
- * @returns {Promise} Promesa con la postulación actualizada
- */
 async function updatePostulacion(numeroSolicitud, newData) {
   try {
     const postulacion = await Postulacion.findOne({ numeroSolicitud });
@@ -100,7 +74,6 @@ async function updatePostulacion(numeroSolicitud, newData) {
       throw new Error("Postulación no encontrada");
     }
 
-    // Valida que la ciudad y región existan en la base de datos
     if (newData.ciudad) {
       const ciudad = await Ciudad.findById(newData.ciudad);
       if (!ciudad) {
@@ -115,12 +88,10 @@ async function updatePostulacion(numeroSolicitud, newData) {
       }
     }
 
-    // Validar que el número de solicitud no se pueda cambiar
     if (newData.numeroSolicitud && newData.numeroSolicitud !== postulacion.numeroSolicitud) {
       throw new Error("No puedes cambiar el número de solicitud");
     }
 
-    // Realiza la actualización de otros campos permitidos
     postulacion.nombreRepresentante = newData.nombreRepresentante;
     postulacion.ApellidoRepresentante = newData.ApellidoRepresentante;
     postulacion.rutRepresentante = newData.rutRepresentante;
@@ -131,7 +102,6 @@ async function updatePostulacion(numeroSolicitud, newData) {
     postulacion.emailInstitucion = newData.emailInstitucion;
     postulacion.direccionInstitucion = newData.direccionInstitucion;
 
-    // Realiza la actualización de la ciudad y región, si se especifican
     if (newData.ciudad) {
       postulacion.ciudad = newData.ciudad;
     }
@@ -140,7 +110,6 @@ async function updatePostulacion(numeroSolicitud, newData) {
       postulacion.region = newData.region;
     }
 
-    // Guarda la postulación actualizada
     const updatedPostulacion = await postulacion.save();
     return updatedPostulacion;
   } catch (error) {
@@ -149,11 +118,6 @@ async function updatePostulacion(numeroSolicitud, newData) {
   }
 }
 
-/**
- * Elimina una solicitud por número de solicitud
- * @param {string} numeroSolicitud - Número de solicitud
- * @returns {Promise} Promesa con un mensaje de éxito
- */
 async function deletePostulacion(numeroSolicitud) {
   try {
     const postulacion = await Postulacion.findOneAndDelete({ numeroSolicitud });

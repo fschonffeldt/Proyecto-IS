@@ -23,7 +23,7 @@ const estadoSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
 const Estado = mongoose.model("Estado", estadoSchema);

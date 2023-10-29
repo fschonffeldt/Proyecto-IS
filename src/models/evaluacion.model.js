@@ -21,7 +21,7 @@ const evaluacionSchema = new mongoose.Schema(
   {
     versionKey: false,
     timestamps: true, // Agregar timestamps para fecha de creación y modificación
-  }
+  },
 );
 
 const Evaluacion = mongoose.model("Evaluacion", evaluacionSchema);
