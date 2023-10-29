@@ -10,6 +10,12 @@ const authRoutes = require("./auth.routes.js");
 
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
+const { isAdmin } = require("../middlewares/authorization.middleware.js");
+const { isEvaluador } = require("../middlewares/authorization.middleware.js");
+
+const estadoRoutes = require("./estado.routes.js"); // Agrega esta línea
+
+const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea
 
 /** Instancia del enrutador */
 const router = express.Router();
@@ -18,6 +24,9 @@ const router = express.Router();
 router.use("/users", authenticationMiddleware, userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
+// Agrega las rutas para la entidad "estado" bajo /api/estados
+router.use("/estado", authenticationMiddleware, estadoRoutes); // Agrega esta línea
+router.use("/evaluaciones", authenticationMiddleware, evaluacionRoutes); // Agrega esta línea
 
 // Importa y utiliza las rutas de los diferentes módulos de tu aplicación
 const postulacionesRoutes = require("./postulaciones.routes");
