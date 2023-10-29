@@ -1,10 +1,5 @@
 "use strict";
-
 const mongoose = require("mongoose");
-
-const ciudad = require("./ciudad.model");
-const region = require("./region.model");
-
 const postulacionesSchema = new mongoose.Schema({
   numeroSolicitud: {
     type: String,
@@ -52,11 +47,11 @@ const postulacionesSchema = new mongoose.Schema({
   },
   region: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'region'
+    ref: "region",
    },
   ciudad: { // Corregido el nombre del campo
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ciudad' // Corregido el nombre del modelo
+    ref: "ciudad", // Corregido el nombre del modelo
   },
 },
 {

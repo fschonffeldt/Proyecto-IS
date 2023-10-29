@@ -1,9 +1,16 @@
 const RegionService = require("../services/region.service");
+const { ciudadSchema } = require("../models/ciudad.model");
 
 async function createRegion(req, res) {
   try {
     const regionData = req.body;
-    const nuevaRegion = await RegionService.createRegion(regionData);
+    const { error, value } = ciudadSchema.validate(regionData);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const nuevaRegion = await RegionService.createRegion(value);
     return res.status(201).json(nuevaRegion);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -36,7 +43,13 @@ async function updateRegionById(req, res) {
   try {
     const regionId = req.params.id;
     const regionData = req.body;
-    const regionActualizada = await RegionService.updateRegionById(regionId, regionData);
+    const { error, value } = ciudadSchema.validate(regionData);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const regionActualizada = await RegionService.updateRegionById(regionId, value);
     if (!regionActualizada) {
       return res.status(404).json({ error: "Región no encontrada" });
     }
