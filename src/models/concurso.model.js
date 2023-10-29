@@ -1,5 +1,6 @@
 // models/Concurso.js
 const mongoose = require('mongoose');
+const Fondo = require('./fondos.model'); 
 const fondoSchema = require('./fondos.model');
 
 const concursoSchema = new mongoose.Schema({
@@ -27,7 +28,21 @@ const concursoSchema = new mongoose.Schema({
 }, {
 versionKey: false,
 });
-
+// Middleware pre-save para copiar el montoTotal a Fondo
+concursoSchema.pre('save', async function(next) {
+  try {
+    // Obtén el documento Fondo relacionado
+    const fondo = await Fondo.findById(this.fondo);
+    // Actualiza el montoTotal en Fondo
+    fondo.montoTotal = this.montoTotal;
+    // Guarda el documento Fondo actualizado
+    await fondo.save();
+    // Continúa con el proceso de guardado
+    next();
+  } catch (error) {
+    next(error);  // Pasa el error al manejador de errores
+  }
+});
 const Concurso = mongoose.model('Concurso', concursoSchema);
 
 module.exports = Concurso;
