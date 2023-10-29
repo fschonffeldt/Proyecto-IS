@@ -33,7 +33,17 @@ async function createEstado(req, res) {
   try {
     const { body } = req;
     const { error: bodyError } = estadoBodySchema.validate(body);
+
+    // Agregar una validación adicional para el campo "estado"
     if (bodyError) return respondError(req, res, 400, bodyError.message);
+    if (!["en proceso", "aceptado", "rechazado"].includes(body.estado)) {
+      return respondError(
+        req,
+        res,
+        400,
+        "El campo 'estado' debe ser 'en proceso', 'aceptado' o 'rechazado'."
+      );
+    }
 
     const [newEstado, estadoError] = await EstadoService.createEstado(body);
 
@@ -48,6 +58,7 @@ async function createEstado(req, res) {
     respondError(req, res, 500, "No se creó el estado");
   }
 }
+
 
 /**
  * Obtiene un estado por su id

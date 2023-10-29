@@ -13,10 +13,14 @@ const estadoBodySchema = Joi.object({
     "string.empty": "El campo 'id_solicitud' no puede estar vacío.",
     "any.required": "El campo 'id_solicitud' es obligatorio.",
   }),
-  estado: Joi.string().required().messages({
-    "string.empty": "El campo 'estado' no puede estar vacío.",
-    "any.required": "El campo 'estado' es obligatorio.",
-  }),
+  estado: Joi.string()
+    .valid("en proceso", "aceptado", "rechazado")
+    .required()
+    .messages({
+      "string.empty": "El campo 'estado' no puede estar vacío.",
+      "any.required": "El campo 'estado' es obligatorio.",
+      "any.only": "El campo 'estado' debe ser 'en proceso', 'aceptado' o 'rechazado'.",
+    }),
   puntos: Joi.number().optional().messages({
     "number.base": "El campo 'puntos' debe ser de tipo numérico.",
   }),
