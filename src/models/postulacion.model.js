@@ -48,7 +48,7 @@ const postulacionesSchema = new mongoose.Schema({
   region: {
     type: String,
     ref: "region",
-   },
+  },
   ciudad: { // Corregido el nombre del campo
     type: String,
     ref: "ciudad", // Corregido el nombre del modelo
@@ -58,12 +58,8 @@ const postulacionesSchema = new mongoose.Schema({
     enum: ["borrador", "enviada"], // Definimos dos estados posibles
     default: "borrador", // Por defecto, se guarda como borrador
   },
-  estado: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "estado",
-  },
 },
-   
+
 {
   versionKey: false,
 });
