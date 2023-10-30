@@ -1,6 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 const Estado = require("../models/estado.model"); // Ajusta esto según la ubicación de tu modelo
+const Evaluacion = require("../models/evaluacion.model");
 
 /**
  * Obtiene todos los estados.
@@ -17,7 +18,7 @@ exports.getEstados = async (req, res, next) => {
 /**
  * Crea un nuevo estado.
  */
-const Evaluacion = require("../models/evaluacion.model");
+
 
 /**
  * Crea un nuevo estado y una nueva evaluación automáticamente.
