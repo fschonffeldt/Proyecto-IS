@@ -14,6 +14,9 @@ const proyectoBodySchema = Joi.object({
   Monto: Joi.number().optional().messages({
     "number.base": "El campo 'Monto' debe ser de tipo numérico.",
   }),
+  Bases: Joi.string().optional().allow("").messages({
+    "string.empty": "El campo 'Bases' no puede estar vacío.",
+  }),
   fechaCreac: Joi.date().optional().messages({
     "date.base": "El campo 'fechaCreac' debe ser de tipo fecha.",
   }),
