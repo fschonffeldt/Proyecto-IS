@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const estadoSchema = new mongoose.Schema(
   {
-    id_evaluacion: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
     id_postulacion: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
