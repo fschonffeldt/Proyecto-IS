@@ -8,12 +8,10 @@ const { isAdmin } = require('../middlewares/authorization.middleware');
 
 const router = express.Router();
 
-//router.use(authenticationMiddleware);
-
 router.get("/", proyecController.obtain);
 router.get("/:id", proyecController.obtainById);
-router.post("/", proyecController.create);
-router.put("/:id", proyecController.update);
-router.delete("/:id", proyecController.delete);
+router.post("/", authenticationMiddleware, isAdmin, proyecController.create);
+router.put("/:id", authenticationMiddleware, isAdmin, proyecController.update);
+router.delete("/:id", authenticationMiddleware, isAdmin, proyecController.delete);
 
 module.exports = router;
