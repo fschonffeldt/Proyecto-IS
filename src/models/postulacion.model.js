@@ -46,21 +46,21 @@ const postulacionesSchema = new mongoose.Schema({
     default: Date.now,
   },
   region: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "region",
    },
   ciudad: { // Corregido el nombre del campo
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "ciudad", // Corregido el nombre del modelo
-  },
- estado: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "estado",
   },
   estados: {
     type: String,
     enum: ["borrador", "enviada"], // Definimos dos estados posibles
     default: "borrador", // Por defecto, se guarda como borrador
+  },
+  estado: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "estado",
   },
 },
    
