@@ -10,6 +10,7 @@ router.get('/', evaluacionController.getEvaluacion);  // Ruta para obtener todos
 router.post('/', evaluacionController.createEvaluacion);  // Ruta para crear un nuevo fondo
 router.put('/:id', evaluacionController.updateEvaluacion);  // Ruta para actualizar un fondo existente
 router.delete('/:id', evaluacionController.deleteEvaluacion);  // Ruta para eliminar un fondo existente
+router.get('/:id', evaluacionController.getEvaluacionById);
 router.get('/:id_postulacion', evaluacionController.getEvaluacionByPostulacion);
 
 module.exports = router;

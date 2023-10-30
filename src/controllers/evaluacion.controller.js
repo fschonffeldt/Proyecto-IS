@@ -39,7 +39,7 @@ exports.updateEvaluacion = async (req, res, next) => {
 
 exports.getEvaluacionByPostulacion = async (req, res, next) => {
   try {
-    const idPostulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
+    const idPostulacion = req.params.id_postulacion;
     const evaluaciones = await Evaluacion.find({ id_postulacion });
     
     if (!evaluaciones || evaluaciones.length === 0) {
@@ -51,6 +51,22 @@ exports.getEvaluacionByPostulacion = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getEvaluacionById = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Obtén el ID de los parámetros
+    const evaluacion = await Evaluacion.findById(id);
+    
+    if (!evaluacion) {
+      return res.status(404).send({ message: 'No se encontró la evaluación especificada' });
+    }
+
+    res.json(evaluacion);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 
 exports.deleteEvaluacion = async (req, res) => {
