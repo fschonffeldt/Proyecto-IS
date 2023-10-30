@@ -1,35 +1,64 @@
-const mongoose = require("mongoose");
+// models/Fondo.js
+const mongoose = require('mongoose');
 
-const evaluacionSchema = new mongoose.Schema(
-  {
-    // ... tus campos existentes ...
-    montoGanado: {
-      type: Number,
-      default: 0, // Valor por defecto si no se especifica monto ganado
-    },
-    esGanador: {
-      type: Boolean,
-      default: false, // Valor por defecto si no se especifica si es ganador
-    },
+const ganadorSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  montoAsignado: { type: Number, required: true }
+});
+
+const fondoSchema = new mongoose.Schema({
+  montoTotal: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: function(value) {
+        // Verificar que el monto total no sea cero
+        return value > 0;
+      },
+      message: 'El monto total debe ser mayor que cero'
+    }
+},
+  montoAsignado: {
+    type: Number,
+    default: 0,
+    validate: {
+      validator: function(value) {
+        // Verificar que el monto asignado no sea mayor que el monto total
+        return value <= this.montoTotal;
+      },
+      message: 'El monto asignado no puede ser mayor que el monto total'
+    }
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  }
-);
+  montoRestante: {
+    type: Number,
+    default: function() {
+      return this.montoTotal - this.montoAsignado;
+    },
+    validate: {
+      validator: function(value) {
+        // Verificar que el monto restante no sea negativo
+        return value >= 0;
+      },
+      message: 'El monto restante no puede ser negativo'
+    }
+  },
 
-const Evaluacion = mongoose.model("Evaluacion", evaluacionSchema);
+  ganadores: { type: [ganadorSchema] }
+}, 
 
-module.exports = Evaluacion;
+{
+  versionKey: false,
+});
 
-// Función para obtener monto y número de ganadores
-async function obtenerGanadores() {
-  const ganadores = await Evaluacion.find({ esGanador: true });
-  const montoTotal = ganadores.reduce((sum, ganador) => sum + ganador.montoGanado, 0);
-  const numeroDeGanadores = ganadores.length;
 
-  return {
-    montoTotal,
-    numeroDeGanadores,
-  };
-}
+fondoSchema.pre('save', function(next) {
+  // Suma los montos asignados a los ganadores
+  this.montoAsignado = this.ganadores.reduce((sum, ganador) => sum + ganador.montoAsignado, 0);
+  // Actualizar el monto restante antes de guardar
+  this.montoRestante = this.montoTotal - this.montoAsignado;
+  next();
+});
+
+const Fondo = mongoose.model('Fondo', fondoSchema);
+
+module.exports = Fondo;
