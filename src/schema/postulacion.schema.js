@@ -6,11 +6,7 @@ const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const TelefonoRegex = /^\d{9}$/;
 
 const postulacionSchema = Joi.object({
-  concurso: Joi.string().required().messages({
-    "string.empty": "El concurso no puede estar vacío.",
-    "any.required": "El concurso es obligatorio.",
-    "string.base": "El concurso debe ser de tipo string.",
-  }),
+ 
   nombreRepresentante: Joi.string().required().messages({
     "string.empty": "El nombre del Representante no puede estar vacío.",
     "any.required": "El nombre del Representante es obligatorio.",
