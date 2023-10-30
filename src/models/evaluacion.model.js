@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const evaluacionSchema = new mongoose.Schema(
   {
@@ -20,10 +20,16 @@ const evaluacionSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-    timestamps: true, // Agregar timestamps para fecha de creación y modificación
-  },
+    timestamps: true,
+  }
 );
 
-const Evaluacion = mongoose.model("Evaluacion", evaluacionSchema);
+evaluacionSchema.pre('save', function (next) {
+  // Puedes agregar lógica personalizada antes de guardar la evaluación aquí si es necesario.
+  // Por ejemplo, puedes realizar validaciones o cálculos adicionales.
+  next();
+});
+
+const Evaluacion = mongoose.model('Evaluacion', evaluacionSchema);
 
 module.exports = Evaluacion;

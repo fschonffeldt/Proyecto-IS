@@ -1,110 +1,52 @@
-"use strict";
-const { respondSuccess, respondError } = require("../utils/resHandler");
-const Evaluacion = require("../models/evaluacion.model"); // Ajusta esto según la ubicación de tu modelo
-const { handleError } = require("../utils/errorHandler");
+const mongoose = require('mongoose');
+const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
 
-async function getEvaluaciones(req, res) {
+exports.findAll = async (req, res, next) => {
   try {
     const evaluaciones = await Evaluacion.find();
-    const formattedEvaluaciones = evaluaciones.map((evaluacion) => ({
-      ...evaluacion.toObject(),
-      fechaCreacion: evalucion.createdAt.toISOString().split('T')[0],
-      horaCreacion: evalucion.createdAt.toISOString().split('T')[1].split('.')[0],
-    }));
-
-    if (formattedEvaluaciones.length === 0) {
-      respondSuccess(req, res, 204);
-    } else {
-      respondSuccess(req, res, 200, formattedEvaluaciones);
-    }
+    res.json(evaluaciones);
   } catch (error) {
-    handleError(error, "evaluacion.controller -> getEvaluaciones");
-    respondError(req, res, 500, "No se pudieron obtener las evaluaciones");
+    next(error);
   }
-}
+};
 
-async function createEvaluacion(req, res) {
+exports.create = async (req, res, next) => {
   try {
-    const { body } = req;
-
-    const nuevaEvaluacion = new Evaluacion(body);
-
+    const nuevaEvaluacion = new Evaluacion(req.body);
     await nuevaEvaluacion.save();
-    respondSuccess(req, res, 201, nuevaEvaluacion);
+    res.status(201).send(nuevaEvaluacion);  // 201 Created
   } catch (error) {
-    handleError(error, "evaluacion.controller -> createEvaluacion");
-    respondError(req, res, 500, "No se creó la evaluación");
-  }
-}
-
-async function getEvaluacionById(req, res) {
-  try {
-    const { params } = req;
-
-    const evaluacion = await Evaluacion.findById(params.id);
-
-    if (!evaluacion) {
-      respondError(req, res, 404, "No se encontró la evaluación solicitada");
-      return;
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(400).send({ message: error.message });
+    } else {
+      next(error);
     }
-
-    const formattedEvaluacion = {
-      ...evaluacion.toObject(),
-      fechaCreacion: evaluacion.createdAt.toISOString().split('T')[0],
-      horaCreacion: evaluacion.createdAt.toISOString().split('T')[1].split('.')[0],
-    };
-
-    respondSuccess(req, res, 200, formattedEvaluacion);
-  } catch (error) {
-    handleError(error, "evaluacion.controller -> getEvaluacionById");
-    respondError(req, res, 500, "No se pudo obtener la evaluación");
   }
-}
+};
 
-async function updateEvaluacion(req, res) {
+exports.update = async (req, res, next) => {
   try {
-    const { params, body } = req;
-
-    const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(
-      params.id,
-      body,
-      { new: true }
-    );
-
+    const { id } = req.params;
+    const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(id, req.body, { new: true });
     if (!evaluacionActualizada) {
-      respondError(req, res, 404, "No se encontró la evaluación solicitada");
-      return;
+      return res.status(404).send();  // 404 Not Found
     }
-
-    respondSuccess(req, res, 200, evaluacionActualizada);
+    res.json(evaluacionActualizada);
   } catch (error) {
-    handleError(error, "evaluacion.controller -> updateEvaluacion");
-    respondError(req, res, 500, "No se pudo actualizar la evaluación");
+    next(error);
   }
-}
+};
 
-async function deleteEvaluacion(req, res) {
+exports.delete = async (req, res) => {
+  const { id } = req.params;
+  
   try {
-    const { params } = req;
-
-    const evaluacionEliminada = await Evaluacion.findByIdAndDelete(params.id);
-
-    if (!evaluacionEliminada) {
-      respondError(req, res, 404, "No se encontró la evaluación solicitada");
-      return;
+    const evaluacion = await Evaluacion.findByIdAndDelete(id);
+    if (!evaluacion) {
+      return res.status(404).send({ message: 'Evaluación no encontrada' });
     }
-
-    respondSuccess(req, res, 200, evaluacionEliminada);
+    res.send({ message: 'Evaluación eliminada exitosamente', data: evaluacion });
   } catch (error) {
-    handleError(error, "evaluacion.controller -> deleteEvaluacion");
-    respondError(req, res, 500, "No se pudo eliminar la evaluación");
+    res.status(500).send({ message: error.message || 'Error al eliminar la evaluación' });
   }
-}
-
-module.exports = {
-  getEvaluaciones,
-  createEvaluacion,
-  getEvaluacionById,
-  updateEvaluacion,
-  deleteEvaluacion,
 };
