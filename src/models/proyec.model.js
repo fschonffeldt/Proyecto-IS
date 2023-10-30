@@ -8,7 +8,6 @@ const proyecSchema = new Schema(
     Descripcion: String,
     Monto: Number,
     Bases: String,
-    fechaCreac: Date
     }, 
     { collection: 'proyectos',  versionKey: false, timestamps: true,});
 

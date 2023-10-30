@@ -52,7 +52,7 @@ exports.update = async (req, res, next) => {
       return res.status(404).send({ message: 'Proyecto no encontrado' });  // 404 Not Found
     }
     res.status(200).send({ message: 'Proyecto actualizado exitosamente' });
-    res.json(ProyectoActualizado);
+    
   } catch (error) {
     next(error);
   }
@@ -70,3 +70,19 @@ exports.delete = async (req, res, next) => {
       next(error);
   }
 };
+
+
+const validar = (Tema,Monto,Descripcion,sevalida) =>{
+  var errors = []
+  if(Tema === undefined || Tema.trim() === ''){
+   errors.push('El Tema NO debe de estar vacío')
+  }
+  if(Descripcion === undefined || Descripcion.trim() === ''){
+    errors.push('La Descripcion NO debe de estar vacía')
+   }
+  if(Monto === undefined || Monto.trim() === '' || isNaN(Monto)){
+    errors.push('El Monto NO debe de estar vacío y debe ser numérico')
+  }
+  
+  return errors
+}
