@@ -5,7 +5,6 @@ const evaluacionController = require("../controllers/evaluacion.controller.js");
 
 const router = express.Router();
 
-
 router.get("/", evaluacionController.getEvaluaciones);
 router.get("/id", evaluacionController.getEvaluacionById)
 router.post("/", evaluacionController.createEvaluacion);

@@ -25,16 +25,5 @@ router.use("/auth", authRoutes);
 router.use("/estado",  estadoRoutes); // Agrega esta línea
 router.use("/evaluacion", evaluacionRoutes); // Agrega esta línea
 
-// Importa y utiliza las rutas de los diferentes módulos de tu aplicación
-const postulacionRoutes = require("./postulacion.routes");
-const ciudadRoutes = require("./ciudad.routes");
-const regionRoutes = require("./region.routes");
-
-// Agrega las rutas de los diferentes módulos aquí
-router.use("/postulaciones", postulacionRoutes);
-router.use("/ciudades", ciudadRoutes);
-router.use("/regiones", regionRoutes);
-
-
 module.exports = router;
 
