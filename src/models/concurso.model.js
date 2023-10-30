@@ -13,7 +13,6 @@ const ganadorSchema = new mongoose.Schema({
   },
 });
 
-
 const concursoSchema = new mongoose.Schema({
   montoTotal: {
     type: Number,
@@ -27,10 +26,31 @@ const concursoSchema = new mongoose.Schema({
   fechaTerminoPostulacion: {
     type: Date,
     required: true,
+    validate: {
+      validator: function(value) {
+        // Obtén la fecha actual
+        const now = new Date();
+        // Calcula la diferencia en meses
+        const diff = (value.getFullYear() * 12 + value.getMonth()) - (now.getFullYear() * 12 + now.getMonth());
+        // Verifica que la diferencia esté dentro del rango permitido (0 a 2 meses)
+        return diff >= 0 && diff <= 2;
+      },
+      message: 'La fecha de término de postulación debe ser dentro de los próximos 2 meses'
+    }
   },
   fechaResultadosPostulacion: {
     type: Date,
     required: true,
+    validate: [{
+      validator: function(value) {
+        const hoy = new Date();
+        const cuatroMesesDespues = new Date(hoy.setMonth(hoy.getMonth() + 4));
+        return value <= cuatroMesesDespues && value >= this.fechaTerminoPostulacion;
+      },
+      message: props => props.value < this.fechaTerminoPostulacion
+        ? 'La fecha de resultados de postulación no puede ser anterior a la fecha de término de postulación'
+        : 'La fecha de resultados de postulación debe ser dentro de los próximos 4 meses'
+    }]
   },
   fondo: {
     type: mongoose.Schema.Types.ObjectId,

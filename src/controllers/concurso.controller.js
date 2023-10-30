@@ -34,6 +34,8 @@ exports.create = async (req, res, next) => {
     fondo.montoTotal = nuevoConcurso.montoTotal;
     fondo.montoAsignado = nuevoConcurso.ganadores.reduce((sum, ganador) => sum + ganador.montoAsignado, 0);
     fondo.ganadores = nuevoConcurso.ganadores;
+
+    // Recalcular el monto restante y guardarlo en el documento Fondo
     fondo.montoRestante = fondo.montoTotal - fondo.montoAsignado;
 
     await fondo.save();
@@ -46,6 +48,7 @@ exports.create = async (req, res, next) => {
     next(error);
   }
 };
+
 
 
 
