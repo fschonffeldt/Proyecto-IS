@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
+const Estado = require("../models/estado.model"); // Importa el modelo de Estado
+
 
 exports.getEvaluacion = async (req, res, next) => {
   try {
@@ -10,11 +12,27 @@ exports.getEvaluacion = async (req, res, next) => {
   }
 };
 
+/**
+ * Crea una nueva evaluación y asigna el ID del estado y la ID de postulación.
+ */
 exports.createEvaluacion = async (req, res, next) => {
   try {
-    const nuevaEvaluacion = new Evaluacion(req.body);
-    await nuevaEvaluacion.save();
-    res.status(201).send(nuevaEvaluacion);  // 201 Created
+    const nuevoEvaluacion = new Evaluacion({
+      id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
+      comentario: req.body.comentario, // Toma el comentario del cuerpo de la solicitud
+      puntos: req.body.puntos, // Toma los puntos del cuerpo de la solicitud
+    });
+
+    // Busca el estado relacionado y asigna su ID a la evaluación
+    const estado = await Estado.findOne({ id_postulacion: req.body.id_postulacion });
+    if (!estado) {
+      return res.status(404).send({ message: "No se encontró un estado para la postulación especificada" });
+    }
+
+    nuevoEvaluacion.id_estado = estado._id;
+
+    await nuevoEvaluacion.save();
+    res.status(201).send(nuevoEvaluacion);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(400).send({ message: error.message });

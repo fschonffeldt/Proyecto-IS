@@ -8,6 +8,7 @@ const evaluacionSchema = new mongoose.Schema(
     },
     comentario: {
       type: String,
+      default: "",
     },
     id_estado: {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +17,7 @@ const evaluacionSchema = new mongoose.Schema(
     puntos: {
       type: Number,
       required: true,
+      default: 0,
     },
   },
   {

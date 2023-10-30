@@ -17,11 +17,31 @@ exports.getEstados = async (req, res, next) => {
 /**
  * Crea un nuevo estado.
  */
+const Evaluacion = require("../models/evaluacion.model");
+
+/**
+ * Crea un nuevo estado y una nueva evaluación automáticamente.
+ */
 exports.createEstado = async (req, res, next) => {
   try {
-    const nuevoEstado = new Estado(req.body);
+    const nuevoEstado = new Estado({
+      id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
+      estado: req.body.estado, // Toma el estado del cuerpo de la solicitud
+    });
+
     await nuevoEstado.save();
-    res.status(201).send(nuevoEstado);
+
+    // Crea una nueva evaluación asociada automáticamente
+    const nuevaEvaluacion = new Evaluacion({
+      id_postulacion: nuevoEstado.id_postulacion, // Asigna la ID de postulación del estado
+      comentario: "", // Puedes personalizar esto
+      id_estado: nuevoEstado._id, // Asigna la ID del estado recién creado
+      puntos: 0, // Puedes personalizar esto
+    });
+
+    await nuevaEvaluacion.save();
+
+    res.status(201).send({ estado: nuevoEstado, evaluacion: nuevaEvaluacion });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(400).send({ message: error.message });
@@ -30,6 +50,7 @@ exports.createEstado = async (req, res, next) => {
     }
   }
 };
+
 
 /**
  * Obtiene un estado por su id.
