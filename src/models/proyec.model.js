@@ -1,4 +1,6 @@
-import { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const model = mongoose.model;
 
 const proyecSchema = new Schema(
     {
@@ -10,4 +12,4 @@ const proyecSchema = new Schema(
     }, 
     { collection: 'proyectos',  versionKey: false, timestamps: true,});
 
-export default model('Proyec', proyecSchema);
+module.exports = model('Proyec', proyecSchema);
