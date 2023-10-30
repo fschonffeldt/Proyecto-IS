@@ -7,6 +7,7 @@ router.get('/', estadoController.getEstados);  // Ruta para obtener todos los es
 router.post('/', estadoController.createEstado);  // Ruta para crear un nuevo estado
 router.put('/:id', estadoController.updateEstado);  // Ruta para actualizar un estado existente
 router.delete('/:id', estadoController.deleteEstado);  // Ruta para eliminar un estado existente
+router.get('/:id_postulacion', estadoController.getEstadoByPostulacion);
 
 
 module.exports = router;

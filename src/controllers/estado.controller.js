@@ -65,6 +65,22 @@ exports.updateEstado = async (req, res, next) => {
   }
 };
 
+exports.getEstadoByPostulacion = async (req, res, next) => {
+  try {
+    const idPostulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
+    const estados = await Estado.find({ id_postulacion });
+    
+    if (!estados || estados.length === 0) {
+      return res.status(404).send({ message: 'No se encontraron estados para la postulación especificada' });
+    }
+
+    res.json(estados);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 /**
  * Elimina un estado por su id.
  */

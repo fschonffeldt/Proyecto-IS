@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const evaluacionSchema = new mongoose.Schema(
   {
     id_postulacion: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     comentario: {
       type: String,
     },
     id_estado: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     puntos: {
@@ -25,8 +25,10 @@ const evaluacionSchema = new mongoose.Schema(
 );
 
 evaluacionSchema.pre('save', function (next) {
-  // Puedes agregar lógica personalizada antes de guardar la evaluación aquí si es necesario.
-  // Por ejemplo, puedes realizar validaciones o cálculos adicionales.
+  if (this.puntos < 0 || this.puntos > 100) {
+    // Verifica si los puntos están en un rango válido
+    return next(new Error('Los puntos deben estar entre 0 y 100'));
+  }
   next();
 });
 

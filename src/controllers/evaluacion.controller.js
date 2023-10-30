@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
 
-exports.findAll = async (req, res, next) => {
+exports.getEvaluacion = async (req, res, next) => {
   try {
     const evaluaciones = await Evaluacion.find();
     res.json(evaluaciones);
@@ -10,7 +10,7 @@ exports.findAll = async (req, res, next) => {
   }
 };
 
-exports.create = async (req, res, next) => {
+exports.createEvaluacion = async (req, res, next) => {
   try {
     const nuevaEvaluacion = new Evaluacion(req.body);
     await nuevaEvaluacion.save();
@@ -24,7 +24,7 @@ exports.create = async (req, res, next) => {
   }
 };
 
-exports.update = async (req, res, next) => {
+exports.updateEvaluacion = async (req, res, next) => {
   try {
     const { id } = req.params;
     const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(id, req.body, { new: true });
@@ -37,7 +37,23 @@ exports.update = async (req, res, next) => {
   }
 };
 
-exports.delete = async (req, res) => {
+exports.getEvaluacionByPostulacion = async (req, res, next) => {
+  try {
+    const idPostulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
+    const evaluaciones = await Evaluacion.find({ id_postulacion });
+    
+    if (!evaluaciones || evaluaciones.length === 0) {
+      return res.status(404).send({ message: 'No se encontraron evaluaciones para la postulación especificada' });
+    }
+
+    res.json(evaluaciones);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+exports.deleteEvaluacion = async (req, res) => {
   const { id } = req.params;
   
   try {
