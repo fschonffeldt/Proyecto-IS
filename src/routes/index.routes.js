@@ -24,6 +24,10 @@ router.use("/auth", authRoutes);
 // Agrega las rutas para la entidad "estado" bajo /api/estados
 router.use("/estado",  estadoRoutes); // Agrega esta línea
 router.use("/evaluacion", evaluacionRoutes); // Agrega esta línea
+// Importa y utiliza las rutas de los diferentes módulos de tu aplicación
+const postulacionRoutes = require("./postulacion.routes");
+// Agrega las rutas de los diferentes módulos aquí
+router.use("/postulacion", postulacionRoutes);
 
 module.exports = router;
 
