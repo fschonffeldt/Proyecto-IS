@@ -1,141 +1,86 @@
 "use strict";
+const Postulaciones= require("../models/postulacion.model");
 
-const { v4: uuidv4 } = require("uuid");
-const moment = require("moment");
-const Postulacion = require("../models/postulacion.model");
-const Ciudad = require("../models/ciudad.model");
-const Region = require("../models/region.model");
-const { handleError } = require("../utils/errorHandler");
 
-async function createPostulacion(postulacionData) {
+// Crear una postulación (con fecha automática, concurso y estado fijos)
+async function createPostulacion(data) {
   try {
-    // Generar una fecha de postulación con Moment.js
-    postulacionData.FechaPostulacion = moment().format();
-
-    // Generar un número de solicitud único con UUID
-    postulacionData.numeroSolicitud = uuidv4();
-
-    const ciudad = await Ciudad.findById(postulacionData.ciudad);
-    if (!ciudad) {
-      throw new Error("La ciudad especificada no existe en la base de datos.");
-    }
-    const region = await Region.findById(postulacionData.region);
-    if (!region) {
-      throw new Error("La región especificada no existe en la base de datos.");
-    }
-    const postulacion = await Postulacion.create(postulacionData);
+    const postulacionData = {
+      ...data,
+      FechaPostulacion: new Date(),
+      concurso: concursoId, // Reemplaza concursoId con el ID del concurso fijo
+      estado: estadoId,
+    };
+    const postulacion = new Postulaciones(postulacionData);
+    await postulacion.save();
     return postulacion;
-  } catch (error) {
-    handleError(error, "postulacion.service -> createPostulacion");
-    throw new Error("Error al crear la postulación: " + error.message);
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 
-async function getPostulacionesByRut(rutRepresentante) {
+// Eliminar una postulación por ID
+async function deletePostulacionById(postId) {
   try {
-    const postulaciones = await Postulacion.find({ rutRepresentante });
+    await Postulaciones.findByIdAndRemove(postId);
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+// Obtener todas las postulaciones por RUT (excepto el campo "fondo")
+async function getPostulacionesByRut(rut) {
+  try {
+    const postulaciones = await Postulaciones.find({ rutRepresentante: rut }, { fondo: 0 });
     return postulaciones;
-  } catch (error) {
-    handleError(error, "postulacion.service -> getPostulacionesByRut");
-    throw new Error("Error al obtener las postulaciones: " + error.message);
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 
-async function getPostulacionByNumeroSolicitud(numeroSolicitud) {
+// Buscar una postulación específica por número de ID
+async function getPostulacionById(postId) {
   try {
-    const postulacion = await Postulacion.findOne({ numeroSolicitud });
-    if (!postulacion) {
-      throw new Error("Postulación no encontrada");
-    }
+    const postulacion = await Postulaciones.findById(postId);
     return postulacion;
-  } catch (error) {
-    handleError(error, "postulacion.service -> getPostulacionByNumeroSolicitud");
-    throw new Error("Error al obtener la postulación: " + error.message);
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 
-async function visualizarEstadoSolicitud(numeroSolicitud) {
+// Actualizar una postulación (incluyendo cambiar el estado)
+async function updatePostulacion(postId, newData) {
   try {
-    const postulacion = await Postulacion.findOne({ numeroSolicitud });
-    if (!postulacion) {
-      throw new Error("Postulación no encontrada");
-    }
-    return postulacion.estado;
-  } catch (error) {
-    handleError(error, "postulacion.service -> visualizarEstadoSolicitud");
-    throw new Error("Error al visualizar el estado de la solicitud: " + error.message);
-  }
-}
-
-async function updatePostulacion(numeroSolicitud, newData) {
-  try {
-    const postulacion = await Postulacion.findOne({ numeroSolicitud });
-    if (!postulacion) {
-      throw new Error("Postulación no encontrada");
-    }
-
-    if (newData.ciudad) {
-      const ciudad = await Ciudad.findById(newData.ciudad);
-      if (!ciudad) {
-        throw new Error("La ciudad especificada no existe en la base de datos.");
-      }
-    }
-
-    if (newData.region) {
-      const region = await Region.findById(newData.region);
-      if (!region) {
-        throw new Error("La región especificada no existe en la base de datos.");
-      }
-    }
-
-    if (newData.numeroSolicitud && newData.numeroSolicitud !== postulacion.numeroSolicitud) {
-      throw new Error("No puedes cambiar el número de solicitud");
-    }
-
-    postulacion.nombreRepresentante = newData.nombreRepresentante;
-    postulacion.ApellidoRepresentante = newData.ApellidoRepresentante;
-    postulacion.rutRepresentante = newData.rutRepresentante;
-    postulacion.telefonoRepresentante = newData.telefonoRepresentante;
-    postulacion.emailRepresentante = newData.emailRepresentante;
-    postulacion.nombreInstitucion = newData.nombreInstitucion;
-    postulacion.rutInstitucion = newData.rutInstitucion;
-    postulacion.emailInstitucion = newData.emailInstitucion;
-    postulacion.direccionInstitucion = newData.direccionInstitucion;
-
-    if (newData.ciudad) {
-      postulacion.ciudad = newData.ciudad;
-    }
-
-    if (newData.region) {
-      postulacion.region = newData.region;
-    }
-
-    const updatedPostulacion = await postulacion.save();
+    const updatedPostulacion = await 
+    Postulaciones.findByIdAndUpdate(postId, newData, { new: true });
     return updatedPostulacion;
-  } catch (error) {
-    handleError(error, "postulacion.service -> updatePostulacion");
-    throw error;
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 
-async function deletePostulacion(numeroSolicitud) {
+async function deletePostulacionById(postId) {
   try {
-    const postulacion = await Postulacion.findOneAndDelete({ numeroSolicitud });
-    if (!postulacion) {
-      throw new Error("Postulación no encontrada");
+    // Utiliza Mongoose para eliminar la postulación por su ID
+    const result = await Postulaciones.findByIdAndRemove(postId);
+
+    // Si se pudo eliminar con éxito, result será el documento eliminado.
+    if (result) {
+      return result;
+    } else {
+      // Si no se encontró la postulación, puedes lanzar un error o devolver un mensaje de que no se encontró.
+      throw new Error("La postulación no se encontró o ya fue eliminada.");
     }
-    return "Postulación eliminada correctamente";
-  } catch (error) {
-    handleError(error, "postulacion.service -> deletePostulacion");
-    throw new Error("Error al eliminar la postulación: " + error.message);
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 
 module.exports = {
   createPostulacion,
+  deletePostulacionById,
   getPostulacionesByRut,
-  getPostulacionByNumeroSolicitud,
-  visualizarEstadoSolicitud,
+  getPostulacionById,
   updatePostulacion,
-  deletePostulacion,
+  deletePostulacionById,
 };

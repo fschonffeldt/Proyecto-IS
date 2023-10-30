@@ -1,9 +1,9 @@
 "use strict";
 const mongoose = require("mongoose");
 const postulacionesSchema = new mongoose.Schema({
-  numeroSolicitud: {
-    type: String,
-    unique: true,
+  concurso: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "concurso",
   },
   nombreRepresentante: {
     type: String,
@@ -57,7 +57,11 @@ const postulacionesSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "estado",
   },
-  
+  estados: {
+    type: String,
+    enum: ["borrador", "enviada"], // Definimos dos estados posibles
+    default: "borrador", // Por defecto, se guarda como borrador
+  },
 },
    
 {

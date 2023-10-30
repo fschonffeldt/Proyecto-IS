@@ -1,18 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const {
-  createPostulacion,
-  getPostulacionesByRut,
-  getPostulacionByNumeroSolicitud,
-  updatePostulacion,
-  deletePostulacion,
-} = require("../controllers/postulacion.controller");
+const PostulacionesController = require("../controllers/postulacion.controller");
 
-// Rutas para las postulaciones
-router.post("/", createPostulacion);
-router.get("/rut/:rut", getPostulacionesByRut);
-router.get("/solicitud/:numeroSolicitud", getPostulacionByNumeroSolicitud);
-router.put("/solicitud/:numeroSolicitud", updatePostulacion);
-router.delete("/solicitud/:numeroSolicitud", deletePostulacion);
+// Ruta para crear una postulación
+router.post("/postulaciones", PostulacionesController.createPostulacion);
+
+// Ruta para eliminar una postulación por ID
+router.delete("/postulaciones/:id", PostulacionesController.deletePostulacionById);
+
+// Ruta para obtener todas las postulaciones por RUT
+router.get("/postulaciones/rut/:rut", PostulacionesController.getPostulacionesByRut);
+
+// Ruta para buscar una postulación específica por número de ID
+router.get("/postulaciones/:id", PostulacionesController.getPostulacionById);
+
+// Ruta para actualizar una postulación
+router.put("/postulaciones/:id", PostulacionesController.updatePostulacion);
 
 module.exports = router;
+

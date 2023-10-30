@@ -1,6 +1,4 @@
 const Joi = require("joi");
-const { v4: uuidv4 } = require("uuid"); // Para generar UUID únicos
-
 
 // Esquema de validación para crear o actualizar una postulación
 const RutRegex = /^(\d{7,8}(\-[\dkK])?|\d{6,7}[\dkK])$/;
@@ -8,8 +6,7 @@ const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const TelefonoRegex = /^\d{9}$/; // Expresión regular para el teléfono
 
 const postulacionSchema = Joi.object({
-  numeroSolicitud: Joi.string().default(() => uuidv4()), // Genera un UUID único automáticamente
-
+  concurso: Joi.string().required().messages,
   nombreRepresentante: Joi.string().required().messages({
     "string.empty": "El nombre del Representante no puede estar vacío.",
     "any.required": "El nombre del Representante es obligatorio.",
@@ -70,33 +67,20 @@ const postulacionSchema = Joi.object({
       "string.email": "El email de la Institución debe tener un formato válido.",
     }),
   direccionInstitucion: Joi.string().required(),
-  FechaPostulacion: Joi.date().default(() => new Date(), 
-  "Fecha de postulación por defecto").optional(),
+
 
   region: Joi.string().required(), // Aquí debes ajustar la validación según tus necesidades
   ciudad: Joi.string().required(), // Aquí debes ajustar la validación según tus necesidades
-});
-
-// Esquema de validación para buscar una postulación por número de solicitud
-const numeroSolicitudSchema = Joi.object({
-  numeroSolicitud: Joi.string().required().messages({
-    "string.empty": "El número de solicitud no puede estar vacío.",
-    "any.required": "El número de solicitud es obligatorio.",
-    "string.base": "El número de solicitud debe ser de tipo string.",
+  estados: Joi.string().required().messages({
+    "string.empty": "El estado no puede estar vacío.",
+    "any.required": "El estado es obligatorio.",
+    "string.base": "El estado debe ser de tipo string.",
   }),
-});
+  
+  });
 
-// Esquema de validación para eliminar una postulación
-const deletePostulacionSchema = Joi.object({
-  numeroSolicitud: Joi.string().required().messages({
-    "string.empty": "El número de solicitud no puede estar vacío.",
-    "any.required": "El número de solicitud es obligatorio.",
-    "string.base": "El número de solicitud debe ser de tipo string.",
-  }),
-});
 
 module.exports = {
   postulacionSchema,
-  numeroSolicitudSchema,
-  deletePostulacionSchema,
+ 
 };

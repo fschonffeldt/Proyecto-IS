@@ -1,142 +1,100 @@
 "use strict";
-const { respondSuccess, respondError } = require("../utils/resHandler");
-const PostulacionService = require("../services/postulacion.service");
-const { postulacionSchema, numeroSolicitudSchema } = require("../schema/postulacion.schema");
-const { handleError } = require("../utils/errorHandler");
 
-/**
- * Crea una nueva postulación
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
+const PostulacionesService = require("../services/postulacion.service");
+const { respondSuccess, respondError } = require("../utils/resHandler");
+const { postulacionSchema } = require("../schema/postulacion.schema");
+
+
+// Crear una postulación
 async function createPostulacion(req, res) {
   try {
-    const postulacionData = req.body;
+    const { pais, region } = req.body;
 
-    // Validar los datos con el esquema
-    const { error } = postulacionSchema.validate(postulacionData);
-
+    // Valida los datos de entrada con el esquema
+    const { error } = postulacionSchema.validate(req.body);
     if (error) {
       return respondError(req, res, 400, error.details[0].message);
     }
 
-    const newPostulacion = await PostulacionService.createPostulacion(postulacionData);
-    return respondSuccess(req, res, 201, newPostulacion);
+    // Realiza consultas a la base de datos para validar pais y region
+    const paisValido = await PostulacionesService.validarPais(pais);
+    const regionValida = await PostulacionesService.validarRegion(region);
+
+    if (!paisValido || !regionValida) {
+      return respondError(req, res, 400, "El país y/o la región no son válidos");
+    }
+
+    const postulacion = await PostulacionesService.createPostulacion(req.body);
+    res.status(201).json(postulacion);
   } catch (error) {
-    handleError(error, "postulacion.controller -> createPostulacion");
-    respondError(req, res, 500, "No se pudo crear la postulación");
+    respondError(req, res, 500, error.message);
   }
 }
 
+// Actualizar una postulación (incluyendo cambiar el estado)
+async function updatePostulacion(req, res) {
+  try {
+    const postId = req.params.id;
+    const newData = req.body;
 
-/**
- * Obtiene todas las postulaciones por el rut del representante
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
+    // Valida los datos de entrada con el esquema
+    const { error } = postulacionSchema.validate(newData);
+    if (error) {
+      return respondError(req, res, 400, error.details[0].message);
+    }
+
+    // Realiza consultas a la base de datos para validar pais y region
+    const paisValido = await PostulacionesService.validarPais(newData.pais);
+    const regionValida = await PostulacionesService.validarRegion(newData.region);
+
+    if (!paisValido || !regionValida) {
+      return respondError(req, res, 400, "El país y/o la región no son válidos");
+    }
+
+    const updatedPostulacion = await PostulacionesService.updatePostulacion(postId, newData);
+    res.status(200).json(updatedPostulacion);
+  } catch (error) {
+    respondError(req, res, 500, error.message);
+  }
+}
+
+// Obtener todas las postulaciones por RUT (excepto el campo "fondo")
 async function getPostulacionesByRut(req, res) {
   try {
     const rut = req.params.rut;
-    const postulaciones = await PostulacionService.getPostulacionesByRut(rut);
-
-    if (postulaciones.length === 0) {
-      return respondSuccess(req, res, 204);
-    }
-
-    return respondSuccess(req, res, 200, postulaciones);
+    const postulaciones = await PostulacionesService.getPostulacionesByRut(rut);
+    respondSuccess(req, res, 200, postulaciones);
   } catch (error) {
-    handleError(error, "postulacion.controller -> getPostulacionesByRut");
-    respondError(req, res, 500, "No se pudo obtener las postulaciones");
+    respondError(req, res, 500, error.message);
   }
 }
 
-/**
- * Obtiene una postulación por número de solicitud
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function getPostulacionByNumeroSolicitud(req, res) {
+// Buscar una postulación específica por número de ID
+async function getPostulacionById(req, res) {
   try {
-    const numeroSolicitud = req.params.numeroSolicitud;
-    const postulacion = await PostulacionService.getPostulacionByNumeroSolicitud(numeroSolicitud);
-
-    if (!postulacion) {
-      return respondError(req, res, 404, "Postulación no encontrada");
-    }
-
-    return respondSuccess(req, res, 200, postulacion);
+    const postId = req.params.id;
+    const postulacion = await PostulacionesService.getPostulacionById(postId);
+    respondSuccess(req, res, 200, postulacion);
   } catch (error) {
-    handleError(error, "postulacion.controller -> getPostulacionByNumeroSolicitud");
-    respondError(req, res, 500, "Error al obtener la postulación");
+    respondError(req, res, 500, error.message);
   }
 }
 
-/**
- * Actualiza una postulación por número de solicitud
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function updatePostulacion(req, res) {
+async function deletePostulacionById(req, res) {
   try {
-    const numeroSolicitud = req.params.numeroSolicitud;
-    const postulacionData = req.body;
-
-    // Validar los datos con el esquema
-    const { error } = postulacionSchema.validate(postulacionData);
-
-    if (error) {
-      return respondError(req, res, 400, error.details[0].message);
-    }
-
-    const updatedPostulacion = await PostulacionService.updatePostulacion(
-      numeroSolicitud,
-      postulacionData);
-
-    if (!updatedPostulacion) {
-      return respondError(req, res, 404, "Postulación no encontrada");
-    }
-
-    return respondSuccess(req, res, 200, updatedPostulacion);
+    const postId = req.params.id;
+    await PostulacionesService.deletePostulacionById(postId);
+    respondSuccess(req, res, 204, "La postulación ha sido eliminada con éxito");
   } catch (error) {
-    handleError(error, "postulacion.controller -> updatePostulacion");
-    respondError(req, res, 500, "Error al actualizar la postulación");
+    respondError(req, res, 500, error.message);
   }
 }
 
-/**
- * Elimina una postulación por número de solicitud
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function deletePostulacion(req, res) {
-  try {
-    const numeroSolicitud = req.params.numeroSolicitud;
-
-    // Valida el número de solicitud con el esquema
-    const { error } = numeroSolicitudSchema.validate({ numeroSolicitud });
-
-    if (error) {
-      return respondError(req, res, 400, error.details[0].message);
-    }
-
-    const deletedPostulacion = await PostulacionService.deletePostulacion(numeroSolicitud);
-
-    if (!deletedPostulacion) {
-      return respondError(req, res, 404, "Postulación no encontrada");
-    }
-
-    return respondSuccess(req, res, 200, deletedPostulacion);
-  } catch (error) {
-    handleError(error, "postulacion.controller -> deletePostulacion");
-    respondError(req, res, 500, "Error al eliminar la postulación");
-  }
-}
 
 module.exports = {
   createPostulacion,
+  deletePostulacionById,
   getPostulacionesByRut,
-  getPostulacionByNumeroSolicitud,
+  getPostulacionById,
   updatePostulacion,
-  deletePostulacion,
 };
-
