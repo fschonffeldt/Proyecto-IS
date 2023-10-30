@@ -25,11 +25,13 @@ async function getEvaluaciones() {
  */
 async function createEvaluacion(evaluacion) {
   try {
-    // Lógica para crear una nueva evaluación, ajusta según tus necesidades
-    const newEvaluacion = new Evaluacion(evaluacion);
+    const { error: bodyError, value: validatedEvaluacion } = evaluacionBodySchema.validate(evaluacion);
+    if (bodyError) return [null, bodyError.message];
+
+    // Crea una nueva evaluación con los datos validados
+    const newEvaluacion = new Evaluacion(validatedEvaluacion);
     await newEvaluacion.save();
 
-    // Devuelve el nuevo objeto de evaluación
     return [newEvaluacion, null];
   } catch (error) {
     handleError(error, 'evaluacion.service -> createEvaluacion');
@@ -61,15 +63,18 @@ async function getEvaluacionById(id) {
  */
 async function updateEvaluacion(id, evaluacion) {
   try {
-    // Lógica para actualizar una evaluación por su id, ajusta según tus necesidades
-    const evaluacionToUpdate = await Evaluacion.findByIdAndUpdate(id, evaluacion, { new: true });
+    const { error: bodyError, value: validatedEvaluacion } = evaluacionBodySchema.validate(evaluacion);
+    if (bodyError) return [null, bodyError.message];
 
-    // Devuelve el objeto de evaluación actualizado
+    // Actualiza la evaluación con los datos validados
+    const evaluacionToUpdate = await Evaluacion.findByIdAndUpdate(id, validatedEvaluacion, { new: true });
+
     return [evaluacionToUpdate, null];
   } catch (error) {
     handleError(error, 'evaluacion.service -> updateEvaluacion');
   }
 }
+
 
 /**
  * Elimina una evaluación por su id de la base de datos
@@ -78,15 +83,15 @@ async function updateEvaluacion(id, evaluacion) {
  */
 async function deleteEvaluacion(id) {
   try {
-    // Lógica para eliminar una evaluación por su id, ajusta según tus necesidades
+    // Elimina la evaluación por su ID
     const evaluacionToDelete = await Evaluacion.findByIdAndDelete(id);
 
-    // Devuelve el objeto de evaluación eliminado
     return evaluacionToDelete;
   } catch (error) {
     handleError(error, 'evaluacion.service -> deleteEvaluacion');
   }
 }
+
 
 module.exports = {
   getEvaluaciones,

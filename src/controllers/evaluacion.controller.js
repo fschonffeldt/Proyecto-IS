@@ -10,14 +10,21 @@ async function getEvaluaciones(req, res) {
     const [evaluaciones, errorEvaluaciones] = await EvaluacionService.getEvaluaciones();
     if (errorEvaluaciones) return respondError(req, res, 404, errorEvaluaciones);
 
-    evaluaciones.length === 0
+    const formattedEvaluaciones = evaluaciones.map((evaluacion) => ({
+      ...evaluacion.toObject(),
+      fechaCreacion: evalucion.createdAt.toISOString().split('T')[0], // Solo la fecha
+      horaCreacion: evalucion.createdAt.toISOString().split('T')[1].split('.')[0], // Solo la hora
+    }));
+
+    formattedEvaluaciones.length === 0
       ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, evaluaciones);
+      : respondSuccess(req, res, 200, formattedEvaluaciones);
   } catch (error) {
     handleError(error, "evaluacion.controller -> getEvaluaciones");
     respondError(req, res, 500, "No se pudieron obtener las evaluaciones");
   }
 }
+
 
 async function createEvaluacion(req, res) {
   try {
@@ -49,12 +56,19 @@ async function getEvaluacionById(req, res) {
 
     if (errorEvaluacion) return respondError(req, res, 404, errorEvaluacion);
 
-    respondSuccess(req, res, 200, evaluacion);
+    const formattedEvaluacion = {
+      ...evaluacion.toObject(),
+      fechaCreacion: evaluacion.createdAt.toISOString().split('T')[0], // Solo la fecha
+      horaCreacion: evaluacion.createdAt.toISOString().split('T')[1].split('.')[0], // Solo la hora
+    };
+
+    respondSuccess(req, res, 200, formattedEvaluacion);
   } catch (error) {
     handleError(error, "evaluacion.controller -> getEvaluacionById");
     respondError(req, res, 500, "No se pudo obtener la evaluación");
   }
 }
+
 
 async function updateEvaluacion(req, res) {
   try {
