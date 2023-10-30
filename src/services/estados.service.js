@@ -93,10 +93,26 @@ async function deleteEstado(id) {
   }
 }
 
+/**
+ * Busca estados por su id_formulario en la base de datos
+ * @param {string} idFormulario - ID del formulario
+ * @returns {Promise} Promesa con el objeto de estados encontrados
+ */
+async function getEstadosByFormularioId(idFormulario) {
+  try {
+    const estados = await Estado.find({ id_formulario: idFormulario }).exec();
+    return estados;
+  } catch (error) {
+    handleError(error, 'estado.service -> getEstadosByFormularioId');
+    return null;
+  }
+}
+
 module.exports = {
   getEstados,
   createEstado,
   getEstadoById,
   updateEstado,
   deleteEstado,
+  getEstadosByFormularioId,
 };

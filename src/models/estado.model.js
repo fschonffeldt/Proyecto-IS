@@ -7,7 +7,7 @@ const estadoSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    id_formulario: {
+    id_postulacion: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },

@@ -12,6 +12,7 @@ router.get("/id", estadoController.getEstadoById)
 router.post("/",  estadoController.createEstado);
 router.put("/:id",  estadoController.updateEstado);
 router.delete("/:id",  estadoController.deleteEstado);
+router.get("/:idFormulario", estadoController.getEstadosByFormularioId);
 
 // Exporta el enrutador
 module.exports = router;

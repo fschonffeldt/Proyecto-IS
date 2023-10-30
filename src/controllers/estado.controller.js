@@ -134,10 +134,35 @@ async function deleteEstado(req, res) {
   }
 }
 
+/**
+ * Obtiene estados por su id_formulario
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getEstadosByFormularioId(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = estadoIdSchema.validate(params);
+
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const estados = await EstadoService.getEstadosByFormularioId(params.idFormulario);
+
+    if (!estados) return respondError(req, res, 404, 'No se encontraron estados con el id_formulario proporcionado.');
+
+    respondSuccess(req, res, 200, estados);
+  } catch (error) {
+    handleError(error, 'estado.controller -> getEstadosByFormularioId');
+    respondError(req, res, 500, 'No se pudieron obtener los estados');
+  }
+}
+
+
 module.exports = {
   getEstados,
   getEstadoById,
   createEstado,
   updateEstado,
   deleteEstado,
+  getEstadosByFormularioId,
 };
