@@ -54,7 +54,7 @@ const concursoSchema = new mongoose.Schema({
   },
   fondo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Fondo',  // Asumiendo que 'Fondo' es el nombre del modelo para el esquema de Fondo
+    ref: 'Fondo',  //  modelo para el esquema de Fondo
     required: true,
   },
 }, {

@@ -1,8 +1,8 @@
 // controllers/fondo.controller.js
 "use strict";
 const mongoose = require('mongoose');
-// Asegúrate de que la ruta y el nombre del archivo sean correctos
-const Fondo = require('../models/fondos.model');  // <-- Ajusta esto si es necesario
+
+const Fondo = require('../models/fondos.model'); 
 
 /**
  * Obtiene todos los fondos.
