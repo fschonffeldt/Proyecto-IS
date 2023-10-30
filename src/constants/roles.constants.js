@@ -1,4 +1,4 @@
 /** Roles permitidos por la base de datos */
-const ROLES = ["user", "evaluador", "admin"];
+const ROLES = ["user", "admin"];
 
 module.exports = ROLES;
