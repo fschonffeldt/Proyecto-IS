@@ -2,11 +2,15 @@ const Joi = require("joi");
 
 // Esquema de validación para crear o actualizar una postulación
 const RutRegex = /^(\d{7,8}(\-[\dkK])?|\d{6,7}[\dkK])$/;
-const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; 
-const TelefonoRegex = /^\d{9}$/; // Expresión regular para el teléfono
+const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const TelefonoRegex = /^\d{9}$/;
 
 const postulacionSchema = Joi.object({
-  concurso: Joi.string().required().messages,
+  concurso: Joi.string().required().messages({
+    "string.empty": "El concurso no puede estar vacío.",
+    "any.required": "El concurso es obligatorio.",
+    "string.base": "El concurso debe ser de tipo string.",
+  }),
   nombreRepresentante: Joi.string().required().messages({
     "string.empty": "El nombre del Representante no puede estar vacío.",
     "any.required": "El nombre del Representante es obligatorio.",
@@ -66,21 +70,28 @@ const postulacionSchema = Joi.object({
       "string.base": "El email de la Institución debe ser de tipo string.",
       "string.email": "El email de la Institución debe tener un formato válido.",
     }),
-  direccionInstitucion: Joi.string().required(),
-
-
-  region: Joi.string().required(), // Aquí debes ajustar la validación según tus necesidades
-  ciudad: Joi.string().required(), // Aquí debes ajustar la validación según tus necesidades
+  direccionInstitucion: Joi.string().required().messages({
+    "string.empty": "La dirección de la Institución no puede estar vacía.",
+    "any.required": "La dirección de la Institución es obligatoria.",
+    "string.base": "La dirección de la Institución debe ser de tipo string.",
+  }),
+  region: Joi.string().required().messages({
+    "string.empty": "La región no puede estar vacía.",
+    "any.required": "La región es obligatoria.",
+    "string.base": "La región debe ser de tipo string.",
+  }),
+  ciudad: Joi.string().required().messages({
+    "string.empty": "La ciudad no puede estar vacía.",
+    "any.required": "La ciudad es obligatoria.",
+    "string.base": "La ciudad debe ser de tipo string.",
+  }),
   estados: Joi.string().required().messages({
     "string.empty": "El estado no puede estar vacío.",
     "any.required": "El estado es obligatorio.",
     "string.base": "El estado debe ser de tipo string.",
   }),
-  
-  });
-
+});
 
 module.exports = {
   postulacionSchema,
- 
 };
