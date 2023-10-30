@@ -3,14 +3,14 @@ const mongoose = require("mongoose");
 const evaluacionSchema = new mongoose.Schema(
   {
     id_postulacion: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     comentario: {
       type: String,
     },
     id_estado: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       required: true,
     },
     puntos: {

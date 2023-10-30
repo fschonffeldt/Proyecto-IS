@@ -33,17 +33,11 @@ async function createEstado(req, res) {
   try {
     const { body } = req;
     const { error: bodyError } = estadoBodySchema.validate(body);
-
-    if (bodyError) {
-      return respondError(req, res, 400, bodyError.message);
-    }
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [newEstado, estadoError] = await EstadoService.createEstado(body);
 
-    if (estadoError) {
-      return respondError(req, res, 400, estadoError);
-    }
-
+    if (estadoError) return respondError(req, res, 400, estadoError);
     if (!newEstado) {
       return respondError(req, res, 400, "No se creó el estado");
     }

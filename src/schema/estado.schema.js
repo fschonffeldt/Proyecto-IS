@@ -17,18 +17,13 @@ const estadoBodySchema = Joi.object({
     "any.required": "El campo 'id_postulacion' es obligatorio.",
   }),
   estados: Joi.array()
-  .items(Joi.string().valid("en proceso", "aceptado", "rechazado"))
+  .items(Joi.string().valid(...ESTADOS_PERMITIDOS))
   .required()
   .messages({
     "array.base": "El estado debe ser de tipo array.",
     "any.required": "El estado es obligatorio.",
     "string.base": "El estado debe ser de tipo string.",
     "any.only": "El estado proporcionado no es válido.",
-  }),
-
-
-  puntos: Joi.number().optional().messages({
-    "number.base": "El campo 'puntos' debe ser de tipo numérico.",
   }),
   fechaModificacion: Joi.date().optional().messages({
     "date.base": "El campo 'fechaModificacion' debe ser de tipo fecha.",
