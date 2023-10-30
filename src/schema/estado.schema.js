@@ -1,4 +1,7 @@
+"use strict";
+
 const Joi = require("joi");
+const ESTADOS_PERMITIDOS = require("../constants/estados.constants");
 
 /**
  * Esquema de validación para el cuerpo de la solicitud de estado.
@@ -13,13 +16,14 @@ const estadoBodySchema = Joi.object({
     "string.empty": "El campo 'id_postulacion' no puede estar vacío.",
     "any.required": "El campo 'id_postulacion' es obligatorio.",
   }),
-  estado: Joi.string()
-    .valid("en proceso", "aceptado", "rechazado")
+  estados: Joi.array()
+    .items(Joi.string().valid(...ESTADOS_PERMITIDOS))
     .required()
     .messages({
-      "string.empty": "El campo 'estado' no puede estar vacío.",
-      "any.required": "El campo 'estado' es obligatorio.",
-      "any.only": "El campo 'estado' debe ser 'en proceso', 'aceptado' o 'rechazado'.",
+      "array.base": "El rol debe ser de tipo array.",
+      "any.required": "El rol es obligatorio.",
+      "string.base": "El rol debe ser de tipo string.",
+      "any.only": "El rol proporcionado no es válido.",
     }),
   puntos: Joi.number().optional().messages({
     "number.base": "El campo 'puntos' debe ser de tipo numérico.",

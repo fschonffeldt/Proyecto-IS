@@ -25,8 +25,16 @@ async function getEvaluaciones() {
  */
 async function createEvaluacion(evaluacion) {
   try {
+    // Valida el cuerpo del objeto de evaluación
     const { error: bodyError, value: validatedEvaluacion } = evaluacionBodySchema.validate(evaluacion);
-    if (bodyError) return [null, bodyError.message];
+    if (bodyError) {
+      return [null, bodyError.message];
+    }
+
+    // Verifica que los puntos no sean negativos y estén en el rango de 0 a 100
+    if (validatedEvaluacion.puntos < 0 || validatedEvaluacion.puntos > 100) {
+      return [null, 'Los puntos deben estar en el rango de 0 a 100.'];
+    }
 
     // Crea una nueva evaluación con los datos validados
     const newEvaluacion = new Evaluacion(validatedEvaluacion);

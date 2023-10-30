@@ -1,8 +1,8 @@
 "use strict";
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
-const EvaluacionService = require("../controllers/evaluacion.controller.js");
-const { evaluacionBodySchema, evaluacionIdSchema } = require("../schema/evaluacion.schema");
+const EvaluacionService = require("../services/evaluaciones.service"); // Asegúrate de que esta importación sea correcta
+const { evaluacionBodySchema } = require("../schema/evaluacion.schema");
 const { handleError } = require("../utils/errorHandler");
 
 async function getEvaluaciones(req, res) {
@@ -10,6 +10,7 @@ async function getEvaluaciones(req, res) {
     const [evaluaciones, errorEvaluaciones] = await EvaluacionService.getEvaluaciones();
     if (errorEvaluaciones) return respondError(req, res, 404, errorEvaluaciones);
 
+    // Formatea las evaluaciones para mostrar fecha y hora por separado
     const formattedEvaluaciones = evaluaciones.map((evaluacion) => ({
       ...evaluacion.toObject(),
       fechaCreacion: evalucion.createdAt.toISOString().split('T')[0], // Solo la fecha
@@ -24,7 +25,6 @@ async function getEvaluaciones(req, res) {
     respondError(req, res, 500, "No se pudieron obtener las evaluaciones");
   }
 }
-
 
 async function createEvaluacion(req, res) {
   try {
@@ -56,6 +56,7 @@ async function getEvaluacionById(req, res) {
 
     if (errorEvaluacion) return respondError(req, res, 404, errorEvaluacion);
 
+    // Formatea la evaluación para mostrar fecha y hora por separado
     const formattedEvaluacion = {
       ...evaluacion.toObject(),
       fechaCreacion: evaluacion.createdAt.toISOString().split('T')[0], // Solo la fecha
