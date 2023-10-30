@@ -14,6 +14,7 @@ const estadoSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ["en proceso", "aceptado", "rechazado"], // Enumeración de estados válidos
+      default: "en proceso", // Valor predeterminado
     },
     ultima_modificacion: {
       type: Date,
