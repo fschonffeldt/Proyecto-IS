@@ -32,3 +32,6 @@ const evaluacionBodySchema = Joi.object({
   "object.unknown": "No se permiten propiedades adicionales.",
 });
 
+module.exports = {
+  evaluacionBodySchema,
+};

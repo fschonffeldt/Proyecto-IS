@@ -20,10 +20,10 @@ const estadoBodySchema = Joi.object({
     .items(Joi.string().valid(...ESTADOS_PERMITIDOS))
     .required()
     .messages({
-      "array.base": "El rol debe ser de tipo array.",
-      "any.required": "El rol es obligatorio.",
-      "string.base": "El rol debe ser de tipo string.",
-      "any.only": "El rol proporcionado no es válido.",
+      "array.base": "El estado debe ser de tipo array.",
+      "any.required": "El estado es obligatorio.",
+      "string.base": "El estado debe ser de tipo string.",
+      "any.only": "El estado proporcionado no es válido.",
     }),
   puntos: Joi.number().optional().messages({
     "number.base": "El campo 'puntos' debe ser de tipo numérico.",
