@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const ciudadSchema = Joi.object({
+const regionSchema = Joi.object({
     nombre: Joi.string()
         .required()
         .regex(/^[A-Za-z]+$/)
@@ -12,4 +12,7 @@ const ciudadSchema = Joi.object({
         }),
 });
 
-module.exports = { ciudadSchema };
+
+module.exports = { regionSchema };
+
+

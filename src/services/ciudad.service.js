@@ -2,10 +2,6 @@ const Ciudad = require("../models/ciudad.model");
 
 async function createCiudad(ciudadData) {
   try {
-    const existente = await Ciudad.findOne({ Nombre: ciudadData.Nombre });
-    if (existente) {
-      throw new Error("Ya existe una ciudad con ese nombre.");
-    }
     const nuevaCiudad = new Ciudad(ciudadData);
     return nuevaCiudad.save();
   } catch (error) {
@@ -34,6 +30,7 @@ async function deleteCiudadById(ciudadId) {
 }
 
 module.exports = {
+  createCiudad,
   createCiudad,
   listCiudades,
   getCiudadById,

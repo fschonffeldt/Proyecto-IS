@@ -31,9 +31,9 @@ const ciudadRoutes = require("./ciudad.routes");
 const regionRoutes = require("./region.routes");
 
 // Agrega las rutas de los diferentes módulos aquí
-router.use("/postulaciones", postulacionRoutes);
-router.use("/ciudades", ciudadRoutes);
-router.use("/regiones", regionRoutes);  
+router.use("/postulacion", postulacionRoutes);
+router.use("/ciudad", ciudadRoutes);
+router.use("/region", regionRoutes);  
 
 
 module.exports = router;

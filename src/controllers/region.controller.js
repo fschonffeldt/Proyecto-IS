@@ -1,10 +1,11 @@
 const RegionService = require("../services/region.service");
-const { ciudadSchema } = require("../models/ciudad.model");
+const { regionSchema } = require("../schema/region.schema");
+
 
 async function createRegion(req, res) {
   try {
     const regionData = req.body;
-    const { error, value } = ciudadSchema.validate(regionData);
+    const { error, value } = regionSchema.validate(regionData);
 
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
@@ -43,7 +44,7 @@ async function updateRegionById(req, res) {
   try {
     const regionId = req.params.id;
     const regionData = req.body;
-    const { error, value } = ciudadSchema.validate(regionData);
+    const { error, value } = regionSchema.validate(regionData);
 
     if (error) {
       return res.status(400).json({ error: error.details[0].message });

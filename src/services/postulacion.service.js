@@ -1,6 +1,20 @@
 "use strict";
 const Postulaciones= require("../models/postulacion.model");
 
+async function validarcuidad(ciudad) {
+  try {
+    // Consulta la base de datos para verificar si la ciudad ya existe
+    const ciudadExistente = await Ciudad.findOne({ nombre: ciudad });
+
+    if (ciudadExistente) {
+      return false; // La ciudad ya existe, no es válida
+    }
+    return true; // La ciudad es válida, no existe en la base de datos
+  } catch (error) {
+    throw new Error("Error al validar la ciudad: " + error.message);
+  }
+}
+
 
 // Crear una postulación (con fecha automática, concurso y estado fijos)
 async function createPostulacion(data) {
@@ -77,6 +91,7 @@ async function deletePostulacionById(postId) {
 }
 
 module.exports = {
+  validarcuidad,
   createPostulacion,
   deletePostulacionById,
   getPostulacionesByRut,
