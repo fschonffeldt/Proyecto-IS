@@ -1,16 +1,16 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const evaluacionSchema = new mongoose.Schema(
   {
     id_postulacion: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId, // Cambia el tipo a ObjectId
       required: true,
     },
     comentario: {
       type: String,
     },
     id_estado: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId, // Cambia el tipo a ObjectId
       required: true,
     },
     puntos: {
@@ -21,9 +21,9 @@ const evaluacionSchema = new mongoose.Schema(
   {
     versionKey: false,
     timestamps: true, // Agregar timestamps para fecha de creación y modificación
-  },
+  }
 );
 
-const Evaluacion = mongoose.model("Evaluacion", evaluacionSchema);
+const Evaluacion = mongoose.model('Evaluacion', evaluacionSchema);
 
 module.exports = Evaluacion;

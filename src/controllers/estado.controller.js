@@ -1,158 +1,83 @@
 "use strict";
-
-const { respondSuccess, respondError } = require("../utils/resHandler");
-const EstadoService = require("../services/estados.service");
-const { estadoBodySchema, estadoIdSchema } = require("../schema/estado.schema");
-const { handleError } = require("../utils/errorHandler");
+const mongoose = require("mongoose");
+const Estado = require("../models/estado.model"); // Ajusta esto según la ubicación de tu modelo
 
 /**
- * Obtiene todos los estados
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
+ * Obtiene todos los estados.
  */
-async function getEstados(req, res) {
+exports.getEstados = async (req, res, next) => {
   try {
-    const [estados, errorEstados] = await EstadoService.getEstados();
-    if (errorEstados) return respondError(req, res, 404, errorEstados);
-
-    estados.length === 0
-      ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, estados);
+    const estados = await Estado.find(); // Accede directamente al modelo de Estado
+    res.json(estados);
   } catch (error) {
-    handleError(error, "estado.controller -> getEstados");
-    respondError(req, res, 500, "No se pudieron obtener los estados");
+    next(error);
   }
-}
-
-/**
- * Crea un nuevo estado
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function createEstado(req, res) {
-  try {
-    const { body } = req;
-    const { error: bodyError } = estadoBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [newEstado, estadoError] = await EstadoService.createEstado(body);
-
-    if (estadoError) return respondError(req, res, 400, estadoError);
-    if (!newEstado) {
-      return respondError(req, res, 400, "No se creó el estado");
-    }
-
-    respondSuccess(req, res, 201, newEstado);
-  } catch (error) {
-    handleError(error, "estado.controller -> createEstado");
-    respondError(req, res, 500, "No se creó el estado");
-  }
-}
-
-
-/**
- * Obtiene un estado por su id
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function getEstadoById(req, res) {
-  try {
-    const { params } = req;
-    const { error: paramsError } = estadoIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const [estado, errorEstado] = await EstadoService.getEstadoById(params.id);
-
-    if (errorEstado) return respondError(req, res, 404, errorEstado);
-
-    respondSuccess(req, res, 200, estado);
-  } catch (error) {
-    handleError(error, "estado.controller -> getEstadoById");
-    respondError(req, res, 500, "No se pudo obtener el estado");
-  }
-}
-
-/**
- * Actualiza un estado por su id
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function updateEstado(req, res) {
-  try {
-    const { params, body } = req;
-    const { error: paramsError } = estadoIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const { error: bodyError } = estadoBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [estado, estadoError] = await EstadoService.updateEstado(params.id, body);
-
-    if (estadoError) return respondError(req, res, 400, estadoError);
-
-    respondSuccess(req, res, 200, estado);
-  } catch (error) {
-    handleError(error, "estado.controller -> updateEstado");
-    respondError(req, res, 500, "No se pudo actualizar el estado");
-  }
-}
-
-/**
- * Elimina un estado por su id
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function deleteEstado(req, res) {
-  try {
-    const { params } = req;
-    const { error: paramsError } = estadoIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const estado = await EstadoService.deleteEstado(params.id);
-    !estado
-      ? respondError(
-          req,
-          res,
-          404,
-          "No se encontró el estado solicitado",
-          "Verifique el id ingresado",
-        )
-      : respondSuccess(req, res, 200, estado);
-  } catch (error) {
-    handleError(error, "estado.controller -> deleteEstado");
-    respondError(req, res, 500, "No se pudo eliminar el estado");
-  }
-}
-
-/**
- * Obtiene estados por su id_formulario
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
-async function getEstadosByFormularioId(req, res) {
-  try {
-    const { params } = req;
-    const { error: paramsError } = estadoIdSchema.validate(params);
-
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const estados = await EstadoService.getEstadosByFormularioId(params.idFormulario);
-
-    if (!estados) return respondError(req, res, 404, 'No se encontraron estados con el id_formulario proporcionado.');
-
-    respondSuccess(req, res, 200, estados);
-  } catch (error) {
-    handleError(error, 'estado.controller -> getEstadosByFormularioId');
-    respondError(req, res, 500, 'No se pudieron obtener los estados');
-  }
-}
-
-
-module.exports = {
-  getEstados,
-  getEstadoById,
-  createEstado,
-  updateEstado,
-  deleteEstado,
-  getEstadosByFormularioId,
 };
+
+/**
+ * Crea un nuevo estado.
+ */
+exports.createEstado = async (req, res, next) => {
+  try {
+    const nuevoEstado = new Estado(req.body);
+    await nuevoEstado.save();
+    res.status(201).send(nuevoEstado);
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(400).send({ message: error.message });
+    } else {
+      next(error);
+    }
+  }
+};
+
+/**
+ * Obtiene un estado por su id.
+ */
+exports.getEstadoById = async (req, res, next) => {
+  try {
+    const estado = await Estado.findById(req.params.id); // Accede directamente al modelo de Estado
+    if (!estado) {
+      return res.status(404).send();
+    }
+    res.json(estado);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Actualiza un estado por su id.
+ */
+exports.updateEstado = async (req, res, next) => {
+  try {
+    const estadoActualizado = await Estado.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!estadoActualizado) {
+      return res.status(404).send();
+    }
+    res.json(estadoActualizado);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Elimina un estado por su id.
+ */
+exports.deleteEstado = async (req, res, next) => {
+  try {
+    const estadoEliminado = await Estado.findByIdAndDelete(req.params.id); // Accede directamente al modelo de Estado
+    if (!estadoEliminado) {
+      return res.status(404).send();
+    }
+    res.send({ message: "Estado eliminado exitosamente", data: estadoEliminado });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = exports;

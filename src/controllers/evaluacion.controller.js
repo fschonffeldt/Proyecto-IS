@@ -1,25 +1,22 @@
 "use strict";
-
 const { respondSuccess, respondError } = require("../utils/resHandler");
-const EvaluacionService = require("../services/evaluaciones.service"); // Asegúrate de que esta importación sea correcta
-const { evaluacionBodySchema } = require("../schema/evaluacion.schema");
+const Evaluacion = require("../models/evaluacion.model"); // Ajusta esto según la ubicación de tu modelo
 const { handleError } = require("../utils/errorHandler");
 
 async function getEvaluaciones(req, res) {
   try {
-    const [evaluaciones, errorEvaluaciones] = await EvaluacionService.getEvaluaciones();
-    if (errorEvaluaciones) return respondError(req, res, 404, errorEvaluaciones);
-
-    // Formatea las evaluaciones para mostrar fecha y hora por separado
+    const evaluaciones = await Evaluacion.find();
     const formattedEvaluaciones = evaluaciones.map((evaluacion) => ({
       ...evaluacion.toObject(),
-      fechaCreacion: evalucion.createdAt.toISOString().split('T')[0], // Solo la fecha
-      horaCreacion: evalucion.createdAt.toISOString().split('T')[1].split('.')[0], // Solo la hora
+      fechaCreacion: evalucion.createdAt.toISOString().split('T')[0],
+      horaCreacion: evalucion.createdAt.toISOString().split('T')[1].split('.')[0],
     }));
 
-    formattedEvaluaciones.length === 0
-      ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, formattedEvaluaciones);
+    if (formattedEvaluaciones.length === 0) {
+      respondSuccess(req, res, 204);
+    } else {
+      respondSuccess(req, res, 200, formattedEvaluaciones);
+    }
   } catch (error) {
     handleError(error, "evaluacion.controller -> getEvaluaciones");
     respondError(req, res, 500, "No se pudieron obtener las evaluaciones");
@@ -29,17 +26,11 @@ async function getEvaluaciones(req, res) {
 async function createEvaluacion(req, res) {
   try {
     const { body } = req;
-    const { error: bodyError } = evaluacionBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-    const [newEvaluacion, evaluacionError] = await EvaluacionService.createEvaluacion(body);
+    const nuevaEvaluacion = new Evaluacion(body);
 
-    if (evaluacionError) return respondError(req, res, 400, evaluacionError);
-    if (!newEvaluacion) {
-      return respondError(req, res, 400, "No se creó la evaluación");
-    }
-
-    respondSuccess(req, res, 201, newEvaluacion);
+    await nuevaEvaluacion.save();
+    respondSuccess(req, res, 201, nuevaEvaluacion);
   } catch (error) {
     handleError(error, "evaluacion.controller -> createEvaluacion");
     respondError(req, res, 500, "No se creó la evaluación");
@@ -49,18 +40,18 @@ async function createEvaluacion(req, res) {
 async function getEvaluacionById(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = evaluacionIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-    const [evaluacion, errorEvaluacion] = await EvaluacionService.getEvaluacionById(params.id);
+    const evaluacion = await Evaluacion.findById(params.id);
 
-    if (errorEvaluacion) return respondError(req, res, 404, errorEvaluacion);
+    if (!evaluacion) {
+      respondError(req, res, 404, "No se encontró la evaluación solicitada");
+      return;
+    }
 
-    // Formatea la evaluación para mostrar fecha y hora por separado
     const formattedEvaluacion = {
       ...evaluacion.toObject(),
-      fechaCreacion: evaluacion.createdAt.toISOString().split('T')[0], // Solo la fecha
-      horaCreacion: evaluacion.createdAt.toISOString().split('T')[1].split('.')[0], // Solo la hora
+      fechaCreacion: evaluacion.createdAt.toISOString().split('T')[0],
+      horaCreacion: evaluacion.createdAt.toISOString().split('T')[1].split('.')[0],
     };
 
     respondSuccess(req, res, 200, formattedEvaluacion);
@@ -70,21 +61,22 @@ async function getEvaluacionById(req, res) {
   }
 }
 
-
 async function updateEvaluacion(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = evaluacionIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-    const { error: bodyError } = evaluacionBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
+    const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(
+      params.id,
+      body,
+      { new: true }
+    );
 
-    const [evaluacion, evaluacionError] = await EvaluacionService.updateEvaluacion(params.id, body);
+    if (!evaluacionActualizada) {
+      respondError(req, res, 404, "No se encontró la evaluación solicitada");
+      return;
+    }
 
-    if (evaluacionError) return respondError(req, res, 400, evaluacionError);
-
-    respondSuccess(req, res, 200, evaluacion);
+    respondSuccess(req, res, 200, evaluacionActualizada);
   } catch (error) {
     handleError(error, "evaluacion.controller -> updateEvaluacion");
     respondError(req, res, 500, "No se pudo actualizar la evaluación");
@@ -94,19 +86,15 @@ async function updateEvaluacion(req, res) {
 async function deleteEvaluacion(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = evaluacionIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-    const evaluacion = await EvaluacionService.deleteEvaluacion(params.id);
-    !evaluacion
-      ? respondError(
-          req,
-          res,
-          404,
-          "No se encontró la evaluación solicitada",
-          "Verifique el id ingresado",
-        )
-      : respondSuccess(req, res, 200, evaluacion);
+    const evaluacionEliminada = await Evaluacion.findByIdAndDelete(params.id);
+
+    if (!evaluacionEliminada) {
+      respondError(req, res, 404, "No se encontró la evaluación solicitada");
+      return;
+    }
+
+    respondSuccess(req, res, 200, evaluacionEliminada);
   } catch (error) {
     handleError(error, "evaluacion.controller -> deleteEvaluacion");
     respondError(req, res, 500, "No se pudo eliminar la evaluación");
