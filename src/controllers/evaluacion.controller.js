@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
-const Estado = require("../models/estado.model"); // Importa el modelo de Estado
+const Estado = require("../models/clasificacion.model"); // Importa el modelo de Estado
 
 
 exports.getEvaluacion = async (req, res, next) => {

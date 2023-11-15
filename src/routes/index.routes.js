@@ -19,12 +19,6 @@ router.use("/users", authenticationMiddleware, userRoutes);
 router.use("/auth", authRoutes);
 // Agrega las rutas para la entidad "estado" bajo /api/estados
 
-
-// Importa y utiliza las rutas de los diferentes módulos de tu aplicación
-const postulacionRoutes = require("./postulacion.routes");
-// Agrega las rutas de los diferentes módulos aquí
-router.use("/postulacion", postulacionRoutes);
-
 const clasificacionRoutes = require("./clasificacion.routes.js"); // Agrega esta línea
 router.use("/clasificacion",  clasificacionRoutes); // Agrega esta línea
 const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea

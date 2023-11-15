@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 
-const estadoSchema = new mongoose.Schema(
+const clasificacionSchema = new mongoose.Schema(
   {
     id_postulacion: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    Estado: [
+    estado: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Estado",
+        ref: "estado",
       },
     ],
     ultima_modificacion: {
@@ -22,11 +22,11 @@ const estadoSchema = new mongoose.Schema(
   }
 );
 
-estadoSchema.pre('save', function(next) {
+clasificacionSchema.pre('save', function(next) {
   // Puedes agregar lógica personalizada antes de guardar el estado aquí si es necesario.
   next();
 });
 
-const Estado = mongoose.model("Estado", estadoSchema);
+const Clasificacion = mongoose.model("Clasificacion", clasificacionSchema);
 
-module.exports = Estado;
+module.exports = Clasificacion;

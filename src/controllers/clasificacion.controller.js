@@ -34,7 +34,7 @@ exports.createClasificacion = async (req, res, next) => {
 
     // Crea una nueva evaluación asociada automáticamente
     const nuevaEvaluacion = new Evaluacion({
-      id_postulacion: nuevoEstado.id_postulacion, // Asigna la ID de postulación del estado
+      id_postulacion: nuevaClasificacion.id_postulacion, // Asigna la ID de postulación del estado
       comentario: "", // Puedes personalizar esto
       id_clasificacion: nuevaClasificacion._id, // Asigna la ID del estado recién creado
       puntos: 0, // Puedes personalizar esto
@@ -42,7 +42,7 @@ exports.createClasificacion = async (req, res, next) => {
 
     await nuevaEvaluacion.save();
 
-    res.status(201).send({ estado: nuevoEstado, evaluacion: nuevaEvaluacion });
+    res.status(201).send({ clasificacion: nuevaClasificacion, evaluacion: nuevaEvaluacion });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(400).send({ message: error.message });
