@@ -1,15 +1,15 @@
 "use strict";
 const mongoose = require("mongoose");
-const Estado = require("../models/estado.model"); // Ajusta esto según la ubicación de tu modelo
+const Clasificacion = require("../models/clasificacion.model"); // Ajusta esto según la ubicación de tu modelo
 const Evaluacion = require("../models/evaluacion.model");
 
 /**
  * Obtiene todos los estados.
  */
-exports.getEstados = async (req, res, next) => {
+exports.getClasificacion = async (req, res, next) => {
   try {
-    const estados = await Estado.find(); // Accede directamente al modelo de Estado
-    res.json(estados);
+    const clasificacion = await Clasificacion.find(); // Accede directamente al modelo de Estado
+    res.json(clasificacion);
   } catch (error) {
     next(error);
   }
@@ -23,20 +23,20 @@ exports.getEstados = async (req, res, next) => {
 /**
  * Crea un nuevo estado y una nueva evaluación automáticamente.
  */
-exports.createEstado = async (req, res, next) => {
+exports.createClasificacion = async (req, res, next) => {
   try {
-    const nuevoEstado = new Estado({
+    const nuevaClasificacion = new Clasificacion({
       id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
-      estado: req.body.estado, // Toma el estado del cuerpo de la solicitud
+      clasificacion: req.body.clasificacion, // Toma el estado del cuerpo de la solicitud
     });
 
-    await nuevoEstado.save();
+    await nuevaClasificacion.save();
 
     // Crea una nueva evaluación asociada automáticamente
     const nuevaEvaluacion = new Evaluacion({
       id_postulacion: nuevoEstado.id_postulacion, // Asigna la ID de postulación del estado
       comentario: "", // Puedes personalizar esto
-      id_estado: nuevoEstado._id, // Asigna la ID del estado recién creado
+      id_clasificacion: nuevaClasificacion._id, // Asigna la ID del estado recién creado
       puntos: 0, // Puedes personalizar esto
     });
 
@@ -56,13 +56,13 @@ exports.createEstado = async (req, res, next) => {
 /**
  * Obtiene un estado por su id.
  */
-exports.getEstadoById = async (req, res, next) => {
+exports.getClasificacionById = async (req, res, next) => {
   try {
-    const estado = await Estado.findById(req.params.id); // Accede directamente al modelo de Estado
-    if (!estado) {
+    const clasificacion = await Clasificacion.findById(req.params.id); // Accede directamente al modelo de Estado
+    if (!clasificacion) {
       return res.status(404).send();
     }
-    res.json(estado);
+    res.json(clasificacion);
   } catch (error) {
     next(error);
   }
@@ -71,32 +71,32 @@ exports.getEstadoById = async (req, res, next) => {
 /**
  * Actualiza un estado por su id.
  */
-exports.updateEstado = async (req, res, next) => {
+exports.updateClasificacion = async (req, res, next) => {
   try {
-    const estadoActualizado = await Estado.findByIdAndUpdate(
+    const clasificacionActualizado = await Clasificacion.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    if (!estadoActualizado) {
+    if (!clasificacionActualizado) {
       return res.status(404).send();
     }
-    res.json(estadoActualizado);
+    res.json(clasificacionActualizado);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getEstadoByPostulacion = async (req, res, next) => {
+exports.getClasificacionByPostulacion = async (req, res, next) => {
   try {
-    const idPostulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
-    const estados = await Estado.find({ id_postulacion });
+    const id_postulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
+    const clasificacion = await Clasificacion.find({ id_postulacion });
     
-    if (!estados || estados.length === 0) {
+    if (!clasificacion || clasificacion.length === 0) {
       return res.status(404).send({ message: 'No se encontraron estados para la postulación especificada' });
     }
 
-    res.json(estados);
+    res.json(clasificacion);
   } catch (error) {
     next(error);
   }
@@ -106,13 +106,13 @@ exports.getEstadoByPostulacion = async (req, res, next) => {
 /**
  * Elimina un estado por su id.
  */
-exports.deleteEstado = async (req, res, next) => {
+exports.deleteClasificacion = async (req, res, next) => {
   try {
-    const estadoEliminado = await Estado.findByIdAndDelete(req.params.id); // Accede directamente al modelo de Estado
-    if (!estadoEliminado) {
+    const clasificacionEliminado = await Clasificacion.findByIdAndDelete(req.params.id); // Accede directamente al modelo de Estado
+    if (!clasificacionEliminado) {
       return res.status(404).send();
     }
-    res.send({ message: "Estado eliminado exitosamente", data: estadoEliminado });
+    res.send({ message: "Estado eliminado exitosamente", data: clasificacionEliminado });
   } catch (error) {
     next(error);
   }

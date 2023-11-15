@@ -6,12 +6,12 @@ const estadoSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    estado: {
-      type: String,
-      required: true,
-      enum: ["en proceso", "aceptado", "rechazado"], // Enumeración de estados válidos
-      default: "en proceso", // Valor predeterminado
-    },
+    Estado: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Estado",
+      },
+    ],
     ultima_modificacion: {
       type: Date,
       default: Date.now,
