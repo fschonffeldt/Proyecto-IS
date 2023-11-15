@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
-const Estado = require("../models/clasificacion.model"); // Importa el modelo de Estado
+const Clasificacion = require("../models/clasificacion.model"); // Importa el modelo de Estado
 
 
 exports.getEvaluacion = async (req, res, next) => {
@@ -17,22 +17,30 @@ exports.getEvaluacion = async (req, res, next) => {
  */
 exports.createEvaluacion = async (req, res, next) => {
   try {
-    const nuevoEvaluacion = new Evaluacion({
-      id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
-      comentario: req.body.comentario, // Toma el comentario del cuerpo de la solicitud
-      puntos: req.body.puntos, // Toma los puntos del cuerpo de la solicitud
+    // Crea una nueva evaluación
+    const nuevaEvaluacion = new Evaluacion({
+      id_postulacion: req.body.id_postulacion,
+      comentario: req.body.comentario,
+      puntos: req.body.puntos,
     });
 
-    // Busca el estado relacionado y asigna su ID a la evaluación
-    const estado = await Estado.findOne({ id_postulacion: req.body.id_postulacion });
-    if (!estado) {
-      return res.status(404).send({ message: "No se encontró un estado para la postulación especificada" });
-    }
+    // Guarda la evaluación para obtener su _id
+    await nuevaEvaluacion.save();
 
-    nuevoEvaluacion.id_estado = estado._id;
+    // Crea una nueva clasificación asociada a la postulación y evaluación
+    const nuevaClasificacion = new Clasificacion({
+      id_postulacion: req.body.id_postulacion,
+      id_evaluacion: nuevaEvaluacion._id,
+      clasificacion: req.body.clasificacion, // Ajusta según los datos necesarios
+    });
 
-    await nuevoEvaluacion.save();
-    res.status(201).send(nuevoEvaluacion);
+    await nuevaClasificacion.save();
+
+    // Actualiza la evaluación con la referencia a la clasificación
+    nuevaEvaluacion.id_estado = nuevaClasificacion._id;
+    await nuevaEvaluacion.save();
+
+    res.status(201).send({ evaluacion: nuevaEvaluacion, clasificacion: nuevaClasificacion });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(400).send({ message: error.message });

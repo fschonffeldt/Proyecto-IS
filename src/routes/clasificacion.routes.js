@@ -1,4 +1,5 @@
 "use strict";
+
 const express = require("express");
 const clasificacionController = require("../controllers/clasificacion.controller"); // Asegúrate de que el controlador tenga el nombre correcto
 const router = express.Router();
@@ -9,6 +10,5 @@ router.put('/:id', clasificacionController.updateClasificacion);  // Ruta para a
 router.delete('/:id', clasificacionController.deleteClasificacion);  // Ruta para eliminar un estado existente
 router.get('/id',clasificacionController.getClasificacionById);
 router.get('/:id_postulacion', clasificacionController.getClasificacionByPostulacion);
-
 
 module.exports = router;

@@ -10,10 +10,6 @@ const evaluacionSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    id_estado: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
     puntos: {
       type: Number,
       required: true,

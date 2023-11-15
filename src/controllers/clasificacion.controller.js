@@ -1,7 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
 const Clasificacion = require("../models/clasificacion.model"); // Ajusta esto según la ubicación de tu modelo
-const Evaluacion = require("../models/evaluacion.model");
 
 /**
  * Obtiene todos los estados.
@@ -16,33 +15,18 @@ exports.getClasificacion = async (req, res, next) => {
 };
 
 /**
- * Crea un nuevo estado.
- */
-
-
-/**
- * Crea un nuevo estado y una nueva evaluación automáticamente.
+ * Crea un nuevo estado
  */
 exports.createClasificacion = async (req, res, next) => {
   try {
     const nuevaClasificacion = new Clasificacion({
-      id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
-      clasificacion: req.body.clasificacion, // Toma el estado del cuerpo de la solicitud
+      id_postulacion: req.body.id_postulacion,
+      clasificacion: req.body.clasificacion,
     });
 
     await nuevaClasificacion.save();
 
-    // Crea una nueva evaluación asociada automáticamente
-    const nuevaEvaluacion = new Evaluacion({
-      id_postulacion: nuevaClasificacion.id_postulacion, // Asigna la ID de postulación del estado
-      comentario: "", // Puedes personalizar esto
-      id_clasificacion: nuevaClasificacion._id, // Asigna la ID del estado recién creado
-      puntos: 0, // Puedes personalizar esto
-    });
-
-    await nuevaEvaluacion.save();
-
-    res.status(201).send({ clasificacion: nuevaClasificacion, evaluacion: nuevaEvaluacion });
+    res.status(201).send({ clasificacion: nuevaClasificacion });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       res.status(400).send({ message: error.message });
@@ -93,7 +77,7 @@ exports.getClasificacionByPostulacion = async (req, res, next) => {
     const clasificacion = await Clasificacion.find({ id_postulacion });
     
     if (!clasificacion || clasificacion.length === 0) {
-      return res.status(404).send({ message: 'No se encontraron estados para la postulación especificada' });
+      return res.status(404).send({ message: 'No se encontraron clasificaciones para la postulación especificada' });
     }
 
     res.json(clasificacion);
@@ -112,7 +96,7 @@ exports.deleteClasificacion = async (req, res, next) => {
     if (!clasificacionEliminado) {
       return res.status(404).send();
     }
-    res.send({ message: "Estado eliminado exitosamente", data: clasificacionEliminado });
+    res.send({ message: "Clasificacion eliminada exitosamente", data: clasificacionEliminado });
   } catch (error) {
     next(error);
   }
