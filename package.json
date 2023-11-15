@@ -25,6 +25,7 @@
     "mongodb": "^6.2.0",
     "mongoose": "7.5.2",
     "morgan": "1.10.0",
+    "node": "^21.1.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
