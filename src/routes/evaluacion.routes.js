@@ -11,6 +11,5 @@ router.post('/', evaluacionController.createEvaluacion);  // Ruta para crear un 
 router.put('/:id', evaluacionController.updateEvaluacion);  // Ruta para actualizar un fondo existente
 router.delete('/:id', evaluacionController.deleteEvaluacion);  // Ruta para eliminar un fondo existente
 router.get('/:id', evaluacionController.getEvaluacionById);
-router.get('/:id_postulacion', evaluacionController.getEvaluacionByPostulacion);
 
 module.exports = router;

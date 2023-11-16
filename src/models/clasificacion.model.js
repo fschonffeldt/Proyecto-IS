@@ -12,8 +12,8 @@ const clasificacionSchema = new mongoose.Schema(
     },
     estado: {
       type: String,
-      default: "En proceso",
       required: true,
+      default: "En proceso",
     },
     ultima_modificacion: {
       type: Date,
