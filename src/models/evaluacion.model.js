@@ -22,13 +22,6 @@ const evaluacionSchema = new mongoose.Schema(
   }
 );
 
-evaluacionSchema.pre('save', function (next) {
-  if (this.puntos < 0 || this.puntos > 100) {
-    // Verifica si los puntos están en un rango válido
-    return next(new Error('Los puntos deben estar entre 0 y 100'));
-  }
-  next();
-});
 
 const Evaluacion = mongoose.model('Evaluacion', evaluacionSchema);
 

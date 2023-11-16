@@ -21,6 +21,7 @@ router.use("/auth", authRoutes);
 
 const clasificacionRoutes = require("./clasificacion.routes.js"); // Agrega esta línea
 router.use("/clasificacion",  clasificacionRoutes); // Agrega esta línea
+
 const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea
 router.use("/evaluacion", evaluacionRoutes); // Agrega esta línea
 

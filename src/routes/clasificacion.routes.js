@@ -9,6 +9,5 @@ router.post('/', clasificacionController.createClasificacion);  // Ruta para cre
 router.put('/:id', clasificacionController.updateClasificacion);  // Ruta para actualizar un estado existente
 router.delete('/:id', clasificacionController.deleteClasificacion);  // Ruta para eliminar un estado existente
 router.get('/id',clasificacionController.getClasificacionById);
-router.get('/:id_postulacion', clasificacionController.getClasificacionByPostulacion);
 
 module.exports = router;
