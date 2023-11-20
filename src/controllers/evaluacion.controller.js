@@ -1,8 +1,23 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
 
-//falta crear
+exports.createEvaluacion = async (req, res, next) => {
+  try {
+    const { id_postulacion, comentario, puntos } = req.body;
 
+    const nuevaEvaluacion = new Evaluacion({
+      id_postulacion,
+      comentario,
+      puntos,
+    });
+
+    const evaluacionCreada = await nuevaEvaluacion.save();
+
+    res.status(201).json(evaluacionCreada);
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getEvaluacion = async (req, res, next) => {
   try {
     const evaluaciones = await Evaluacion.find();
