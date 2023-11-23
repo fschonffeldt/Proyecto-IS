@@ -34,7 +34,7 @@ const postulacionRoutes = require("./postulacion.routes");
 router.use("/postulacion", postulacionRoutes);
 
 const clasificacionRoutes = require("./clasificacion.routes.js"); // Agrega esta línea
-router.use("/clasificacion",  clasificacionRoutes); // Agrega esta línea
+router.use("/clasificacion", clasificacionRoutes); // Agrega esta línea
 
 const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea
 router.use("/evaluacion", evaluacionRoutes); // Agrega esta línea
@@ -46,4 +46,5 @@ router.use("/proyec", proyecRoutes);
 
 // Exporta el enrutador
 module.exports = router;
+
 
