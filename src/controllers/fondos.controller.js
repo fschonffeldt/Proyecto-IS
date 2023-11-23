@@ -1,12 +1,9 @@
-// controllers/fondo.controller.js
 "use strict";
 const mongoose = require('mongoose');
-// Asegúrate de que la ruta y el nombre del archivo sean correctos
-const Fondo = require('../models/fondos.model');  // <-- Ajusta esto si es necesario
+const { fondoBodySchema } = require('../schema/fondos.schema'); // Importa el esquema de validación
 
-/**
- * Obtiene todos los fondos.
- */
+const Fondo = require('../models/fondos.model');
+
 exports.findAll = async (req, res, next) => {
     try {
         const fondos = await Fondo.find();
@@ -16,29 +13,32 @@ exports.findAll = async (req, res, next) => {
     }
 };
 
-
-// controllers/fondo.controller.js
-
 exports.create = async (req, res, next) => {
     try {
-      const nuevoFondo = new Fondo(req.body);
-      await nuevoFondo.save();
-      res.status(201).send(nuevoFondo);  // 201 Created
+        // Validar el cuerpo de la solicitud con el esquema
+        const { error, value } = fondoBodySchema.validate(req.body);
+
+        if (error) {
+            // Si hay un error de validación, enviar un mensaje de error personalizado
+            return res.status(400).send({ message: error.message });
+        }
+
+        // Crear un nuevo fondo utilizando los datos validados
+        const nuevoFondo = new Fondo(value);
+        await nuevoFondo.save();
+
+        res.status(201).send(nuevoFondo);  // 201 Created
     } catch (error) {
-      if (error instanceof mongoose.Error.ValidationError) {
-        // Si es un error de validación, enviar un mensaje de error personalizado
-        res.status(400).send({ message: error.message });
-      } else {
-        // Si es otro tipo de error, pasarlo al siguiente middleware de manejo de errores
-        next(error);
-      }
+        if (error instanceof mongoose.Error.ValidationError) {
+            // Si es un error de validación de Mongoose, enviar un mensaje de error personalizado
+            res.status(400).send({ message: error.message });
+        } else {
+            // Si es otro tipo de error, pasarlo al siguiente middleware de manejo de errores
+            next(error);
+        }
     }
-  };
+};
 
-
-/**
- * Actualiza un fondo existente.
- */
 exports.update = async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -52,23 +52,18 @@ exports.update = async (req, res, next) => {
     }
 };
 
-// Método para eliminar un fondo por su ID
 exports.delete = async (req, res) => {
-    const { id } = req.params;  // Extrae el ID del fondo desde la URL
-  
+    const { id } = req.params;
+
     try {
-      // Busca y elimina el fondo por su ID
-      const fondo = await Fondo.findByIdAndDelete(id);
-  
-      if (!fondo) {
-        // Si no se encontró el fondo, envía un mensaje de error
-        return res.status(404).send({ message: 'Fondo no encontrado' });
-      }
-  
-      // Si se eliminó el fondo, envía un mensaje de éxito
-      res.send({ message: 'Fondo eliminado exitosamente', data: fondo });
+        const fondo = await Fondo.findByIdAndDelete(id);
+
+        if (!fondo) {
+            return res.status(404).send({ message: 'Fondo no encontrado' });
+        }
+
+        res.send({ message: 'Fondo eliminado exitosamente', data: fondo });
     } catch (error) {
-      // Si ocurre un error, lo captura y envía un mensaje de error
-      res.status(500).send({ message: error.message || 'Error al eliminar el fondo' });
+        res.status(500).send({ message: error.message || 'Error al eliminar el fondo' });
     }
-  };
+};

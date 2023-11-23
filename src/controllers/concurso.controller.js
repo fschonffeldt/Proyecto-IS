@@ -19,6 +19,18 @@ exports.findAll = async (req, res, next) => {
 /** 
  * Crea un nuevo concurso.
  */
+exports.findOne = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const concurso = await Concurso.findById(id).populate('montoTotalFondo');
+    if (!concurso) {
+      return res.status(404).send({ message: 'Concurso no encontrado' });  // 404 Not Found
+    }
+    res.json(concurso);
+  } catch (error) {
+    next(error);
+  }
+};
 exports.create = async (req, res, next) => {
   try {
     const nuevoConcurso = new Concurso(req.body);
