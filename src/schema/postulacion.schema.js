@@ -84,7 +84,12 @@ const postulacionSchema = Joi.object({
     "any.required": "La ciudad es obligatoria.",
     "string.base": "La ciudad debe ser de tipo string.",
   }),
+  estados: Joi.string().valid("enviada").optional().messages({
+    "any.only": "El estado solo puede ser enviada.",
+    "any.required": "El estado es obligatorio.",
+  }),
 });
+
 
 module.exports = {
   postulacionSchema,
