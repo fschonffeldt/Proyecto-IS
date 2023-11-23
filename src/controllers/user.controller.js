@@ -6,7 +6,7 @@ const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
 
 /**
- * Obtiene todos los usuarios
+ * Obtiene todos los usuarios00
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
