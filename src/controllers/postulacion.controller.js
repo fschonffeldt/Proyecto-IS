@@ -1,91 +1,142 @@
 "use strict";
-const Postulaciones = require("../models/postulacion.model");
-const Estado = require("../models/estado.model");
+const { respondSuccess, respondError } = require("../utils/resHandler");
+const PostulacionService = require("../services/postulacion.service");
+const { postulacionSchema } = require("../schema/postulacion.schema");
+const moment = require("moment");
 
-// Crear una postulación
 async function crearPostulacion(req, res) {
   try {
-    const nuevaPostulacion = new Postulaciones(req.body);
-    await nuevaPostulacion.save();
-    res.status(201).json(nuevaPostulacion);
+    const { error, value } = postulacionSchema.validate(req.body);
+
+    if (error) {
+      return respondError(req, res, 400, error.message);
+    }
+
+    const [nuevaPostulacion, errorCrear] = await PostulacionService.crearPostulacion(value);
+
+    if (errorCrear) {
+      return respondError(req, res, 400, errorCrear);
+    }
+
+    // Convierte la cadena de fecha a un objeto de fecha de JavaScript
+    const fechaPostulacion = new Date(nuevaPostulacion.FechaPostulacion);
+
+    // Formatea la fecha antes de enviarla como respuesta
+    nuevaPostulacion.FechaPostulacion = moment(fechaPostulacion).format("YYYY-MM-DD");
+
+    respondSuccess(req, res, 201, nuevaPostulacion);
   } catch (error) {
-    res.status(500).json({ error: "No se pudo crear la postulación" });
+    respondError(req, res, 500, "No se pudo crear la postulación");
   }
-};
-
-
-// Buscar una postulación por ID
+}
 async function buscarPostulacionPorId(req, res) {
   try {
-    const postulacion = await Postulaciones.findById(req.params.id);
-    if (!postulacion) {
-      return res.status(404).json({ error: "Postulación no encontrada" });
-    }
-    res.json(postulacion);
-  } catch (error) {
-    res.status(500).json({ error: "No se pudo buscar la postulación" });
-  }
-};
+    const { params } = req;
+    const [postulacion, errorBuscar] = await PostulacionService.buscarPostulacionPorId(params.id);
 
-// Listar todas las postulaciones por el rut del representante
+    if (errorBuscar) {
+      return respondError(req, res, 500, errorBuscar);
+    }
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    respondError(req, res, 500, "No se pudo buscar la postulación");
+  }
+}
+
 async function listarPostulacionesPorRutRepresentante(req, res) {
   try {
-    const postulaciones = await
-     Postulaciones.find({ rutRepresentante: req.params.rutRepresentante });
-    res.json(postulaciones);
-  } catch (error) {
-    res.status(500).json({ error: "No se pudieron listar las postulaciones" });
-  }
-};
+    const { params } = req;
+    const [postulaciones, errorListar] = 
+    await PostulacionService.listarPostulacionesPorRutRepresentante(params.rutRepresentante);
 
-// Eliminar una postulación por ID
+    if (errorListar) {
+      return respondError(req, res, 500, errorListar);
+    }
+
+    respondSuccess(req, res, 200, postulaciones);
+  } catch (error) {
+    respondError(req, res, 500, "No se pudieron listar las postulaciones");
+  }
+}
+
+async function buscarPostulaciones(req, res) {
+  try {
+    const [postulaciones, errorBuscar] = await PostulacionService.buscarPostulaciones();
+
+    if (errorBuscar) {
+      return respondError(req, res, 500, errorBuscar);
+    }
+
+    respondSuccess(req, res, 200, postulaciones);
+  } catch (error) {
+    respondError(req, res, 500, "Hubo un problema al listar las postulaciones");
+  }
+}
+
 async function eliminarPostulacionPorId(req, res) {
   try {
-    const postulacion = await Postulaciones.findByIdAndDelete(req.params.id);
-    if (!postulacion) {
-      return res.status(404).json({ error: "Postulación no encontrada" });
-    }
-    res.json({ message: "Postulación eliminada" });
-  } catch (error) {
-    res.status(500).json({ error: "No se pudo eliminar la postulación" });
-  }
-};
+    const { params } = req;
+    const [postulacion, errorEliminar] = 
+    await PostulacionService.eliminarPostulacionPorId(params.id);
 
-// Actualizar el estado de una postulación
-async function actualizarPostulacion(req, res) {
-    try {
-      const { estadoId, ...actualizacion } = req.body;
-  
-      // Actualiza la postulación
-      const postulacion = await Postulaciones.findByIdAndUpdate(
-        req.params.id,
-        { ...actualizacion },
-        { new: true },
-      );
-  
-      if (!postulacion) {
-        return res.status(404).json({ error: "Postulación no encontrada" });
-      }
-  
-      // Si el estado se cambia a 'enviada', crea un nuevo estado
-      if (estadoId && actualizacion.estados === "enviada") {
-        const nuevoEstado = new Estado({
-          id_postulacion: req.params.id,
-          estado: "en proceso",
-        });
-        await nuevoEstado.save();
-      }
-  
-      res.json(postulacion);
-    } catch (error) {
-      res.status(500).json({ error: "No se pudo actualizar la postulación" });
+    if (errorEliminar) {
+      return respondError(req, res, 500, errorEliminar);
     }
-  };
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    respondError(req, res, 500, "No se pudo eliminar la postulación");
+  }
+}
+
+async function crearPostulacion(req, res) {
+  try {
+    const { error, value } = postulacionSchema.validate(req.body);
+
+    if (error) {
+      return respondError(req, res, 400, error.message);
+    }
+
+    const [nuevaPostulacion, errorCrear] = await PostulacionService.crearPostulacion(value);
+
+    if (errorCrear) {
+      return respondError(req, res, 400, errorCrear);
+    }
+
+    respondSuccess(req, res, 201, nuevaPostulacion);
+  } catch (error) {
+    respondError(req, res, 500, "No se pudo crear la postulación");
+  }
+}
+
+async function actualizarPostulacion(req, res) {
+  try {
+    const { params, body } = req;
+    const { error, value } = postulacionSchema.validate(body);
+
+    if (error) {
+      return respondError(req, res, 400, error.message);
+    }
+
+    const [postulacion, errorActualizar] = 
+    await PostulacionService.actualizarPostulacion(params.id, value);
+
+    if (errorActualizar) {
+      return respondError(req, res, 500, errorActualizar);
+    }
+
+    respondSuccess(req, res, 200, postulacion);
+  } catch (error) {
+    respondError(req, res, 500, "No se pudo actualizar la postulación");
+  }
+}
 
 module.exports = {
   crearPostulacion,
   buscarPostulacionPorId,
   listarPostulacionesPorRutRepresentante,
+  buscarPostulaciones,
   eliminarPostulacionPorId,
   actualizarPostulacion,
 };

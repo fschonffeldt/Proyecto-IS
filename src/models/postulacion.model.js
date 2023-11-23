@@ -1,10 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 const postulacionesSchema = new mongoose.Schema({
-  concurso: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "concurso",
-  },
+ 
   nombreRepresentante: {
     type: String,
     required: true,
@@ -65,7 +62,7 @@ const postulacionesSchema = new mongoose.Schema({
   },
 
 },
-   
+
 {
   versionKey: false,
 });
