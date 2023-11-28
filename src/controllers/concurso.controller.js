@@ -9,7 +9,8 @@ const Fondo = require('../models/fondos.model');
  */
 exports.findAll = async (req, res, next) => {
   try {
-    const concursos = await Concurso.find().populate('fondo');
+    const concursos = await Concurso.find().populate('montoTotalFondo');
+
     res.json(concursos);
   } catch (error) {
     next(error);
@@ -22,7 +23,7 @@ exports.findAll = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const concurso = await Concurso.findById(id).populate('montoTotalFondo');
+    const concurso = await Concurso.findById(id).populate('fondo');
     if (!concurso) {
       return res.status(404).send({ message: 'Concurso no encontrado' });  // 404 Not Found
     }
@@ -37,15 +38,14 @@ exports.create = async (req, res, next) => {
     await nuevoConcurso.save();
 
     // Buscar el Fondo asociado
-    const fondo = await Fondo.findById(nuevoConcurso.fondo);
+    const fondo = await Fondo.findById(nuevoConcurso.montoTotalFondo);  // Ajusta según tu modelo
+
     if (!fondo) {
       throw new Error('Fondo no encontrado');
     }
 
     // Actualizar la información del Fondo
     fondo.montoTotal = nuevoConcurso.montoTotal;
-    fondo.montoAsignado = nuevoConcurso.ganadores.reduce((sum, ganador) => sum + ganador.montoAsignado, 0);
-    fondo.ganadores = nuevoConcurso.ganadores;
 
     // Recalcular el monto restante y guardarlo en el documento Fondo
     fondo.montoRestante = fondo.montoTotal - fondo.montoAsignado;
@@ -53,13 +53,14 @@ exports.create = async (req, res, next) => {
     await fondo.save();
 
     // Buscar nuevamente el concurso con el fondo poblado
-    const concursoConFondo = await Concurso.findById(nuevoConcurso._id).populate('fondo');
+    const concursoConFondo = await Concurso.findById(nuevoConcurso._id).populate('montoTotalFondo');  // Ajusta según tu modelo
 
     res.status(201).json(concursoConFondo);  // 201 Created
   } catch (error) {
     next(error);
   }
 };
+
 
 
 
