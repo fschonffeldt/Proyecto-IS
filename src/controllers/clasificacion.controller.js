@@ -4,8 +4,11 @@ const Clasificacion = require('../models/clasificacion.model'); // Asegúrate de
 // Controlador para crear una nueva clasificación
 exports.createClasificacion = async (req, res) => {
   try {
-    const clasificacion = await Clasificacion.find(); // Población de la referencia 'estado'
-    res.json(clasificacion);
+    const nuevaClasificacion = req.body;
+
+    const clasificacionCreada = await Clasificacion.create(nuevaClasificacion);
+
+    res.status(201).json(clasificacionCreada);
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al crear la clasificación' });
