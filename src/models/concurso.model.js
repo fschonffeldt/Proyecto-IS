@@ -25,6 +25,14 @@ concursoSchema.pre('save', async function(next) {
     // Absorbe el ID del fondo al Concurso
     this.montoTotalFondo = fondo._id;  // Ajusta esto según tus necesidades
 
+    // Verifica si el monto a repartir es mayor que el monto total del fondo
+    if (this.montoARepartir > fondo.montoTotal) {
+      throw new Error('El monto a repartir no puede ser mayor que el monto total del fondo');
+    }
+
+    // Descuenta el monto a repartir del monto total del fondo
+    fondo.montoTotal -= this.montoARepartir;
+
     // Guarda el documento Fondo actualizado
     await fondo.save();
     // Continúa con el proceso de guardado
@@ -33,8 +41,6 @@ concursoSchema.pre('save', async function(next) {
     next(error);  // Pasa el error al manejador de errores
   }
 });
-
-
 
 const Concurso = mongoose.model('Concurso', concursoSchema);
 

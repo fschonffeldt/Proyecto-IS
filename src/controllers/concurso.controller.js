@@ -71,15 +71,38 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const concursoActualizado = await Concurso.findByIdAndUpdate(id, req.body, { new: true });
+    let concursoActualizado = await Concurso.findById(id);
     if (!concursoActualizado) {
       return res.status(404).send();  // 404 Not Found
     }
+
+    // Actualiza el concurso con los nuevos datos
+    for (let prop in req.body) {
+      concursoActualizado[prop] = req.body[prop];
+    }
+
+    // Busca el Fondo asociado
+    const fondo = await Fondo.findById(concursoActualizado.montoTotalFondo);
+
+    if (!fondo) {
+      throw new Error('Fondo no encontrado');
+    }
+
+    // Actualiza el montoTotal en el Fondo
+    fondo.montoTotal -= concursoActualizado.montoARepartir;
+
+    // Guarda el Fondo actualizado
+    await fondo.save();
+
+    // Guarda el concurso actualizado
+    concursoActualizado = await concursoActualizado.save();
+
     res.json(concursoActualizado);
   } catch (error) {
     next(error);
   }
 };
+
 
 exports.delete = async (req, res, next) => {
   try {
