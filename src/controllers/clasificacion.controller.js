@@ -1,120 +1,80 @@
-"use strict";
-const mongoose = require("mongoose");
-const Clasificacion = require("../models/clasificacion.model"); // Ajusta esto según la ubicación de tu modelo
-const Evaluacion = require("../models/evaluacion.model");
+const mongoose = require('mongoose');
+const Clasificacion = require('../models/clasificacion.model'); // Asegúrate de tener la ruta correcta al modelo
 
-/**
- * Obtiene todos los estados.
- */
-exports.getClasificacion = async (req, res, next) => {
+// Controlador para crear una nueva clasificación
+exports.createClasificacion = async (req, res) => {
   try {
-    const clasificacion = await Clasificacion.find(); // Accede directamente al modelo de Estado
-    res.json(clasificacion);
+    const nuevaClasificacion = req.body;
+
+    const clasificacionCreada = await Clasificacion.create(nuevaClasificacion);
+
+    res.status(201).json(clasificacionCreada);
   } catch (error) {
-    next(error);
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al crear la clasificación' });
   }
 };
 
-/**
- * Crea un nuevo estado.
- */
-
-
-/**
- * Crea un nuevo estado y una nueva evaluación automáticamente.
- */
-exports.createClasificacion = async (req, res, next) => {
+// Controlador para obtener todas las clasificaciones
+exports.getClasificacion = async (req, res) => {
   try {
-    const nuevaClasificacion = new Clasificacion({
-      id_postulacion: req.body.id_postulacion, // Toma el ID de postulación del cuerpo de la solicitud
-      clasificacion: req.body.clasificacion, // Toma el estado del cuerpo de la solicitud
-    });
-
-    await nuevaClasificacion.save();
-
-    // Crea una nueva evaluación asociada automáticamente
-    const nuevaEvaluacion = new Evaluacion({
-      id_postulacion: nuevaClasificacion.id_postulacion, // Asigna la ID de postulación del estado
-      comentario: "", // Puedes personalizar esto
-      id_clasificacion: nuevaClasificacion._id, // Asigna la ID del estado recién creado
-      puntos: 0, // Puedes personalizar esto
-    });
-
-    await nuevaEvaluacion.save();
-
-    res.status(201).send({ clasificacion: nuevaClasificacion, evaluacion: nuevaEvaluacion });
+    const clasificaciones = await Clasificacion.find();
+    res.status(200).json(clasificaciones);
   } catch (error) {
-    if (error instanceof mongoose.Error.ValidationError) {
-      res.status(400).send({ message: error.message });
-    } else {
-      next(error);
-    }
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener las clasificaciones' });
   }
 };
 
-
-/**
- * Obtiene un estado por su id.
- */
-exports.getClasificacionById = async (req, res, next) => {
+// Buscar clasificación por ID
+exports.getClasificacionById = async (req, res) => {
   try {
-    const clasificacion = await Clasificacion.findById(req.params.id); // Accede directamente al modelo de Estado
-    if (!clasificacion) {
-      return res.status(404).send();
-    }
-    res.json(clasificacion);
-  } catch (error) {
-    next(error);
-  }
-};
-
-/**
- * Actualiza un estado por su id.
- */
-exports.updateClasificacion = async (req, res, next) => {
-  try {
-    const clasificacionActualizado = await Clasificacion.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!clasificacionActualizado) {
-      return res.status(404).send();
-    }
-    res.json(clasificacionActualizado);
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.getClasificacionByPostulacion = async (req, res, next) => {
-  try {
-    const id_postulacion = req.params.id_postulacion; // Obtén el id_postulacion de los parámetros
-    const clasificacion = await Clasificacion.find({ id_postulacion });
+    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
+    const clasificacion = await Clasificacion.findById(id);
     
-    if (!clasificacion || clasificacion.length === 0) {
-      return res.status(404).send({ message: 'No se encontraron estados para la postulación especificada' });
+    if (!clasificacion) {
+      return res.status(404).json({ mensaje: 'Clasificación no encontrada' });
     }
 
-    res.json(clasificacion);
+    res.status(200).json(clasificacion);
   } catch (error) {
-    next(error);
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener la clasificación por ID' });
   }
 };
 
-
-/**
- * Elimina un estado por su id.
- */
-exports.deleteClasificacion = async (req, res, next) => {
+// Actualizar clasificación por ID
+exports.updateClasificacion = async (req, res) => {
   try {
-    const clasificacionEliminado = await Clasificacion.findByIdAndDelete(req.params.id); // Accede directamente al modelo de Estado
-    if (!clasificacionEliminado) {
-      return res.status(404).send();
+    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
+    const actualizacion = req.body; // Asegúrate de que estás enviando los datos de actualización en el cuerpo de la solicitud
+    const clasificacionActualizada = await Clasificacion.findByIdAndUpdate(id, actualizacion, { new: true });
+    
+    if (!clasificacionActualizada) {
+      return res.status(404).json({ mensaje: 'Clasificación no encontrada' });
     }
-    res.send({ message: "Estado eliminado exitosamente", data: clasificacionEliminado });
+
+    res.status(200).json(clasificacionActualizada);
   } catch (error) {
-    next(error);
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al actualizar la clasificación por ID' });
+  }
+};
+
+// Eliminar clasificación por ID
+exports.deleteClasificacion = async (req, res) => {
+  try {
+    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
+    const clasificacionEliminada = await Clasificacion.findByIdAndRemove(id);
+    
+    if (!clasificacionEliminada) {
+      return res.status(404).json({ mensaje: 'Clasificación no encontrada' });
+    }
+
+    res.status(200).json({ mensaje: 'Clasificación eliminada correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al eliminar la clasificación por ID' });
   }
 };
 
