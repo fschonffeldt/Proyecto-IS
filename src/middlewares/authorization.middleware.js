@@ -77,5 +77,5 @@ async function isUser(req, res, next) {
 module.exports = {
   isAdmin,
   isEvaluador,
-  isUser,
+  isUser,
 };

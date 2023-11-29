@@ -57,13 +57,6 @@ exports.create = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
-
-
 /** 
  * Actualiza un concurso existente.
  */

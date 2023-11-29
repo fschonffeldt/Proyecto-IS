@@ -1,11 +1,12 @@
-// routes/fondo.routes.js
+// fondos.routes.js
+
 "use strict";
 
 const express = require("express");
 const fondosController = require("../controllers/fondos.controller");
 const authenticationMiddleware = require('../middlewares/authentication.middleware');
-
 const { isAdmin, isUser } = require('../middlewares/authorization.middleware');
+
 const router = express.Router();
 
 router.get('/',authenticationMiddleware, fondosController.findAll);  // Ruta para obtener todos los fondos
