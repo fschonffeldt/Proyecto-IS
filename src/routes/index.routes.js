@@ -20,7 +20,12 @@ router.use("/auth", authRoutes);
 // Agrega las rutas para la entidad "estado" bajo /api/estados
 
 const clasificacionRoutes = require("./clasificacion.routes.js"); // Agrega esta línea
+<<<<<<< HEAD
 router.use("/clasificacion", authenticationMiddleware,  clasificacionRoutes); // Agrega esta línea
+=======
+router.use("/clasificacion",  clasificacionRoutes); // Agrega esta línea
+
+>>>>>>> 4d48846df43b1a7e90dbd72fef3255b12e2c7d3c
 const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea
 router.use("/evaluacion", authenticationMiddleware, evaluacionRoutes); // Agrega esta línea
 

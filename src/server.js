@@ -14,7 +14,7 @@ const indexRoutes = require("./routes/index.routes.js");
 const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
-const { createRoles, createUsers, createEstados } = require("./config/initialSetup");
+const { createRoles, createUsers } = require("./config/initialSetup");
 
 /**
  * Inicia el servidor web
@@ -55,8 +55,6 @@ async function setupAPI() {
     // Inicia el servidor web
     await setupServer();
     // Inicia la creación de los roles
-    await createEstados();
-    // Inicia la creación de los estados
     await createRoles();
     // Inicia la creación del usuario admin y user
     await createUsers();

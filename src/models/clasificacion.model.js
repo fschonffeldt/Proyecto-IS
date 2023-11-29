@@ -1,20 +1,38 @@
 const mongoose = require("mongoose");
-const ESTADO = require("../constants/estado.constants"); // Asegúrate de importar tus constantes de estados
 
 const clasificacionSchema = new mongoose.Schema(
   {
     id_evaluacion: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      validate: {
+        validator: async function (value) {
+          // Validar que la id_evaluacion existe en tu base de datos
+          // Puedes utilizar lógica asíncrona o consultas a la base de datos aquí
+          // Retorna true si es válida y false si no lo es
+          return true; // ¡Asegúrate de implementar la validación real!
+        },
+        message: 'La id_evaluacion proporcionada no es válida.',
+      },
     },
     id_postulacion: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      validate: {
+        validator: async function (value) {
+          // Validar que la id_postulacion existe en tu base de datos
+          // Puedes utilizar lógica asíncrona o consultas a la base de datos aquí
+          // Retorna true si es válida y false si no lo es
+          return true; // ¡Asegúrate de implementar la validación real!
+        },
+        message: 'La id_postulacion proporcionada no es válida.',
+      },
     },
     estado: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "estado",
-      default: "6554daba504a326972fe5419", // Reemplaza con el ID del estado predeterminado
+      type: String,
+      required: true,
+      default: "En revisión",
+      enum: ["En revisión", "Aprobado", "Rechazado"], // Valores permitidos para estado
     },
     ultima_modificacion: {
       type: Date,
@@ -25,11 +43,6 @@ const clasificacionSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
-
-clasificacionSchema.pre('save', function(next) {
-  // Puedes agregar lógica personalizada antes de guardar el estado aquí si es necesario.
-  next();
-});
 
 const Clasificacion = mongoose.model("Clasificacion", clasificacionSchema);
 
