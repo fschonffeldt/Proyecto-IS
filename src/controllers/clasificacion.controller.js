@@ -7,7 +7,7 @@ const Clasificacion = require("../models/clasificacion.model"); // Ajusta esto s
  */
 exports.getClasificacion = async (req, res, next) => {
   try {
-    const clasificacion = await Clasificacion.find(); // Accede directamente al modelo de Estado
+    const clasificacion = await Clasificacion.find(); // Población de la referencia 'estado'
     res.json(clasificacion);
   } catch (error) {
     next(error);
