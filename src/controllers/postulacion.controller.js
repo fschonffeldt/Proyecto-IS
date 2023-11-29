@@ -3,6 +3,9 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const PostulacionService = require("../services/postulacion.service");
 const { postulacionSchema } = require("../schema/postulacion.schema");
 const moment = require("moment");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 async function crearPostulacion(req, res) {
   try {
@@ -10,6 +13,10 @@ async function crearPostulacion(req, res) {
 
     if (error) {
       return respondError(req, res, 400, error.message);
+    }
+
+    if (req.files && req.files.length > 0) {
+      value.archivosPDF = req.files.map( (file) => file.buffer);
     }
 
     const [nuevaPostulacion, errorCrear] = await PostulacionService.crearPostulacion(value);
@@ -139,4 +146,6 @@ module.exports = {
   buscarPostulaciones,
   eliminarPostulacionPorId,
   actualizarPostulacion,
+  crearPostulacion: upload.array("archivosPDF", 10, crearPostulacion),
+
 };

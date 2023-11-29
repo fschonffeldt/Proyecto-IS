@@ -56,9 +56,9 @@ const postulacionesSchema = new mongoose.Schema({
     enum: ["borrador", "enviada"], 
     default: "borrador", 
   },
-  estado: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "estado",
+    
+  archivos: {
+     type: Buffer,
   },
 
 },
