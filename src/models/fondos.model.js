@@ -16,11 +16,6 @@ const fondoSchema = new mongoose.Schema({
 });
 const Fondo = mongoose.model('Fondo', fondoSchema);
 
-fondoSchema.pre('save', function(next) {
-  // Actualizar el monto restante antes de guardar
-  this.montoRestante = this.montoTotal - this.montoAsignado;
-  next();
-});
 
 
 module.exports = Fondo;

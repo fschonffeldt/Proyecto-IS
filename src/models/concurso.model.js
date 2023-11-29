@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Fondo = require('./fondos.model');
 
 const concursoSchema = new mongoose.Schema({
+  nombreConcurso: {
+    type: String,
+    required: true,
+  },
   montoTotalFondo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Fondo', // modelo para el esquema de Fondo
@@ -15,6 +19,7 @@ const concursoSchema = new mongoose.Schema({
   versionKey: false,
 });
 
+
 // Middleware pre-save para absorber el monto de un fondo según su ID
 concursoSchema.pre('save', async function(next) {
   try {
@@ -25,10 +30,6 @@ concursoSchema.pre('save', async function(next) {
     // Absorbe el ID del fondo al Concurso
     this.montoTotalFondo = fondo._id;  // Ajusta esto según tus necesidades
 
-    // Verifica si el monto a repartir es mayor que el monto total del fondo
-    if (this.montoARepartir > fondo.montoTotal) {
-      throw new Error('El monto a repartir no puede ser mayor que el monto total del fondo');
-    }
 
     // Descuenta el monto a repartir del monto total del fondo
     fondo.montoTotal -= this.montoARepartir;

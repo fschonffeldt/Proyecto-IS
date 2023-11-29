@@ -31,35 +31,34 @@ exports.findOne = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+};// Controlador para crear un nuevo concurso
+// Controlador para crear un nuevo concurso
 exports.create = async (req, res, next) => {
   try {
-    const nuevoConcurso = new Concurso(req.body);
-    await nuevoConcurso.save();
+      const { nombreConcurso, montoTotalFondo, montoARepartir } = req.body;
 
-    // Buscar el Fondo asociado
-    const fondo = await Fondo.findById(nuevoConcurso.montoTotalFondo);  // Ajusta según tu modelo
+      // Verifica si el fondo existe
+      const fondo = await Fondo.findById(montoTotalFondo);
+      if (!fondo) {
+          return res.status(400).send({ message: 'Fondo asociado no encontrado', montoTotalFondo });
+      }
 
-    if (!fondo) {
-      throw new Error('Fondo no encontrado');
-    }
+      // Crea un nuevo concurso
+      const nuevoConcurso = new Concurso({ nombreConcurso, montoTotalFondo, montoARepartir });
 
-    // Actualizar la información del Fondo
-    fondo.montoTotal = nuevoConcurso.montoTotal;
+      // Guarda el concurso y actualiza el fondo
+      await nuevoConcurso.save();
+      fondo.montoTotalFondo -= montoARepartir;
+      await fondo.save();
 
-    // Recalcular el monto restante y guardarlo en el documento Fondo
-    fondo.montoRestante = fondo.montoTotal - fondo.montoAsignado;
-
-    await fondo.save();
-
-    // Buscar nuevamente el concurso con el fondo poblado
-    const concursoConFondo = await Concurso.findById(nuevoConcurso._id).populate('montoTotalFondo');  // Ajusta según tu modelo
-
-    res.status(201).json(concursoConFondo);  // 201 Created
+      res.status(201).json(nuevoConcurso);
   } catch (error) {
-    next(error);
+      next(error);
   }
 };
+
+
+
 
 
 
@@ -89,7 +88,7 @@ exports.update = async (req, res, next) => {
     }
 
     // Actualiza el montoTotal en el Fondo
-    fondo.montoTotal -= concursoActualizado.montoARepartir;
+    fondo.montoTotalFondo -= concursoActualizado.montoARepartir;
 
     // Guarda el Fondo actualizado
     await fondo.save();
