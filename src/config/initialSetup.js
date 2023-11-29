@@ -5,6 +5,7 @@ const User = require("../models/user.model.js");
 const Estado = require("../models/estados.model.js");
 
 
+
 /**
  * Crea los roles por defecto en la base de datos.
  * @async
@@ -28,6 +29,7 @@ async function createRoles() {
     console.error(error);
   }
 }
+
 
 /**
  * Crea los roles por defecto en la base de datos.
@@ -97,5 +99,5 @@ async function createUsers() {
 module.exports = {
   createEstados,
   createRoles,
-  createUsers,
+  createUsers,
 };
