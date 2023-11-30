@@ -139,4 +139,6 @@ module.exports = {
   buscarPostulaciones,
   eliminarPostulacionPorId,
   actualizarPostulacion,
+  crearPostulacion: upload.array("archivosPDF", 10, crearPostulacion),
+
 };

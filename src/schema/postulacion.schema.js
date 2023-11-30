@@ -88,6 +88,7 @@ const postulacionSchema = Joi.object({
     "any.only": "El estado solo puede ser enviada.",
     "any.required": "El estado es obligatorio.",
   }),
+
 });
 
 
