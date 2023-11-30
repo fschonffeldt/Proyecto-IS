@@ -10,15 +10,14 @@ const proyectoBodySchema = Joi.object({
     "string.empty": "El nombre del tema no puede estar vacío.",
     "any.required": "El nombre del tema es obligatorio.",
     "string.base": "El nombre del tema debe ser de tipo string.",
-    "string.pattern.base": "El nombre del tema solo puede contener caracteres alfanuméricos y espacios.",
+    "string.pattern.base": "El nombre del tema solo permite caracteres alfanuméricos y espacios. No puede contener solo números, mayúsculas o espacios en blanco.",
     "string.min": "El nombre del tema debe tener al menos 5 caracteres.",
-    "string.pattern.invert.base": "El nombre del tema no puede contener solo mayúsculas, solo números o solo espacios en blanco.",
   }),
-  Descripcion: Joi.string().required().pattern(/^[a-zA-Z0-9\s]+$/).min(5).messages({
+  Descripcion: Joi.string().required().pattern(/^(?!\s+$)(?![0-9\s]+$)(?=.*[a-z\d])[a-zA-Z\d\s]+$/).min(5).messages({
     "string.empty": "La descripcion no puede estar vacia.",
     "any.required": "La descripcion es obligatoria.",
     "string.base": "La descripcion debe ser de tipo string.",
-    "string.pattern.base": "La descripcion solo puede contener caracteres alfanuméricos y espacios.",
+    "string.pattern.base": "La descripcion solo puede contener caracteres alfanuméricos y espacios. No puede contener solo números, mayúsculas o espacios en blanco.",
     "string.min": "La descripcion debe contener al menos 5 caracteres.",
   }),
   Monto: Joi.number().required().min(1).messages({
