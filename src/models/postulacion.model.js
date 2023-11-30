@@ -56,11 +56,6 @@ const postulacionesSchema = new mongoose.Schema({
     enum: ["borrador", "enviada"], 
     default: "borrador", 
   },
-    
-  archivos: {
-     type: Buffer,
-  },
-
 },
 
 {
