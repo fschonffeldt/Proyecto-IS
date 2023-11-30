@@ -1,5 +1,7 @@
 "use strict";
+const mongoose = require('mongoose');
 const Proyecto = require('../models/proyec.model.js');
+const { proyectoBodySchema } = require('../schema/proyec.schema');
 
 /** 
  * Obtiene todos los proyectos.
@@ -31,12 +33,22 @@ exports.obtainById = async (req, res, next) => {
  */
 exports.create = async (req, res, next) => {
   try {
-    const newProyecto = new Proyecto(req.body);
+    const { error, value } = proyectoBodySchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({ message: error.message });
+    }
+
+    const newProyecto = new Proyecto(value);
     await newProyecto.save();
 
     res.status(201).json(newProyecto);  // 201 Created
-  } catch (error) {
-    next(error);
+
+  }catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(400).send({ message: error.message });
+    }else {
+      next(error);
+    }
   }
 };
 
@@ -70,19 +82,3 @@ exports.delete = async (req, res, next) => {
       next(error);
   }
 };
-
-
-const validar = (Tema,Monto,Descripcion,sevalida) =>{
-  var errors = []
-  if(Tema === undefined || Tema.trim() === ''){
-   errors.push('El Tema NO debe de estar vacío')
-  }
-  if(Descripcion === undefined || Descripcion.trim() === ''){
-    errors.push('La Descripcion NO debe de estar vacía')
-   }
-  if(Monto === undefined || Monto.trim() === '' || isNaN(Monto)){
-    errors.push('El Monto NO debe de estar vacío y debe ser numérico')
-  }
-  
-  return errors
-}
