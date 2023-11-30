@@ -3,7 +3,7 @@ const router = express.Router();
 const postulacionesController = require("../controllers/postulacion.controller");
 
 // Ruta para crear una nueva postulación
-router.post("postulacion", postulacionesController.crearPostulacion);
+router.post("/", postulacionesController.crearPostulacion);
 
 // Ruta para buscar una postulación por ID
 router.get("/:id", postulacionesController.buscarPostulacionPorId);
