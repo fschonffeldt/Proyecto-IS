@@ -38,11 +38,14 @@ async function setupServer() {
  */
 async function setupAPI() {
   try {
-    await setupDB();                                // Inicia la conexión a la base de datos
-    await setupServer();                            // Inicia el servidor web
-    await createRoles();                            // Inicia la creación de los roles
-    await createUsers();                            // Inicia la creación del usuario admin y user
-
+    // Inicia la conexión a la base de datos
+    await setupDB();
+    // Inicia el servidor web
+    await setupServer();
+    // Inicia la creación de los roles
+    await createRoles();
+    // Inicia la creación del usuario admin y user
+    await createUsers();
   } catch (err) {
     handleFatalError(err, "/server.js -> setupAPI");
   }
