@@ -24,6 +24,7 @@ const postulacionSchema = Joi.object({
       "string.empty": "El rut del Representante no puede estar vacío.",
       "any.required": "El rut del Representante es obligatorio.",
       "string.base": "El rut del Representante debe ser de tipo string.",
+      "string.pattern.base": "El rut del Representante debe tener un formato válido.",
     }),
   telefonoRepresentante: Joi.string()
     .required()
@@ -32,6 +33,7 @@ const postulacionSchema = Joi.object({
       "string.empty": "El teléfono del Representante no puede estar vacío.",
       "any.required": "El teléfono del Representante es obligatorio.",
       "string.base": "El teléfono del Representante debe ser de tipo string.",
+      "string.pattern.base": "El teléfono del Representante debe tener un formato válido.",
     }),
   emailRepresentante: Joi.string()
     .email()
@@ -55,6 +57,7 @@ const postulacionSchema = Joi.object({
       "string.empty": "El rut de la Institución no puede estar vacío.",
       "any.required": "El rut de la Institución es obligatorio.",
       "string.base": "El rut de la Institución debe ser de tipo string.",
+      "string.pattern.base": "El rut de la Institución debe tener un formato válido.",
     }),
   emailInstitucion: Joi.string()
     .email()
@@ -81,12 +84,13 @@ const postulacionSchema = Joi.object({
     "any.required": "La ciudad es obligatoria.",
     "string.base": "La ciudad debe ser de tipo string.",
   }),
-  estados: Joi.string().required().messages({
-    "string.empty": "El estado no puede estar vacío.",
+  estados: Joi.string().valid("enviada").optional().messages({
+    "any.only": "El estado solo puede ser enviada.",
     "any.required": "El estado es obligatorio.",
-    "string.base": "El estado debe ser de tipo string.",
   }),
+
 });
+
 
 module.exports = {
   postulacionSchema,

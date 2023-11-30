@@ -30,7 +30,7 @@ const postulacionesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  emailInstitucion: { // Corregido el nombre del campo
+  emailInstitucion: { 
     type: String,
     required: true,
   },
@@ -38,22 +38,23 @@ const postulacionesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  region: {
+    type: String,
+    required: true,
+   },
+  ciudad: { 
+    type: String,
+    required: true,
+  },
   FechaPostulacion: {
     type: Date,
     default: Date.now,
   },
-  region: {
-    type: String,
-    ref: "region",
-  },
-  ciudad: { // Corregido el nombre del campo
-    type: String,
-    ref: "ciudad", // Corregido el nombre del modelo
-  },
   estados: {
     type: String,
-    enum: ["borrador", "enviada"], // Definimos dos estados posibles
-    default: "borrador", // Por defecto, se guarda como borrador
+    enum: ["borrador", "enviada"], 
+    default: "borrador", 
   },
 },
 
