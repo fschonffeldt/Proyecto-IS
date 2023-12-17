@@ -9,7 +9,7 @@ import Login from './routes/Login.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
+    element: <PublicRoot />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
+  { // Ruta de login
     path: '/auth',
     element: <Login />,
   },
