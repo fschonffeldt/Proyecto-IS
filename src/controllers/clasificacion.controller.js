@@ -11,7 +11,7 @@ exports.createClasificacion = async (req, res) => {
     res.status(201).json(clasificacionCreada);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al crear la clasificación' });
+    res.status(400).json({ mensaje: 'Error al crear la clasificación' });
   }
 };
 
@@ -22,7 +22,7 @@ exports.getClasificacion = async (req, res) => {
     res.status(200).json(clasificaciones);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener las clasificaciones' });
+    res.status(400).json({ mensaje: 'Error al obtener las clasificaciones' });
   }
 };
 
@@ -39,7 +39,7 @@ exports.getClasificacionById = async (req, res) => {
     res.status(200).json(clasificacion);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al obtener la clasificación por ID' });
   }
 };
 
@@ -57,7 +57,7 @@ exports.updateClasificacion = async (req, res) => {
     res.status(200).json(clasificacionActualizada);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al actualizar la clasificación por ID' });
   }
 };
 
@@ -74,7 +74,7 @@ exports.deleteClasificacion = async (req, res) => {
     res.status(200).json({ mensaje: 'Clasificación eliminada correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al eliminar la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al eliminar la clasificación por ID' });
   }
 };
 

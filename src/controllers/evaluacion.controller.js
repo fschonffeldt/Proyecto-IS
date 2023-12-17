@@ -86,7 +86,7 @@ exports.deleteEvaluacion = async (req, res) => {
     }
     res.send({ message: 'Evaluación eliminada exitosamente', data: evaluacion });
   } catch (error) {
-    res.status(500).send({ message: error.message || 'Error al eliminar la evaluación' });
+    res.status(400).send({ message: error.message || 'Error al eliminar la evaluación' });
   }
 };
 

@@ -33,6 +33,15 @@ const clasificacionSchema = new mongoose.Schema(
       required: true,
       default: "En revisión",
       enum: ["En revisión", "Aprobado", "Rechazado"], // Valores permitidos para estado
+      validate: {
+        validator: async function (value) {
+          // Validar que la id_postulacion existe en tu base de datos
+          // Puedes utilizar lógica asíncrona o consultas a la base de datos aquí
+          // Retorna true si es válida y false si no lo es
+          return true; // ¡Asegúrate de implementar la validación real!
+        },
+        message: 'El estado proporcionada no es válido.',
+      },
     },
     ultima_modificacion: {
       type: Date,
