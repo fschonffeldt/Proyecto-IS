@@ -1,6 +1,6 @@
 import axios from './root.service';
 import cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
+import * as jwtDecode from 'jwt-decode';
 
 export const login = async ({ email, password }) => {
   try {
