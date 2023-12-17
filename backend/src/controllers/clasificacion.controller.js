@@ -1,17 +1,23 @@
 const mongoose = require('mongoose');
-const Clasificacion = require('../models/clasificacion.model'); // Asegúrate de tener la ruta correcta al modelo
+const Clasificacion = require('../models/clasificacion.model');
+const { clasificacionBodySchema, clasificacionIdSchema } = require("../schema/clasificacion.schema");
 
 // Controlador para crear una nueva clasificación
 exports.createClasificacion = async (req, res) => {
   try {
     const nuevaClasificacion = req.body;
 
+    const validationResult = clasificacionBodySchema.validate(nuevaClasificacion);
+    if (validationResult.error) {
+      return res.status(400).json({ mensaje: validationResult.error.details[0].message });
+    }
+
     const clasificacionCreada = await Clasificacion.create(nuevaClasificacion);
 
     res.status(201).json(clasificacionCreada);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al crear la clasificación' });
+    res.status(400).json({ mensaje: 'Error al crear la clasificación' });
   }
 };
 
@@ -22,14 +28,19 @@ exports.getClasificacion = async (req, res) => {
     res.status(200).json(clasificaciones);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener las clasificaciones' });
+    res.status(400).json({ mensaje: 'Error al obtener las clasificaciones' });
   }
 };
 
 // Buscar clasificación por ID
 exports.getClasificacionById = async (req, res) => {
   try {
-    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
+    const validationResult = clasificacionIdSchema.validate(req.params);
+    if (validationResult.error) {
+      return res.status(400).json({ mensaje: validationResult.error.details[0].message });
+    }
+
+    const id = req.params.id;
     const clasificacion = await Clasificacion.findById(id);
     
     if (!clasificacion) {
@@ -39,15 +50,26 @@ exports.getClasificacionById = async (req, res) => {
     res.status(200).json(clasificacion);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al obtener la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al obtener la clasificación por ID' });
   }
 };
 
 // Actualizar clasificación por ID
 exports.updateClasificacion = async (req, res) => {
   try {
-    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
-    const actualizacion = req.body; // Asegúrate de que estás enviando los datos de actualización en el cuerpo de la solicitud
+    const validationResult = clasificacionIdSchema.validate(req.params);
+    if (validationResult.error) {
+      return res.status(400).json({ mensaje: validationResult.error.details[0].message });
+    }
+
+    const id = req.params.id;
+    const actualizacion = req.body;
+
+    const validationResultUpdate = clasificacionBodySchema.validate(actualizacion);
+    if (validationResultUpdate.error) {
+      return res.status(400).json({ mensaje: validationResultUpdate.error.details[0].message });
+    }
+
     const clasificacionActualizada = await Clasificacion.findByIdAndUpdate(id, actualizacion, { new: true });
     
     if (!clasificacionActualizada) {
@@ -57,14 +79,19 @@ exports.updateClasificacion = async (req, res) => {
     res.status(200).json(clasificacionActualizada);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al actualizar la clasificación por ID' });
   }
 };
 
 // Eliminar clasificación por ID
 exports.deleteClasificacion = async (req, res) => {
   try {
-    const id = req.params.id; // Asegúrate de que estás obteniendo el ID de la solicitud
+    const validationResult = clasificacionIdSchema.validate(req.params);
+    if (validationResult.error) {
+      return res.status(400).json({ mensaje: validationResult.error.details[0].message });
+    }
+
+    const id = req.params.id;
     const clasificacionEliminada = await Clasificacion.findByIdAndRemove(id);
     
     if (!clasificacionEliminada) {
@@ -74,7 +101,7 @@ exports.deleteClasificacion = async (req, res) => {
     res.status(200).json({ mensaje: 'Clasificación eliminada correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: 'Error al eliminar la clasificación por ID' });
+    res.status(400).json({ mensaje: 'Error al eliminar la clasificación por ID' });
   }
 };
 
