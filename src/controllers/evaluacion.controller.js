@@ -1,27 +1,6 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');  // Ajusta la ruta si es necesario
 
-
-const API_KEY = require('../config/configEnv.js');
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(API_KEY);
-            const msg = {
-                to: postulacion.email, //traer email de postulacion
-                from: "municipalidad.francisco.de.sales@gmail.com",
-                subject: "Resultado de evaluacion",
-                text: "Comunicado", 
-                html: <strong>${comentario}</strong>,
-            };
-
-            await sgMail.send(msg)
-                .then(() => {
-                    console.log('Correo enviado');
-                })
-                .catch((error) => {
-                    console.error('Error al enviar el correo:', error);
-                });
-
-
 exports.createEvaluacion = async (req, res, next) => {
   try {
     const { id_postulacion, comentario, puntos } = req.body;
