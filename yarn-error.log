@@ -1,0 +1,68 @@
+Arguments: 
+  /root/.nvm/versions/node/v20.9.0/bin/node /root/.nvm/versions/node/v20.9.0/bin/yarn start
+
+PATH: 
+  /root/.nvm/versions/node/v20.9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.9.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/usuario1/ProyectoIS/Proyecto-IS/package.json: Expected double-quoted property name in JSON at position 158
+      at JSON.parse (<anonymous>)
+      at /root/.nvm/versions/node/v20.9.0/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/root/.nvm/versions/node/v20.9.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /root/.nvm/versions/node/v20.9.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "api-node",
+    "version": "1.0.0",
+    "description": "API con Node",
+    "main": "src/server.js",
+    "scripts": {
+      "start": "node src/server.js",
+    },
+    "keywords": [
+      "node",
+      "backend",
+      "http"
+    ],
+    "author": "Camilo saez",
+    "license": "MIT",
+    "dependencies": {
+      "bcryptjs": "2.4.3",
+      "cookie-parser": "1.4.6",
+      "cors": "2.8.5",
+      "dotenv": "^16.3.1",
+      "express": "4.18.2",
+      "joi": "17.10.2",
+      "jsonwebtoken": "9.0.2",
+      "moment": "^2.29.4",
+      "mongodb": "^6.2.0",
+      "mongoose": "^7.5.2",
+      "morgan": "1.10.0",
+      "multer": "^1.4.5-lts.1",
+      "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+      "eslint": "8.50.0",
+      "eslint-config-google": "0.14.0",
+      "jsdoc": "4.0.2",
+      "nodemon": "3.0.1",
+      "prettier": "3.0.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
