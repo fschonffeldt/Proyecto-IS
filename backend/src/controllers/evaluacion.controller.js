@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');
-const { evaluacionBodySchema, evaluacionIdSchema } = require("../schema/evaluacion.schema"); // Ajusta la ruta si es necesario
-//const { validateRequest } = require('../middlewares/validation.middleware'); // Añade un middleware de validación si lo tienes
+const { evaluacionBodySchema, evaluacionIdSchema } = require('../schemas/evaluacion.schema'); // Ajusta la ruta si es necesario
+const { validateRequest } = require('../middlewares/validation.middleware'); // Añade un middleware de validación si lo tienes
 
 exports.createEvaluacion = async (req, res, next) => {
   try {
-    // Validar el cuerpo de la solicitud
     await validateRequest(evaluacionBodySchema, req.body);
 
     const { id_postulacion, comentario, puntos } = req.body;
@@ -87,3 +86,5 @@ exports.deleteEvaluacion = async (req, res) => {
 };
 
 module.exports = exports;
+
+//perras empoderadas

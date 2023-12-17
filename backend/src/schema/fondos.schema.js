@@ -38,3 +38,4 @@ const fondoIdSchema = Joi.object({
 });
 
 module.exports = { fondoBodySchema, fondoIdSchema };
+

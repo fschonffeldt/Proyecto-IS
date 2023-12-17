@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 /**
  * Esquema de validación para el cuerpo de la solicitud de concurso.
@@ -27,3 +27,5 @@ const concursoBodySchema = Joi.object({
 });
 
 module.exports = { concursoBodySchema };
+
+
