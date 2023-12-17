@@ -5,19 +5,18 @@ const Joi = require("joi");
  * Esquema de validación para proyectos.
  * @constant {Object}
  */
-const proyectoBodySchema = Joi.object({
-  Tema: Joi.string().required().pattern(/^(?!\s+$)(?![0-9\s]+$)(?=.*[a-z\d])[a-zA-Z\d\s]+$/).min(5).messages({
+const proyectoBodySchema = Joi.object({Tema: Joi.string().required().pattern(/^(?!\s+$)(?![0-9\s]+$)(?=.*[a-z\d])[a-zA-Z\d\s]+$/).min(5).messages({
     "string.empty": "El nombre del tema no puede estar vacío.",
     "any.required": "El nombre del tema es obligatorio.",
     "string.base": "El nombre del tema debe ser de tipo string.",
-    "string.pattern.base": "El nombre del tema solo permite caracteres alfanuméricos y espacios. No puede contener solo números, mayúsculas o espacios en blanco.",
+    "string.pattern.base": "Ingrese un tema valido.",
     "string.min": "El nombre del tema debe tener al menos 5 caracteres.",
   }),
   Descripcion: Joi.string().required().pattern(/^(?!\s+$)(?![0-9\s]+$)(?=.*[a-z\d])[a-zA-Z\d\s]+$/).min(5).messages({
     "string.empty": "La descripcion no puede estar vacia.",
     "any.required": "La descripcion es obligatoria.",
     "string.base": "La descripcion debe ser de tipo string.",
-    "string.pattern.base": "La descripcion solo puede contener caracteres alfanuméricos y espacios. No puede contener solo números, mayúsculas o espacios en blanco.",
+    "string.pattern.base": "Ingrese una descripcion valida.",
     "string.min": "La descripcion debe contener al menos 5 caracteres.",
   }),
   Monto: Joi.number().required().min(1).messages({
