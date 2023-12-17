@@ -9,16 +9,22 @@ import Login from './routes/Login.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <PublicRoot />,
+    element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
         element: <App />,
       },
+      {
+        path: '/postulaciones',
+        
+      },
     ],
   },
-  { // Ruta de login
+ 
+
+  {
     path: '/auth',
     element: <Login />,
   },
