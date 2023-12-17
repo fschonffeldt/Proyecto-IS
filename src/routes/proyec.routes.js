@@ -1,18 +1,17 @@
 "use strict";
-const express = require("express");
 
+const express = require("express");
 const proyecController = require("../controllers/proyect.controller.js");
-const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
-const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
+const authenticationMiddleware = require('../middlewares/authentication.middleware');
+const { isAdmin } = require('../middlewares/authorization.middleware');
+
 
 const router = express.Router();
 
-router.use(authenticationMiddleware);
-
-router.get("/", proyecController.getProyectos);
-router.post("/", authorizationMiddleware.isAdmin, proyecController.createProyecto);
-router.get("/:id", proyecController.getProyectoById);
-router.put("/:id", authorizationMiddleware.isAdmin, proyecController.updateProyecto);
-router.delete("/:id", authorizationMiddleware.isAdmin, proyecController.deleteProyecto);
+router.get("/", proyecController.obtain);
+router.get("/:id", proyecController.obtainById);
+router.post("/", authenticationMiddleware, isAdmin, proyecController.create);
+router.put("/:id", authenticationMiddleware, isAdmin, proyecController.update);
+router.delete("/:id", authenticationMiddleware, isAdmin, proyecController.delete);
 
 module.exports = router;

@@ -44,7 +44,6 @@ const proyecRoutes = require("./proyec.routes");
 // Agrega las rutas de los diferentes módulos aquí
 router.use("/proyec", proyecRoutes);
 
-// Exporta el enrutador
 module.exports = router;
 
 

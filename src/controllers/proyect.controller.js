@@ -1,105 +1,84 @@
-const { respondSuccess, respondError } = require("../utils/resHandler");
-const ProyecService = require("../controllers/proyect.controller.js");
-const { proyecBodySchema, proyecIdSchema } = require("../schema/proyec.schema");
-const { handleError } = require("../utils/errorHandler");
+"use strict";
+const mongoose = require('mongoose');
+const Proyecto = require('../models/proyec.model.js');
+const { proyectoBodySchema } = require('../schema/proyec.schema');
 
-async function getProyectos(req, res) {
+/** 
+ * Obtiene todos los proyectos.
+ */
+exports.obtain = async (req, res, next) => {
   try {
-    const [proyectos, errorProyectos] = await ProyecService.getProyectos();
-    if (errorProyectos) return respondError(req, res, 404, errorProyectos);
-
-    proyectos.length === 0
-      ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, proyectos);
+    const proyectos = await Proyecto.find();
+    res.json(proyectos);
   } catch (error) {
-    handleError(error, "proyec.controller -> getProyectos");
-    respondError(req, res, 500, "No se pudieron obtener los proyectos");
+    next(error);
   }
-}
+};
 
-async function createProyecto(req, res) {
+/** 
+ * Obtiene un proyecto por id.
+ */
+exports.obtainById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { body } = req;
-    const { error: bodyError } = proyecBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
+    const proyecto = await Proyecto.findById(id, req.body);
+    res.json(proyecto);
+  } catch (error) {
+    next(error);
+  }
+};
 
-    const [newProyecto, proyectoError] = await ProyecService.createProyecto(body);
-
-    if (proyectoError) return respondError(req, res, 400, proyectoError);
-    if (!newProyecto) {
-      return respondError(req, res, 400, "No se creó el proyecto");
+/** 
+ * Crea un nuevo proyecto.
+ */
+exports.create = async (req, res, next) => {
+  try {
+    const { error, value } = proyectoBodySchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({ message: error.message });
     }
 
-    respondSuccess(req, res, 201, newProyecto);
-  } catch (error) {
-    handleError(error, "proyec.controller -> createProyecto");
-    respondError(req, res, 500, "No se creó el proyecto");
-  }
-}
+    const newProyecto = new Proyecto(value);
+    await newProyecto.save();
 
-async function getProyectoById(req, res) {
+    res.status(201).json(newProyecto);  // 201 Created
+
+  }catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(400).send({ message: error.message });
+    }else {
+      next(error);
+    }
+  }
+};
+
+
+/** 
+ * Actualiza un proyecto existente.
+ */
+exports.update = async (req, res, next) => {
   try {
-    const { params } = req;
-    const { error: paramsError } = proyecIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const [proyecto, errorProyecto] = await ProyecService.getProyectoById(params.id);
-
-    if (errorProyecto) return respondError(req, res, 404, errorProyecto);
-
-    respondSuccess(req, res, 200, proyecto);
+    const { id } = req.params;
+    const ProyectoActualizado = await Proyecto.findByIdAndUpdate(id, req.body, { new: true });
+    if (!ProyectoActualizado) {
+      return res.status(404).send({ message: 'Proyecto no encontrado' });  // 404 Not Found
+    }
+    res.status(200).send({ message: 'Proyecto actualizado exitosamente' });
+    
   } catch (error) {
-    handleError(error, "proyecto.controller -> getProyectoById");
-    respondError(req, res, 500, "No se pudo obtener el proyecto");
+    next(error);
   }
-}
+};
 
-async function updateProyecto(req, res) {
+exports.delete = async (req, res, next) => {
   try {
-    const { params, body } = req;
-    const { error: paramsError } = proyecIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const { error: bodyError } = proyecBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [proyecto, proyectoError] = await ProyecService.updateProyecto(params.id, body);
-
-    if (proyectoError) return respondError(req, res, 400, proyectoError);
-
-    respondSuccess(req, res, 200, proyecto);
+      const { id } = req.params;
+      const proyectoEliminado = await Proyecto.findByIdAndDelete(id);
+      if (!proyectoEliminado) {
+          return res.status(404).send({ message: 'Proyecto no encontrado' });  // 404 Not Found
+      }
+      res.status(200).send({ message: 'Proyecto eliminado exitosamente' });  // 200 OK
   } catch (error) {
-    handleError(error, "proyec.controller -> updateProyecto");
-    respondError(req, res, 500, "No se pudo actualizar la evaluación");
+      next(error);
   }
-}
-
-async function deleteProyecto(req, res) {
-  try {
-    const { params } = req;
-    const { error: paramsError } = proyecIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
-
-    const proyecto = await ProyecService.deleteProyecto(params.id);
-    !proyecto
-      ? respondError(
-          req,
-          res,
-          404,
-          "No se encontró el proyecto solicitado",
-          "Verifique el id ingresado"
-        )
-      : respondSuccess(req, res, 200, proyecto);
-  } catch (error) {
-    handleError(error, "proyec.controller -> deleteProyecto");
-    respondError(req, res, 500, "No se pudo eliminar la evaluación");
-  }
-}
-
-module.exports = {
-  getProyectos,
-  createProyecto,
-  getProyectoById,
-  updateProyecto,
-  deleteProyecto,
 };
