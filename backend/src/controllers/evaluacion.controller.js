@@ -86,4 +86,3 @@ exports.deleteEvaluacion = async (req, res) => {
 
 module.exports = exports;
 
-//perras empoderadas

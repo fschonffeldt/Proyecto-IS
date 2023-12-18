@@ -11,14 +11,28 @@ export const createpostulacion = async (postulaciones) => {
   }
 };
 
-export const getpostulaciones = async () => {
+export const getPostulacionesPorCorreo = async (correo) => {
   try {
-    const response = await axios.get('/postulacion/:id');
+    const response = await axios.get(`/postulacion/correo/${correo}`);
     if (response.status === 200) {
-      return response.data.data;
+      return response.data;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    throw error;
   }
-}
-export const getpostulacion = async (id) => {
+};
+
+export const getPostulacionPorId = async (id) => {
+  try {
+    const response = await axios.get(`/postulacion/${id}`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
