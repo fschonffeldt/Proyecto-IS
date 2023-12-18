@@ -1,7 +1,10 @@
+// components/PostulacionForm.jsx
 import { useState } from 'react';
 import { createpostulacion } from '../services/postulacion.service';
+import './PostulacionForm.css'; // Ajusta la ruta según tu estructura
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importa el CSS de Bootstrap
 
-function PostulacionForm() {
+const PostulacionForm = () => {
   const [postulacionData, setPostulacionData] = useState({
     nombreRepresentante: '',
     ApellidoRepresentante: '',
@@ -14,6 +17,7 @@ function PostulacionForm() {
     direccionInstitucion: '',
     region: '',
     ciudad: '',
+    // Agrega más campos según sea necesario
   });
 
   const handleChange = (e) => {
@@ -39,124 +43,150 @@ function PostulacionForm() {
   };
 
   return (
-    <div>
-      <h2>Formulario de Postulación</h2>
+    <div className="container mt-4">
+      <h2 className="mb-4">Formulario de Postulación</h2>
 
       <form onSubmit={handleSubmit}>
-        <label>
-          Nombre Representante:
-          <input
-            type="text"
-            name="nombreRepresentante"
-            value={postulacionData.nombreRepresentante}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="nombreRepresentante" className="form-label">Nombre Representante:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="nombreRepresentante"
+              value={postulacionData.nombreRepresentante}
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>
-          Apellido Representante:
-          <input
-            type="text"
-            name="ApellidoRepresentante"
-            value={postulacionData.ApellidoRepresentante}
-            onChange={handleChange}
-          />
-        </label>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="ApellidoRepresentante" className="form-label">Apellido Representante:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="ApellidoRepresentante"
+              value={postulacionData.ApellidoRepresentante}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <label>
-          Rut Representante:
-          <input
-            type="text"
-            name="rutRepresentante"
-            value={postulacionData.rutRepresentante}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="rutRepresentante" className="form-label">Rut Representante:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="rutRepresentante"
+              value={postulacionData.rutRepresentante}
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>
-          Teléfono Representante:
-          <input
-            type="text"
-            name="telefonoRepresentante"
-            value={postulacionData.telefonoRepresentante}
-            onChange={handleChange}
-          />
-        </label>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="telefonoRepresentante" className="form-label">Teléfono Representante:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="telefonoRepresentante"
+              value={postulacionData.telefonoRepresentante}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <label>
-          Email Representante:
-          <input
-            type="text"
-            name="emailRepresentante"
-            value={postulacionData.emailRepresentante}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="emailRepresentante" className="form-label">Email Representante:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="emailRepresentante"
+              value={postulacionData.emailRepresentante}
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>
-          Nombre Institución:
-          <input
-            type="text"
-            name="nombreInstitucion"
-            value={postulacionData.nombreInstitucion}
-            onChange={handleChange}
-          />
-        </label>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="nombreInstitucion" className="form-label">Nombre Institución:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="nombreInstitucion"
+              value={postulacionData.nombreInstitucion}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <label>
-          Rut Institución:
-          <input
-            type="text"
-            name="rutInstitucion"
-            value={postulacionData.rutInstitucion}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="rutInstitucion" className="form-label">Rut Institución:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="rutInstitucion"
+              value={postulacionData.rutInstitucion}
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>
-          Email Institución:
-          <input
-            type="text"
-            name="emailInstitucion"
-            value={postulacionData.emailInstitucion}
-            onChange={handleChange}
-          />
-        </label>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="emailInstitucion" className="form-label">Email Institución:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="emailInstitucion"
+              value={postulacionData.emailInstitucion}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <label>
-          Dirección Institución:
-          <input
-            type="text"
-            name="direccionInstitucion"
-            value={postulacionData.direccionInstitucion}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="direccionInstitucion" className="form-label">Dirección Institución:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="direccionInstitucion"
+              value={postulacionData.direccionInstitucion}
+              onChange={handleChange}
+            />
+          </div>
 
-        <label>
-          Región:
-          <input
-            type="text"
-            name="region"
-            value={postulacionData.region}
-            onChange={handleChange}
-          />
-        </label>
+          <div className="col-md-6 mb-3">
+            <label htmlFor="region" className="form-label">Región:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="region"
+              value={postulacionData.region}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
 
-        <label>
-          Ciudad:
-          <input
-            type="text"
-            name="ciudad"
-            value={postulacionData.ciudad}
-            onChange={handleChange}
-          />
-        </label>
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label htmlFor="ciudad" className="form-label">Ciudad:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="ciudad"
+              value={postulacionData.ciudad}
+              onChange={handleChange}
+            />
+          </div>
+          {/* Agrega más campos según sea necesario */}
+        </div>
 
-        <button type="submit">Enviar Postulación</button>
+        <div className="mt-3">
+          <button type="submit" className="btn btn-primary">Enviar Postulación</button>
+        </div>
       </form>
     </div>
   );
-}
+};
 
 export default PostulacionForm;
