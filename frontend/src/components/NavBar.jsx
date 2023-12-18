@@ -23,10 +23,10 @@ const NavBar = () => {
             <li className="nav-item">
               <Link to="/proyectos" className="nav-link">Proyectos</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/evaluacion" className="nav-link">Evaluacion</Link>
+            </li>
           </ul>
-        </div>
-        <div className="navbar-action-container">
-          <Link to="/login" className="nav-link login">Iniciar Sesión</Link>
         </div>
       </div>
     </nav>
