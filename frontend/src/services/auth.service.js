@@ -9,6 +9,7 @@ export const login = async ({ email, password }) => {
       password,
     });
     const { status, data } = response;
+    console.log(response); // Agrega esta línea para imprimir la respuesta completa
     if (status === 200) {
       const { email, roles } = await jwtDecode(data.data.accessToken);
       localStorage.setItem('user', JSON.stringify({ email, roles }));
@@ -18,7 +19,7 @@ export const login = async ({ email, password }) => {
       cookies.set('jwt-auth', data.data.accessToken, { path: '/' });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error during login:", error);
   }
 };
 
