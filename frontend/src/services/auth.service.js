@@ -1,6 +1,6 @@
 import axios from './root.service';
 import cookies from 'js-cookie';
-import * as jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 export const login = async ({ email, password }) => {
   try {
@@ -10,7 +10,6 @@ export const login = async ({ email, password }) => {
     });
     const { status, data } = response;
     if (status === 200) {
-      console.log("funca");
       const { email, roles } = await jwtDecode(data.data.accessToken);
       localStorage.setItem('user', JSON.stringify({ email, roles }));
       axios.defaults.headers.common[
@@ -19,7 +18,6 @@ export const login = async ({ email, password }) => {
       cookies.set('jwt-auth', data.data.accessToken, { path: '/' });
     }
   } catch (error) {
-    console.log("no funca");
     console.log(error);
   }
 };

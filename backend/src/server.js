@@ -18,7 +18,7 @@ async function setupServer() {
     /** Instancia de la aplicacion */
     const server = express();
     server.use(express.json());                                       // Agrega el middleware para el manejo de datos en formato JSON
-    server.use(cors({ origin: "/" }));                                // Agregamos los cors
+    server.use(cors({ credentials: true, origin: true }));            // Agregamos los cors
     server.use(cookieParser());                                       // Agregamos el middleware para el manejo de cookies
     server.use(morgan("dev"));                                        // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(express.urlencoded({ extended: true }));               // Agrega el middleware para el manejo de datos en formato URL
