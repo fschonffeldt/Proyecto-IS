@@ -4,33 +4,40 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
+import Login from './routes/Login.jsx';
+import Postulacion from './routes/Postulacion.jsx';
 import Fondos from './routes/Fondos.jsx';
 import Concurso from './routes/Concurso.jsx';
-
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: '/',
-        element: <App />,
-      },
-    ],
+    
   },
+  {
+    path: '/',
+    element: <App />,
+  },
+ {
+     path: '/postulaciones',
+      element: <Postulacion />,
 
-    {
-    path: '/fondos',
-    element: <Fondos/>,
+ },
+ {
+  path: '/fondos',
+  element: <Fondos/>,
+  },
+  {
+    path: '/concurso',
+    element: <Concurso/>,
     },
-    {
-      path: '/concurso',
-      element: <Concurso/>,
-      }
 
-  
+  {
+    path: '/auth',
+    element: <Login />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
