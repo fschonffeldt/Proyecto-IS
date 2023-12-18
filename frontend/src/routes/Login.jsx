@@ -5,7 +5,7 @@ function Login() {
   const navigate = useNavigate();
 
   if (localStorage.getItem('user')) {
-    return (
+return (
       <>
         <h2>Ya estas logeado!</h2>
         <button onClick={() => navigate('/')}>Ir a home</button>
@@ -21,4 +21,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login;//*

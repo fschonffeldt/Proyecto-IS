@@ -5,24 +5,35 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
-import Proyectos from './routes/Proyectos.jsx';
+import Postulacion from './routes/Postulacion.jsx';
+import Fondos from './routes/Fondos.jsx';
+import Concurso from './routes/Concurso.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: '/',
-        element: <App />,
-      },
-      {
-        path: '/proyectos',
-        element: <Proyectos />,
-      }
-    ],
+    
   },
+  {
+    path: '/',
+    element: <App />,
+  },
+ {
+     path: '/postulaciones',
+      element: <Postulacion />,
+
+ },
+ {
+  path: '/fondos',
+  element: <Fondos/>,
+  },
+  {
+    path: '/concurso',
+    element: <Concurso/>,
+    },
+
   {
     path: '/auth',
     element: <Login />,

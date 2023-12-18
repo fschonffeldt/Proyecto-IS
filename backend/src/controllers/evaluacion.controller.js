@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Evaluacion = require('../models/evaluacion.model');
-const { evaluacionBodySchema, evaluacionIdSchema } = require('../schema/evaluacion.schema'); // Ajusta la ruta si es necesario
+const { evaluacionBodySchema, evaluacionIdSchema } = require("../schema/evaluacion.schema"); // Ajusta la ruta si es necesario
 
 exports.createEvaluacion = async (req, res, next) => {
   try {

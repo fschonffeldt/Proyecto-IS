@@ -18,7 +18,7 @@ const evaluacionBodySchema = Joi.object({
     }),
   comentario: Joi.string().default(" ").custom((value, helpers) => {
     if (!value.includes(" ")) {
-      return helpers.message('El comentario debe contener al menos un espacio.');
+      return helpers.message("El comentario debe contener al menos un espacio.");
     }
     return value;
   }),
