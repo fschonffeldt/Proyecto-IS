@@ -10,3 +10,15 @@ export const createpostulacion = async (postulaciones) => {
     console.log(error);
   }
 };
+
+export const getpostulaciones = async () => {
+  try {
+    const response = await axios.get('/postulacion/:id');
+    if (response.status === 200) {
+      return response.data.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const getpostulacion = async (id) => {

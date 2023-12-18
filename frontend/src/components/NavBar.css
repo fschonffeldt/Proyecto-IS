@@ -1,31 +1,11 @@
-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-  }
-  
-  .navbar-logo a {
-    font-size: 1.5rem;
+/* Ajusta los estilos según tus preferencias */
+.main-title {
+    font-size: 24px;
     font-weight: bold;
-    color: #fff;
-    text-decoration: none;
+    padding-right: 20px; /* Espaciado entre el título y los enlaces */
   }
   
-  .navbar-links a {
-    margin: 0 15px;
-    font-size: 1rem;
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .navbar-login a {
-    font-size: 1rem;
-    color: #fff;
-    text-decoration: none;
-    border: 1px solid #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
+  .nav-link.login {
+    /* Agrega estilos específicos para el enlace de iniciar sesión */
+    color: white; /* Cambia el color del texto a blanco (o el color que prefieras) */
   }

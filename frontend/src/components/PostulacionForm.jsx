@@ -1,5 +1,5 @@
-// components/PostulacionForm.jsx
-import { useState } from 'react';
+
+import  { useState } from 'react';
 import { createpostulacion } from '../services/postulacion.service';
 import './PostulacionForm.css'; // Ajusta la ruta según tu estructura
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importa el CSS de Bootstrap
@@ -19,6 +19,8 @@ const PostulacionForm = () => {
     ciudad: '',
     // Agrega más campos según sea necesario
   });
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,10 +35,14 @@ const PostulacionForm = () => {
 
     try {
       const createdPostulacion = await createpostulacion(postulacionData);
+      setSuccessMessage('¡Postulación creada con éxito!');
+      setErrorMessage(''); // Limpia cualquier mensaje de error existente
       console.log('Postulación creada:', createdPostulacion);
       // Puedes redirigir a otra página después de la creación exitosa
       // (Asegúrate de tener configurado React Router si estás utilizando rutas)
     } catch (error) {
+      setSuccessMessage('');
+      setErrorMessage('Error al crear la postulación. Por favor, verifica los datos.');
       console.error('Error al crear la postulación:', error.message);
       // Manejo de errores
     }
@@ -45,6 +51,8 @@ const PostulacionForm = () => {
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Formulario de Postulación</h2>
+      {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="row">
@@ -53,6 +61,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="nombreRepresentante"
               name="nombreRepresentante"
               value={postulacionData.nombreRepresentante}
               onChange={handleChange}
@@ -64,6 +73,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="ApellidoRepresentante"
               name="ApellidoRepresentante"
               value={postulacionData.ApellidoRepresentante}
               onChange={handleChange}
@@ -77,6 +87,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="rutRepresentante"
               name="rutRepresentante"
               value={postulacionData.rutRepresentante}
               onChange={handleChange}
@@ -88,6 +99,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="telefonoRepresentante"
               name="telefonoRepresentante"
               value={postulacionData.telefonoRepresentante}
               onChange={handleChange}
@@ -101,6 +113,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="emailRepresentante"
               name="emailRepresentante"
               value={postulacionData.emailRepresentante}
               onChange={handleChange}
@@ -112,6 +125,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="nombreInstitucion"
               name="nombreInstitucion"
               value={postulacionData.nombreInstitucion}
               onChange={handleChange}
@@ -125,6 +139,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="rutInstitucion"
               name="rutInstitucion"
               value={postulacionData.rutInstitucion}
               onChange={handleChange}
@@ -136,6 +151,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="emailInstitucion"
               name="emailInstitucion"
               value={postulacionData.emailInstitucion}
               onChange={handleChange}
@@ -149,6 +165,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="direccionInstitucion"
               name="direccionInstitucion"
               value={postulacionData.direccionInstitucion}
               onChange={handleChange}
@@ -160,6 +177,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="region"
               name="region"
               value={postulacionData.region}
               onChange={handleChange}
@@ -173,6 +191,7 @@ const PostulacionForm = () => {
             <input
               type="text"
               className="form-control"
+              id="ciudad"
               name="ciudad"
               value={postulacionData.ciudad}
               onChange={handleChange}
@@ -190,3 +209,4 @@ const PostulacionForm = () => {
 };
 
 export default PostulacionForm;
+
