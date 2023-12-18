@@ -21,4 +21,3 @@ export const getpostulaciones = async () => {
     console.log(error);
   }
 }
-export const getpostulacion = async (id) => {
