@@ -4,6 +4,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
+import Fondos from './routes/Fondos.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,12 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+    {
+    path: '/fondos',
+    element: <Fondos/>,
+    }
+
   
 ]);
 
