@@ -23,23 +23,28 @@ const concursoSchema = new mongoose.Schema({
 // Middleware pre-save para absorber el monto de un fondo según su ID
 concursoSchema.pre('save', async function(next) {
   try {
-    // Obtén el documento Fondo relacionado
     const fondo = await Fondo.findById(this.montoTotalFondo);
     if (!fondo) throw new Error('Fondo no encontrado');
 
-    // Absorbe el ID del fondo al Concurso
-    this.montoTotalFondo = fondo._id;  // Ajusta esto según tus necesidades
+    this.montoTotalFondo = fondo._id;
 
-
-    // Descuenta el monto a repartir del monto total del fondo
     fondo.montoTotal -= this.montoARepartir;
-
-    // Guarda el documento Fondo actualizado
     await fondo.save();
-    // Continúa con el proceso de guardado
+
+    // Crea un nuevo Ganador asociado al Concurso y Clasificacion
+    const nuevoGanador = new Ganador({
+      idConcurso: this._id,
+      idClasificacion: this.idClasificacion, // Ajusta esto según tus necesidades
+      montoAsignado: this.montoARepartir,
+    });
+
+    // Resta automáticamente el monto asignado del monto a repartir del Concurso
+    this.montoARepartir -= this.montoARepartir;
+
+    await nuevoGanador.save();
     next();
   } catch (error) {
-    next(error);  // Pasa el error al manejador de errores
+    next(error);
   }
 });
 
