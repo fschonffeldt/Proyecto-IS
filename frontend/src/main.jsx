@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Fondos from './routes/Fondos.jsx';
+import Concurso from './routes/Concurso.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -22,7 +24,11 @@ const router = createBrowserRouter([
     {
     path: '/fondos',
     element: <Fondos/>,
-    }
+    },
+    {
+      path: '/concurso',
+      element: <Concurso/>,
+      }
 
   
 ]);

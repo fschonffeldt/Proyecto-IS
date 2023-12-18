@@ -1,15 +1,10 @@
-import axios from './root.service'; // Se asume que root.service.js maneja la configuración de axios
+import axios from './root.service';
 
-const concursoService = {
-  crearConcurso: async (datosConcurso) => {
-    try {
-      const respuesta = await axios.post('/concurso', datosConcurso);
-      return respuesta.data; // Puedes modificar esto según la estructura de tu respuesta
-    } catch (error) {
-      throw error.response ? error.response.data : error.message;
-    }
-  },
-  // Agrega otras funciones relacionadas con "concurso" aquí según tus necesidades
+export const createConcurso = async (data) => {
+  try {
+    const response = await axios.post('/concurso', data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error creating concurso');
+  }
 };
-
-export default concursoService;
