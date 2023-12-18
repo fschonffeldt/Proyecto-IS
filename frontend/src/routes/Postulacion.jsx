@@ -1,9 +1,6 @@
-
 import PostulacionForm from '../components/PostulacionForm';
 import NavBar from '../components/NavBar';
 import { Link } from 'react-router-dom';
-
-
 
 
 function Postulacion() {
