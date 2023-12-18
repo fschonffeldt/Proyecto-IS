@@ -1,0 +1,11 @@
+/* Ajusta los estilos según tus preferencias */
+.main-title {
+    font-size: 24px;
+    font-weight: bold;
+    padding-right: 20px; /* Espaciado entre el título y los enlaces */
+  }
+  
+  .nav-link.login {
+    /* Agrega estilos específicos para el enlace de iniciar sesión */
+    color: white; /* Cambia el color del texto a blanco (o el color que prefieras) */
+  }
