@@ -26,11 +26,18 @@ const NavBar = () => {
             <li className="nav-item">
               <Link to="/evaluacion" className="nav-link">Evaluacion</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/fondos" className="nav-link">Fondos</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/concurso" className="nav-link">Concurso</Link>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
   );
 };
+
 
 export default NavBar;
