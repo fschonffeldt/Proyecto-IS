@@ -1,13 +1,12 @@
-function postulaciones() {
-    return (
-      <>
-        <h1>Pagina principal</h1>
-        <div>
-          <h2>Estas logeado!</h2>
-        </div>
-      </>
-    );
-  }
-  
-  export default postulaciones;
-  
+import PostulacionForm from '../components/PostulacionForm';
+
+function Postulacion() {
+  return (
+    <div>
+      <h1>Vista de Postulación</h1>
+      <PostulacionForm />
+    </div>
+  );
+}
+
+export default Postulacion;
