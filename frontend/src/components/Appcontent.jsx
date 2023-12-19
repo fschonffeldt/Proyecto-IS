@@ -14,7 +14,7 @@ const AppContent = () => {
               </div>
               <div className="col-md-4">
                 {/* Contenido de las opciones */}
-                <a href="#" className="btn btn-primary">Iniciar Sesión</a>
+
               </div>
             </div>
           </main>
