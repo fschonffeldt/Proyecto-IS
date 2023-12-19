@@ -37,7 +37,7 @@ const clasificacionRoutes = require("./clasificacion.routes.js"); // Agrega esta
 router.use("/clasificacion", clasificacionRoutes); // Agrega esta línea
 
 const evaluacionRoutes = require("./evaluacion.routes.js"); // Agrega esta línea
-router.use("/evaluacion", authenticationMiddleware, evaluacionRoutes); // Agrega esta línea
+router.use("/evaluacion",  evaluacionRoutes); // Agrega esta línea
 
 // Importa y utiliza las rutas de los diferentes módulos de tu aplicación
 const proyecRoutes = require("./proyec.routes");

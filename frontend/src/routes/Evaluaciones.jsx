@@ -3,9 +3,12 @@ import EvaluacionForm from "../components/CrearEvaluacion" // Asegúrate de impo
 const Evaluacion = () => {
 return (
   <>
-    <div>Evaluacion</div>
-    <EvaluacionForm />
+      <div>
+      <h1>Vista de Evaluacion</h1>
+      <EvaluacionForm />
+    </div>
   </>
+  
 )
 }
 

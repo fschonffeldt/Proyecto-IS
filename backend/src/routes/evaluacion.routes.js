@@ -16,7 +16,7 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 router.get('/', authorizationMiddleware.isEvaluador, evaluacionController.getEvaluacion);  // Ruta para obtener todos los fondos
-router.post('/', authorizationMiddleware.isEvaluador, evaluacionController.createEvaluacion);  // Ruta para crear un nuevo fondo
+router.post('/', evaluacionController.createEvaluacion);  // Ruta para crear un nuevo fondo
 router.put('/:id', authorizationMiddleware.isEvaluador, evaluacionController.updateEvaluacion);  // Ruta para actualizar un fondo existente
 router.delete('/:id', authorizationMiddleware.isEvaluador, evaluacionController.deleteEvaluacion);  // Ruta para eliminar un fondo existente
 router.get('/:id', authorizationMiddleware.isEvaluador, authorizationMiddleware.isUser, evaluacionController.getEvaluacionById);
