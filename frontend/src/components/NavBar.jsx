@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import '../assets/NavBar.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 const NavBar = () => {
   return (
@@ -20,20 +22,16 @@ const NavBar = () => {
             <li className="nav-item">
               <Link to="/turismo" className="nav-link">Turismo</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/proyectos" className="nav-link">Proyectos</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/postulacion" className="nav-link">Postulacion</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/evaluacion" className="nav-link">Evaluacion</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/fondos" className="nav-link">Fondos</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/concurso" className="nav-link">Concurso</Link>
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#" id="proyectosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Proyectos
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="proyectosDropdown">
+                <li><Link to="/postulacion" className="dropdown-item">Postulacion</Link></li>
+                <li><Link to="/evaluacion" className="dropdown-item">Evaluacion</Link></li>
+                <li><Link to="/fondos" className="dropdown-item">Fondos</Link></li>
+                <li><Link to="/concurso" className="dropdown-item">Concurso</Link></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -41,6 +39,5 @@ const NavBar = () => {
     </nav>
   );
 };
-
 
 export default NavBar;
