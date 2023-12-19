@@ -52,12 +52,6 @@ const NavBar = () => {
       </div>
     </nav>
   );
-<<<<<<< HEAD
-}
-
-export default NavBar;
-=======
 };
 
 export default NavBar;
->>>>>>> origin/diegod
