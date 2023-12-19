@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { createfondos } from '../services/fondos.service';
 import { useNavigate } from 'react-router-dom';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import './FondoForm.css';
 
 const FondoForm = () => {
@@ -20,26 +21,36 @@ const FondoForm = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <Container className="mt-5">
       <h2>Nuevo Fondo</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-3">
-          <label htmlFor="nombre" className="form-label">Nombre del fondo:</label>
-          <input {...register('nombre', { required: 'Este campo es obligatorio' })} className={form-control ${errors.nombre ? 'is-invalid' : ''}} />
-          {errors.nombre && <div className="invalid-feedback">{errors.nombre.message}</div>}
-        </div>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="nombre">
+            <Form.Label>Nombre del fondo:</Form.Label>
+            <Form.Control
+              {...register('nombre', { required: 'Este campo es obligatorio' })}
+              className={`form-control ${errors.nombre ? 'is-invalid' : ''}`}
+            />
+            {errors.nombre && <div className="invalid-feedback">{errors.nombre.message}</div>}
+          </Form.Group>
+        </Row>
 
-        <div className="mb-3">
-          <label htmlFor="montoTotal" className="form-label">Monto Total:</label>
-          <input {...register('montoTotal', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })} className={form-control ${errors.montoTotal ? 'is-invalid' : ''}} />
-          {errors.montoTotal && <div className="invalid-feedback">{errors.montoTotal.message}</div>}
-        </div>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="montoTotal">
+            <Form.Label>Monto Total:</Form.Label>
+            <Form.Control
+              {...register('montoTotal', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })}
+              className={`form-control ${errors.montoTotal ? 'is-invalid' : ''}`}
+            />
+            {errors.montoTotal && <div className="invalid-feedback">{errors.montoTotal.message}</div>}
+          </Form.Group>
+        </Row>
 
         {/* Agrega más campos según tus necesidades */}
 
-        <button type="submit" className="btn btn-primary">Crear Fondo</button>
-      </form>
-    </div>
+        <Button type="submit" variant="primary">Crear Fondo</Button>
+      </Form>
+    </Container>
   );
 };
 

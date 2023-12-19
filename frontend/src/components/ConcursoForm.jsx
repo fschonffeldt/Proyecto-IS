@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
-import { createConcurso } from '../services/concurso.service'; // Ajusta la ruta según tu estructura
+import { createConcurso } from '../services/concurso.service';
 import { useNavigate } from 'react-router-dom';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 
 const ConcursoForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -10,8 +11,8 @@ const ConcursoForm = () => {
     try {
       const response = await createConcurso(data);
       if (response) {
-        console.log(response); // Maneja la respuesta según tus necesidades
-        navigate('/'); // Redirecciona a la lista de concursos después de crear
+        console.log(response);
+        navigate('/');
       }
     } catch (error) {
       console.error('Error al enviar el formulario de concurso:', error);
@@ -19,32 +20,44 @@ const ConcursoForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <Container className="form-container mt-5">
       <h2>Nuevo Concurso</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label htmlFor="nombre">Nombre del concurso:</label>
-          <input {...register('nombre', { required: 'Este campo es obligatorio' })} />
-          {errors.nombre && <span className="error-message">{errors.nombre.message}</span>}
-        </div>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="nombre">
+            <Form.Label>Nombre del concurso:</Form.Label>
+            <Form.Control
+              {...register('nombre', { required: 'Este campo es obligatorio' })}
+            />
+            {errors.nombre && <span className="error-message">{errors.nombre.message}</span>}
+          </Form.Group>
+        </Row>
 
-        <div className="form-group">
-          <label htmlFor="montoTotal">Monto Total del Fondo:</label>
-          <input {...register('montoTotal', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })} />
-          {errors.montoTotal && <span className="error-message">{errors.montoTotal.message}</span>}
-        </div>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="montoTotal">
+            <Form.Label>Monto Total del Fondo:</Form.Label>
+            <Form.Control
+              {...register('montoTotal', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })}
+            />
+            {errors.montoTotal && <span className="error-message">{errors.montoTotal.message}</span>}
+          </Form.Group>
+        </Row>
 
-        <div className="form-group">
-          <label htmlFor="montoRepartir">Monto a Repartir:</label>
-          <input {...register('montoRepartir', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })} />
-          {errors.montoRepartir && <span className="error-message">{errors.montoRepartir.message}</span>}
-        </div>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="montoRepartir">
+            <Form.Label>Monto a Repartir:</Form.Label>
+            <Form.Control
+              {...register('montoRepartir', { required: 'Este campo es obligatorio', min: { value: 1, message: 'El monto debe ser mayor que cero' } })}
+            />
+            {errors.montoRepartir && <span className="error-message">{errors.montoRepartir.message}</span>}
+          </Form.Group>
+        </Row>
 
         {/* Agrega más campos según tus necesidades */}
 
-        <button type="submit">Crear Concurso</button>
-      </form>
-    </div>
+        <Button type="submit">Crear Concurso</Button>
+      </Form>
+    </Container>
   );
 };
 
