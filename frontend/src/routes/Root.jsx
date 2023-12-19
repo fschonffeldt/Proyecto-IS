@@ -66,7 +66,6 @@ function PageRoot() {
     <div ref={pageRootRef}>
       <NavBar />
       <div>
-      <h1>Aquí debería ir un encabezado</h1>
         <div
           style={{
             position: 'fixed',

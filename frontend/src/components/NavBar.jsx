@@ -28,7 +28,7 @@ const NavBar = () => {
                 Proyectos
               </a>
               <ul className="dropdown-menu" aria-labelledby="proyectosDropdown">
-                <li><Link to="/postulacion" className="dropdown-item">Postulacion</Link></li>
+                <li><Link to="/postulaciones" className="dropdown-item">Postulaciones</Link></li>
                 <li><Link to="/evaluacion" className="dropdown-item">Evaluacion</Link></li>
                 <li><Link to="/fondos" className="dropdown-item">Fondos</Link></li>
                 <li><Link to="/concurso" className="dropdown-item">Concurso</Link></li>
