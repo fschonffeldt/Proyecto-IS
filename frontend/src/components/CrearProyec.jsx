@@ -22,24 +22,21 @@ const ProyectoForm = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className='container d-flex justify-content-center align-items-center vh-100'>
+      <div className='col-lg-6 my-form-container'>
         <form onSubmit={handleSubmit(onSubmit)}>
           
-          <div>
-            <label htmlFor="Tema">
-              Tema
-            </label>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Tema">Tema</label>
             <div>
               <input
-                type="text"
+                class="form-control" type="text" id="Tema"
                 {...register("Tema", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
                     message: "El tema debe tener entre 1 y 40 letras."
                   }
                 })}
-                id="Tema"
               />
               {errors.Tema && (
                 <span>{errors.Tema.message}</span>
@@ -47,20 +44,17 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="Descripcion">
-              Descripcion
-            </label>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Descripcion">Descripcion</label>
             <div>
               <input
-                type="text"
+                class="form-control" type="text" id="Descripcion"
                 {...register("Descripcion", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
                     message: "El tema debe tener entre 1 y 40 letras."
                   }
                 })}
-                id="Descripcion"
               />
               {errors.Tema && (
                 <span>{errors.Descripcion.message}</span>
@@ -68,13 +62,11 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="Monto">
-              Monto
-            </label>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Monto">Monto</label>
             <div>
               <input
-                type="number"
+                class="form-control" type="number" id="Monto"
                 {...register("Monto", {
                   min: {
                     value: 0,
@@ -85,7 +77,6 @@ const ProyectoForm = () => {
                     message: "El monto no puede exceder 999999999"
                   }
                 })}
-                id="Monto"
               />
               {errors.Monto && (
                 <span>{errors.Monto.message}</span>
@@ -93,20 +84,17 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="Bases">
-              Bases
-            </label>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Bases">Bases</label>
             <div>
               <input
-                type="text"
+                class="form-control" type="text" id="Bases"
                 {...register("Bases", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
                     message: "BASES debe tener entre 1 y 40 letras."
                   }
                 })}
-                id="Bases"
               />
               {errors.Tema && (
                 <span>{errors.Bases.message}</span>
@@ -114,11 +102,7 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div>
-            <div>
-              <button type="submit">Enviar</button>
-            </div>
-          </div>
+          <button class="btn btn-primary" type="submit">Enviar</button>
 
         </form>
       </div>
