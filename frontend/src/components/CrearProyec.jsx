@@ -24,6 +24,7 @@ const ProyectoForm = () => {
   return (
     <div className='container d-flex justify-content-center align-items-center vh-100'>
       <div className='col-lg-6 my-form-container'>
+      <h2>Crea un Proyecto</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           
           <div className="mb-3">
