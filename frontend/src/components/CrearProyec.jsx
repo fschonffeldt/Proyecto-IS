@@ -26,11 +26,11 @@ const ProyectoForm = () => {
       <div className='col-lg-6 my-form-container'>
         <form onSubmit={handleSubmit(onSubmit)}>
           
-          <div class="mb-3">
-            <label class="form-label" htmlFor="Tema">Tema</label>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="Tema">Tema</label>
             <div>
               <input
-                class="form-control" type="text" id="Tema"
+                className="form-control" type="text" id="Tema"
                 {...register("Tema", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
@@ -44,11 +44,11 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label" htmlFor="Descripcion">Descripcion</label>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="Descripcion">Descripcion</label>
             <div>
               <input
-                class="form-control" type="text" id="Descripcion"
+                className="form-control" type="text" id="Descripcion"
                 {...register("Descripcion", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
@@ -62,11 +62,11 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label" htmlFor="Monto">Monto</label>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="Monto">Monto</label>
             <div>
               <input
-                class="form-control" type="number" id="Monto"
+                className="form-control" type="number" id="Monto"
                 {...register("Monto", {
                   min: {
                     value: 0,
@@ -84,11 +84,11 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label" htmlFor="Bases">Bases</label>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="Bases">Bases</label>
             <div>
               <input
-                class="form-control" type="text" id="Bases"
+                className="form-control" type="text" id="Bases"
                 {...register("Bases", {
                   pattern: {
                     value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
@@ -102,7 +102,7 @@ const ProyectoForm = () => {
             </div>
           </div>
 
-          <button class="btn btn-primary" type="submit">Enviar</button>
+          <button className="btn btn-primary" type="submit">Enviar</button>
 
         </form>
       </div>
