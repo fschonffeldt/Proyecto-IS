@@ -29,6 +29,15 @@ const router = createBrowserRouter([
         path: '/Evaluacion',
         element: <Evaluacion />,
       }
+      ,
+      {
+      path: '/fondos',
+      element: <Fondos/>,
+      },
+      {
+        path: '/concurso',
+        element: <Concurso/>,
+        }
     ],
   },
   {
@@ -40,14 +49,6 @@ const router = createBrowserRouter([
       element: <Postulacion />,
 
  },
- {
-  path: '/fondos',
-  element: <Fondos/>,
-  },
-  {
-    path: '/concurso',
-    element: <Concurso/>,
-    },
 
   {
     path: '/auth',

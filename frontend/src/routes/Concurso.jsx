@@ -1,10 +1,11 @@
 
 import ConcursoForm from '../components/ConcursoForm';
-
+import NavBar from '../components/NavBar';
 function Concurso() {
   return (
     <div>
-      <h1>Vista de Concurso</h1>
+      <NavBar />
+      <h1>Concurso</h1>
       <ConcursoForm />
     </div>
   );
