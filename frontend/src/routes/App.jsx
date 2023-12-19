@@ -1,10 +1,15 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import NavBar from '../components/NavBar';
+import AppContent from '../components/AppContent';
+import SocialLink from '../components/SocialLink';
 
 function App() {
   return (
-    <>
-      <h1>Pagina principal</h1>
-    </>
+    <div>
+      <NavBar />
+      <AppContent />
+      <SocialLink />
+    </div>
   );
 }
-
 export default App;

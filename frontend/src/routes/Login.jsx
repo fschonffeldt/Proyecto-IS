@@ -15,7 +15,7 @@ return (
 
   return (
     <div>
-      <h2>Inicia sesion!</h2>
+      <h1>Municipalidad</h1>
       <LoginForm />
     </div>
   );

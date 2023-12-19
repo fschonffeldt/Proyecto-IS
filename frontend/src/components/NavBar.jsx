@@ -6,21 +6,22 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <div className="navbar-brand-container">
-          <Link to="/" className="navbar-brand main-title">MUNICIPALIDAD</Link>
-        </div>
+        <a className="navbar-brand" href="#">Municipalidad</a>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link to="/tramites" className="nav-link">Trámites</Link>
+              <a className="nav-link" href="#">Trámites</a>
             </li>
             <li className="nav-item">
-              <Link to="/seguridad" className="nav-link">Seguridad</Link>
+              <a className="nav-link" href="#">Seguridad</a>
             </li>
             <li className="nav-item">
-              <Link to="/turismo" className="nav-link">Turismo</Link>
+              <a className="nav-link" href="#">Turismo</a>
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="proyectosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,6 +39,6 @@ const NavBar = () => {
       </div>
     </nav>
   );
-};
+}
 
 export default NavBar;
