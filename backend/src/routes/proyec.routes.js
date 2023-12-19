@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", proyecController.obtain);
 router.get("/:id", proyecController.obtainById);
-router.post("/", authenticationMiddleware, isAdmin, proyecController.create);
+router.post("/crear", authenticationMiddleware, isAdmin, proyecController.create);
 router.put("/:id", authenticationMiddleware, isAdmin, proyecController.update);
 router.delete("/:id", authenticationMiddleware, isAdmin, proyecController.delete);
 

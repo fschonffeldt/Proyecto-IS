@@ -1,76 +1,113 @@
-import { Formik, Form, Field } from "formik"
-import axios from "axios"
-import mongoose from "mongoose"
+import { useForm } from "react-hook-form";
+import axios from '../services/root.service';
 
-export const CrearProyec = () => {
-    const handleSubmit = async (values) => {
-      console.log(values)
-  
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/proyec",
-          values
-        )
-  
-        if (response.status === 201) {
-          console.log("Solicitud Post exitosa")
-          alert('Practica creada!')
-          // Realiza acciones adicionales en caso de éxito
-        } else {
-          console.error("Error en la solicitud Post", response.statusText)
-          alert('Error!!!')
-        }
-      } catch (error) {
-        console.error("Error al realizar la solicitud Post:", error)
-        alert('Error!!!')
-      }
-    }
-  
-    return (
-      <div className='container d-flex justify-content-center align-items-center vh-100'>
-        <div className='col-lg-6 my-form-container'>
-          <h1>Crear un Proyecto</h1> {/* Aplica el estilo personalizado */}
-          <Formik
-            initialValues={{
-              _id: new mongoose.Types.ObjectId(),
-              Tema: "",
-              Descripcion: "",
-              Monto: "",
-              Bases: ""
-            }}
-            onSubmit={handleSubmit}
-          >
-            {() => (
-              <Form>
-                <div className='form-group'>
-                  <label htmlFor='tema'>Tema</label>
-                  <Field type='text' name='tema' className='form-control' />
-                </div>
+const ProyectoForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
 
-                <div className='form-group'>
-                  <label htmlFor='descripcion'>Descripcion</label>
-                  <Field type='text' name='descripcion' className='form-control' />
-                </div>
+  const onSubmit = (data) => {
+      console.log(data);
+      axios.post('/proyec/crear', data)
+          .then((response) => {
+              console.log(response.data);
+              reset(); 
+          })
+          .catch((error) => {
+              console.error('Error al enviar los datos:', error);
+          });
+  };
 
-                <div className='form-group'>
-                  <label htmlFor='monto'>Monto</label>
-                  <Field type='text' name='monto' className='form-control'/>
-                </div>
+  return (
+    <div className='container d-flex justify-content-center align-items-center vh-100'>
+      <div className='col-lg-6 my-form-container'>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Tema">Tema</label>
+            <div>
+              <input
+                class="form-control" type="text" id="Tema"
+                {...register("Tema", {
+                  pattern: {
+                    value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                    message: "El tema debe tener entre 1 y 40 letras."
+                  }
+                })}
+              />
+              {errors.Tema && (
+                <span>{errors.Tema.message}</span>
+              )}
+            </div>
+          </div>
 
-                <div className='form-group'>
-                  <label htmlFor='bases'>Bases</label>
-                  <Field type='text' name='bases' className='form-control'/>
-                </div>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Descripcion">Descripcion</label>
+            <div>
+              <input
+                class="form-control" type="text" id="Descripcion"
+                {...register("Descripcion", {
+                  pattern: {
+                    value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                    message: "El tema debe tener entre 1 y 40 letras."
+                  }
+                })}
+              />
+              {errors.Tema && (
+                <span>{errors.Descripcion.message}</span>
+              )}
+            </div>
+          </div>
 
-                <button type='submit' className='btn btn-primary mt-3'>
-                  Enviar
-                </button>
-              </Form>
-            )}
-          </Formik>
-        </div>
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Monto">Monto</label>
+            <div>
+              <input
+                class="form-control" type="number" id="Monto"
+                {...register("Monto", {
+                  min: {
+                    value: 0,
+                    message: "El monto debe ser igual o mayor que 0."
+                  },
+                  max: {
+                    value: 999999999,
+                    message: "El monto no puede exceder 999999999"
+                  }
+                })}
+              />
+              {errors.Monto && (
+                <span>{errors.Monto.message}</span>
+              )}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" htmlFor="Bases">Bases</label>
+            <div>
+              <input
+                class="form-control" type="text" id="Bases"
+                {...register("Bases", {
+                  pattern: {
+                    value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                    message: "BASES debe tener entre 1 y 40 letras."
+                  }
+                })}
+              />
+              {errors.Tema && (
+                <span>{errors.Bases.message}</span>
+              )}
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Enviar</button>
+
+        </form>
       </div>
-    )
-}
+    </div>
+  );
+};
 
-export default CrearProyec;
+export default ProyectoForm;
